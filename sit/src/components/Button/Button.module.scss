@@ -1,17 +1,40 @@
 .wrapper {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
   border: 1.5px solid transparent;
-  min-width: 150px;
-  padding: 8px 15px;
-  font-size: 1.8rem;
-  font-weight: 700;
   border-radius: 10px;
   cursor: pointer;
   transition: all .1s linear;
   box-shadow: var(--box-shadow-color);
 
+  //medium size
+  min-width: 150px;
+  padding: 8px 15px;
+  font-size: 1.8rem;
+  font-weight: 700;
+
   + .wrapper {
     margin-left: 8px;
   }
+
+  //lord-icon support
+  .icon {
+    lord-icon{
+      max-width: 27px;
+      max-height: 27px;
+    }
+  }
+}
+
+.icon {
+  display: flex;
+  align-self: center;
+}
+
+.icon + .title, .title + .icon {
+  margin-left: 8px;
 }
 
 //Button Style
@@ -42,11 +65,28 @@
   min-width: 100px;
   font-size: 1.6rem;
   padding: 6px 10px;
+
+  //lord-icon support
+  .icon {
+    lord-icon{
+      max-width: 24px;
+      max-height: 24px;
+    }
+  }
 }
 
 .large {
   min-width: 200px;
   padding: 15px 20px;
+  font-size: 22px;
+
+  //lord-icon support
+  .icon {
+    lord-icon{
+      max-width: 33px;
+      max-height: 33px;
+    }
+  }
 }
 
 //Disable
