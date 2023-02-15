@@ -103,7 +103,7 @@
 //Button Sizes
 .small {
   min-width: 100px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   padding: 6px 10px;
 
   //lord-icon support
@@ -154,4 +154,13 @@
   opacity: 0.5;
   pointer-events: none;
   box-shadow: none;
+}
+
+//Orther
+.smallLeft {
+  margin-left: 20px !important;
+}
+
+.ntd {
+  text-decoration: none !important;
 }

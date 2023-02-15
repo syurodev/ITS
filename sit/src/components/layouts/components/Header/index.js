@@ -45,10 +45,16 @@ function Header() {
   return (
     <header className={cx("wrapper")}>
       <div className={cx("topbar-container")}>
-        <div className={cx("logo")}>
-          <img className={cx("logo-image")} src={images.logo} alt="IT Social" />
-          <samp className={cx("logo-text")}>IT Social</samp>
-        </div>
+        <Button text ntd to="/">
+          <div className={cx("logo")}>
+            <img
+              className={cx("logo-image")}
+              src={images.logo}
+              alt="IT Social"
+            />
+            <samp className={cx("logo-text")}>IT Social</samp>
+          </div>
+        </Button>
 
         {/* Search Box */}
         <div className={cx("search-box")}>

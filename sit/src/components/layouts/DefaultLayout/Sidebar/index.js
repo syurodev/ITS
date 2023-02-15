@@ -9,6 +9,7 @@ function Sidebar() {
   return (
     <div className={cx("wrapper")}>
       <Button
+        to="/questions"
         text
         start
         leftIcon={
@@ -25,17 +26,56 @@ function Sidebar() {
 
       <Button
         text
+        to="/tags"
         start
+        small
+        smallLeft
         leftIcon={
           <lord-icon
             src="https://cdn.lordicon.com/pmegrqxm.json"
             trigger="hover"
-            colors="primary:#ed7966,secondary:#030e12"
+            colors="primary:#030e12"
             style={{ width: "250px", height: "250px" }}
           ></lord-icon>
         }
       >
         Thẻ
+      </Button>
+
+      <Button
+        text
+        to="/users"
+        start
+        small
+        smallLeft
+        leftIcon={
+          <lord-icon
+            src="https://cdn.lordicon.com/bhfjfgqz.json"
+            trigger="hover"
+            colors="primary:#030e12"
+            style={{ width: "250px", height: "250px" }}
+          ></lord-icon>
+        }
+      >
+        Người dùng
+      </Button>
+
+      <Button
+        text
+        to="/works"
+        start
+        small
+        smallLeft
+        leftIcon={
+          <lord-icon
+            src="https://cdn.lordicon.com/winbdcbm.json"
+            trigger="hover"
+            colors="primary:#030e12"
+            style={{ width: "250px", height: "250px" }}
+          ></lord-icon>
+        }
+      >
+        Công việc
       </Button>
     </div>
   );

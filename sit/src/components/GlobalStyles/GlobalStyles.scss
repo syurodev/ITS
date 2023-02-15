@@ -12,9 +12,13 @@
   --white: #fff;
   --black: #030e12;
   --light-gray: rgba(22, 24, 35, 0.06);
+
   --box-shadow-color: rgb(0 0 0 / 12%) 0px 0px 5px;
   --box-shadow-color-hover: rgb(0 0 0 / 12%) 0px 0px 15px;
+
   --page-fwidth: 1200px;
+
+  --text-color-black: #030e12;
 }
 
 *,
@@ -37,6 +41,7 @@ body {
   text-rendering: optimizeSpeed;
   min-height: 100vh;
   font-family: 'Open Sans', sans-serif;
+  color: var(--text-color-black);
 }
 
 button {
@@ -48,4 +53,5 @@ button {
 
 a[href] {
   text-decoration: none;
+  color: var(--text-color-black);
 }

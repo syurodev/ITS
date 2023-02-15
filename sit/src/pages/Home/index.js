@@ -8,7 +8,7 @@ const cx = classNames.bind(style);
 const Home = () => {
   return (
     <div className={cx("wrapper")}>
-      <Button text>Click</Button>
+      <h1>Home Page</h1>
     </div>
   );
 };
