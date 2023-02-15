@@ -10,6 +10,7 @@ function Sidebar() {
     <div className={cx("wrapper")}>
       <Button
         text
+        start
         leftIcon={
           <lord-icon
             src="https://cdn.lordicon.com/gqzfzudq.json"
@@ -20,6 +21,21 @@ function Sidebar() {
         }
       >
         Câu hỏi
+      </Button>
+
+      <Button
+        text
+        start
+        leftIcon={
+          <lord-icon
+            src="https://cdn.lordicon.com/pmegrqxm.json"
+            trigger="hover"
+            colors="primary:#ed7966,secondary:#030e12"
+            style={{ width: "250px", height: "250px" }}
+          ></lord-icon>
+        }
+      >
+        Thẻ
       </Button>
     </div>
   );

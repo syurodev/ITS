@@ -14,6 +14,8 @@ function Button({
   large = false,
   disable = false,
   rounded = false,
+  start = false,
+  end = false,
   leftIcon,
   rightIcon,
   children,
@@ -28,11 +30,13 @@ function Button({
   const classes = cx("wrapper", {
     primary,
     outline,
+    text,
+    rounded,
+    start,
+    end,
     small,
     large,
     disable,
-    rounded,
-    text,
   });
 
   if (to) {
