@@ -4,16 +4,16 @@
   text-align: center;
   justify-content: center;
   border: 1.5px solid transparent;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all .1s linear;
   box-shadow: var(--box-shadow-color);
 
   //medium size
-  min-width: 150px;
+  min-width: 140px;
   padding: 8px 15px;
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 500;
 
   + .wrapper {
     margin-left: 8px;
@@ -30,7 +30,7 @@
 
 .icon {
   display: flex;
-  align-self: center;
+  align-items: center;
 }
 
 .icon + .title, .title + .icon {

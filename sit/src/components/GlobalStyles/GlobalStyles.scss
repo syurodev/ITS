@@ -1,15 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  --primary-color: #80ed99;
-  --primary-color-hover: #77dd8e;
-  --primary-color-outline-hover: rgba(112, 214, 136,.3);
+  --primary-color: #ed7966;
+  --primary-color-light: rgba(237, 120, 102, 0.392);
+  --primary-color-hover: #e76c59;
+  --primary-color-outline-hover: rgba(231, 108, 89, .3);
   --green: #43aa8b;
   --yellow: #f9c74f;
   --red: #f94144;
   --orange: #f3722c;
   --white: #fff;
-  --black: #000;
+  --black: #030e12;
+  --light-gray: rgba(22, 24, 35, 0.06);
   --box-shadow-color: rgb(0 0 0 / 12%) 0px 0px 5px;
   --box-shadow-color-hover: rgb(0 0 0 / 12%) 0px 0px 15px;
 }
