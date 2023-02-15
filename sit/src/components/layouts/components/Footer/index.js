@@ -4,7 +4,11 @@ import style from "./Footer.module.scss";
 const cx = classNames.bind(style);
 
 function Footer() {
-  return <h2>footer</h2>;
+  return (
+    <footer className={cx("wrapper")}>
+      <div className={cx("footer-container")}></div>
+    </footer>
+  );
 }
 
 export default Footer;

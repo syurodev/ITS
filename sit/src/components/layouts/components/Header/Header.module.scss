@@ -1,12 +1,10 @@
 .wrapper {
   height: 60px;
   box-shadow: var(--box-shadow-color);
-
-  
 }
 
 .topbar-container {
-  width: 1200px;
+  width: var(--page-fwidth);
   height: 100%;
   display: flex;
   justify-content: space-between;

@@ -1,0 +1,13 @@
+.container {
+  margin: 0 auto;
+}
+
+.container {
+  width: var(--page-fwidth);
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  margin-left: 10px;
+}
