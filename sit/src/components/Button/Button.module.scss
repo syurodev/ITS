@@ -6,6 +6,7 @@
   border: 1.5px solid transparent;
   border-radius: 12px;
   cursor: pointer;
+  overflow: hidden;
   transition: all .1s linear;
   box-shadow: var(--box-shadow-color);
 
@@ -24,6 +25,17 @@
     lord-icon{
       max-width: 27px;
       max-height: 27px;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: transparent;
+        width: 500px;
+        height: 100px;
+        top: -10px;
+        left: -30px;
+      }
     }
   }
 }
@@ -82,6 +94,16 @@
     lord-icon{
       max-width: 24px;
       max-height: 24px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: transparent;
+        width: 500px;
+        height: 100px;
+        top: -10px;
+        left: -30px;
+      }
     }
   }
 }
@@ -96,6 +118,16 @@
     lord-icon{
       max-width: 33px;
       max-height: 33px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: transparent;
+        width: 500px;
+        height: 100px;
+        top: -10px;
+        left: -30px;
+      }
     }
   }
 }
