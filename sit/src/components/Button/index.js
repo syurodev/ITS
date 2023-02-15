@@ -9,6 +9,7 @@ function Button({
   href = false,
   primary,
   outline = false,
+  text = false,
   small = false,
   large = false,
   disable = false,
@@ -17,9 +18,11 @@ function Button({
   rightIcon,
   children,
   onClick,
+  ...passProps
 }) {
   let Component = "button";
   const props = {
+    ...passProps,
     onClick,
   };
   const classes = cx("wrapper", {
@@ -29,6 +32,7 @@ function Button({
     large,
     disable,
     rounded,
+    text,
   });
 
   if (to) {

@@ -60,6 +60,17 @@
   border-radius: 999px;
 }
 
+.text {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 1.6rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 //Button Sizes
 .small {
   min-width: 100px;
