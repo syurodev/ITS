@@ -18,15 +18,14 @@ function Button({
   end = false,
   smallLeft = false,
   ntd = false,
+  className,
   leftIcon,
   rightIcon,
   children,
   onClick,
-  ...passProps
 }) {
   let Component = "button";
   const props = {
-    ...passProps,
     onClick,
   };
   const classes = cx("wrapper", {
@@ -40,6 +39,7 @@ function Button({
     small,
     smallLeft,
     large,
+    className,
     disable,
   });
 
@@ -58,7 +58,7 @@ function Button({
   return (
     <Component className={classes} {...props}>
       {leftIcon && <span className={cx("icon")}>{leftIcon}</span>}
-      <samp className={cx("title")}>{children}</samp>
+      <samp className={cx("title", className)}>{children}</samp>
       {rightIcon && <span className={cx("icon")}>{rightIcon}</span>}
     </Component>
   );

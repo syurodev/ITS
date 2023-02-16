@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames/bind";
-import style from "./Header.module.scss";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
+import TippyHeadless from "@tippyjs/react/headless";
+
+import style from "./Header.module.scss";
 import Button from "~/components/Button";
+import { Wrapper as PopperWrapper } from "~/components/Popper";
+import SearchQuestionItem from "~/components/SearchQuestionItem";
 
 import images from "~/assets/images";
 
@@ -57,15 +61,30 @@ function Header() {
         </Button>
 
         {/* Search Box */}
-        <div className={cx("search-box")}>
-          <input
-            className={cx("search-input")}
-            type="text"
-            placeholder="Search..."
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <button ref={searchIcon} className={cx("search-button")}></button>
-        </div>
+        <TippyHeadless
+          visible
+          interactive
+          render={(attrs) => (
+            <div className={cx("search-result")} tabIndex="-1" {...attrs}>
+              <PopperWrapper>
+                <SearchQuestionItem />
+                <SearchQuestionItem />
+                <SearchQuestionItem />
+                <SearchQuestionItem />
+              </PopperWrapper>
+            </div>
+          )}
+        >
+          <div className={cx("search-box")}>
+            <input
+              className={cx("search-input")}
+              type="text"
+              placeholder="Search..."
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <button ref={searchIcon} className={cx("search-button")}></button>
+          </div>
+        </TippyHeadless>
 
         <div className={cx("actions")}>
           <Button outline>Đăng ký</Button>

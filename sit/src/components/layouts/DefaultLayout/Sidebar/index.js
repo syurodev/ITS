@@ -14,14 +14,31 @@ function Sidebar() {
         start
         leftIcon={
           <lord-icon
-            src="https://cdn.lordicon.com/gqzfzudq.json"
+            src="https://cdn.lordicon.com/isugonwi.json"
             trigger="hover"
-            colors="primary:#ed7966,secondary:#030e12"
+            colors="primary:#030e12"
             style={{ width: "250px", height: "250px" }}
           ></lord-icon>
         }
       >
         Câu hỏi
+      </Button>
+
+      <Button
+        text
+        start
+        small
+        smallLeft
+        leftIcon={
+          <lord-icon
+            src="https://cdn.lordicon.com/gigfpovs.json"
+            trigger="hover"
+            colors="primary:#030e12"
+            style={{ width: "250px", height: "250px" }}
+          ></lord-icon>
+        }
+      >
+        Dấu trang
       </Button>
 
       <Button
