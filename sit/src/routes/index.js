@@ -1,5 +1,5 @@
 //Layouts
-import { NoSidebar } from "~/components/layouts";
+import { NoSidebar } from "~/layouts";
 
 //Pages
 import Home from "~/pages/Home";

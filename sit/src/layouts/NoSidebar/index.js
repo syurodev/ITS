@@ -1,5 +1,5 @@
-import Header from "~/components/layouts/components/Header";
-import Footer from "~/components/layouts/components/Footer";
+import Header from "~/layouts/components/Header";
+import Footer from "~/layouts/components/Footer";
 
 function NoSidebar({ children }) {
   return (
