@@ -9,6 +9,9 @@ import Tags from "~/pages/Tags";
 import Works from "~/pages/Works";
 import Users from "~/pages/Users";
 
+// Host
+const host = "";
+
 //Public Routes
 const publicRoutes = [
   { path: "/", component: Home },
