@@ -1,0 +1,100 @@
+.wrapper {
+  margin-top: 10px;
+}
+
+.container {
+  margin-top: 10px;
+}
+
+.item { 
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--light-gray);
+
+  &:first-child {
+  border-top: 1px solid var(--light-gray);
+  }
+}
+
+//HEARDER
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+
+  // USER
+  & .user {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    position: relative;
+
+    & .avata {
+      width: 45px;
+      height: 45px;
+      border-radius: 100rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    
+      & img {
+        width: 50px;
+        object-fit: cover;
+      }
+    }
+
+    & .username {
+      font-weight: 500;
+      margin-left: 8px;
+    }
+
+    & .score {
+      margin-left: 5px;
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+
+    & ::before {
+      content: "";
+      height: 15px;
+      width: 1px;
+      background-color: var(--light-gray);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -8px;
+    }
+  }
+
+  //INFO
+  & .info {
+    margin-left: 16px;
+
+    & span + span {
+      margin-left: 8px;
+    }
+  }
+}
+
+//TITLE
+.title {
+  font-size: 1.8rem;
+  padding: 0 53px;
+  font-weight: 500;
+
+  & .link:hover {
+    text-decoration: underline !important;
+    text-decoration-color: var(--primary-color) !important;
+  }
+}
+
+//TAGS
+.tags {
+  padding: 0 44px;
+
+  & .tag {
+    color: var(--primary-color);
+  }
+}
+
+

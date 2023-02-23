@@ -43,6 +43,10 @@ body {
   min-height: 100vh;
   font-family: 'Open Sans', sans-serif;
   color: var(--text-color-black);
+
+  ::selection {
+    background: var(--primary-color-light);
+  }
 }
 
 button {

@@ -2,8 +2,8 @@
 import { NoSidebar } from "~/layouts";
 
 //Pages
-import Home from "~/pages/Home";
 import Questions from "~/pages/Questions";
+import Question from "~/pages/Question";
 import Ask from "~/pages/Ask";
 import Tags from "~/pages/Tags";
 import Works from "~/pages/Works";
@@ -14,8 +14,8 @@ const host = "";
 
 //Public Routes
 const publicRoutes = [
-  { path: "/", component: Home },
-  { path: "/questions", component: Questions },
+  { path: "/", component: Questions },
+  { path: "/question", component: Question },
   { path: "/tags", component: Tags },
   { path: "/users", component: Users },
 ];
