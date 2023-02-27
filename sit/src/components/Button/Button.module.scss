@@ -7,7 +7,7 @@
   border-radius: 12px;
   cursor: pointer;
   overflow: hidden;
-  transition: all .1s linear;
+  transition: all 0.1s linear;
   box-shadow: var(--box-shadow-color);
 
   //medium size
@@ -22,7 +22,7 @@
 
   //lord-icon support
   .icon {
-    lord-icon{
+    lord-icon {
       max-width: 27px;
       max-height: 27px;
       position: relative;
@@ -45,7 +45,8 @@
   align-items: center;
 }
 
-.icon + .title, .title + .icon {
+.icon + .title,
+.title + .icon {
   margin-left: 8px;
 }
 
@@ -106,6 +107,13 @@
   }
 }
 
+.column {
+  + .column {
+    margin-left: 0px;
+    margin-top: 12px;
+  }
+}
+
 //Button Sizes
 .small {
   // min-width: 100px;
@@ -114,7 +122,7 @@
 
   //lord-icon support
   .icon {
-    lord-icon{
+    lord-icon {
       max-width: 24px;
       max-height: 24px;
 
@@ -131,6 +139,10 @@
   }
 }
 
+.fwidth {
+  width: 100%;
+}
+
 .large {
   min-width: 200px;
   padding: 15px 20px;
@@ -138,7 +150,7 @@
 
   //lord-icon support
   .icon {
-    lord-icon{
+    lord-icon {
       max-width: 33px;
       max-height: 33px;
 
