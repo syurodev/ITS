@@ -10,15 +10,14 @@ import Works from "~/pages/Works";
 import Users from "~/pages/Users";
 import Auth from "~/pages/Auth";
 
-// Host
-const host = "";
-
 //Public Routes
 const publicRoutes = [
   { path: "/", component: Questions },
   { path: "/question", component: Question },
   { path: "/tags", component: Tags },
   { path: "/users", component: Users },
+  { path: "/auth/register", component: Auth, layout: null },
+  { path: "/auth/login", component: Auth, layout: null },
   { path: "/auth", component: Auth, layout: null },
 ];
 

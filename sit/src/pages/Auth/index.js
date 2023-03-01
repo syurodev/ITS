@@ -1,21 +1,28 @@
 import classNames from "classnames/bind";
 import { signInWithPopup } from "firebase/auth";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { auth, provider } from "~/firebase";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { login } from "./authSlice";
 import images from "~/assets/images";
 import Button from "~/components/Button";
 import style from "./Auth.module.scss";
-import { async } from "@firebase/util";
 
 const cx = classNames.bind(style);
 
 function Auth() {
-  const [registered, setRegistered] = useState(false);
+  const router = () => {
+    const href = window.location.href.includes("/register");
+    if (href) {
+      return false;
+    }
+    return true;
+  };
+
+  const [registered, setRegistered] = useState(router);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [username, setUsername] = useState("");
@@ -32,9 +39,6 @@ function Auth() {
   const userData = {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => {
-    return state.user.user;
-  });
 
   const handelSignWithGoogle = async () => {
     signInWithPopup(auth, provider).then((res) => {
@@ -61,7 +65,7 @@ function Auth() {
     if (username.trim() !== "") {
       if (username.trim().length <= 8) {
         setUsernameError(true);
-        setError("Username phải từ 8 ký tự trở lên");
+        setError(registered ? "" : "Username phải từ 8 ký tự trở lên");
         setDisableButton(true);
       } else {
         setDisableButton(false);
@@ -72,26 +76,28 @@ function Auth() {
   };
 
   const validatePassword = () => {
+    if (password.trim() === "") {
+      setError("");
+      setPasswordError(false);
+      setDisableButton(false);
+    } else if (password.trim().length <= 8) {
+      setDisableButton(true);
+      setPasswordError(true);
+      setError(registered ? "" : "Vui lòng nhập password trên 8 ký tự");
+    } else {
+      setDisableButton(false);
+      setRepasswordError(false);
+      setError("");
+    }
+  };
+
+  const validateRepassword = () => {
     if (password !== repassword) {
       setDisableButton(true);
       setRepasswordError(true);
       setError("Nhập lại password không chính xác");
-    } else if (password.trim() === "") {
-      setError("");
-      setPasswordError(false);
-      setRepasswordError(false);
-      setDisableButton(false);
     } else if (repassword.trim() === "") {
-      setDisableButton(true);
-      setRepasswordError(true);
-      setError("Vui lòng nhập password trên 8 ký tự");
-    } else if (password.trim().length <= 8) {
-      setDisableButton(true);
-      setPasswordError(true);
-      setError("Vui lòng nhập password trên 8 ký tự");
-    } else {
       setDisableButton(false);
-      setRepasswordError(false);
       setRepasswordError(false);
       setError("");
     }
@@ -114,7 +120,7 @@ function Auth() {
           setDisableButton(true);
         } else {
           axios
-            .post("/user", userData)
+            .post("/user/create", userData)
             .then((res) => {
               dispatch(login(res.data.data));
               navigate("/");
@@ -127,7 +133,27 @@ function Auth() {
     }
   };
 
-  const handelLogin = () => {};
+  const handelLogin = async () => {
+    const userData = {
+      username: username,
+      password: password,
+    };
+
+    await axios
+      .post("/user/login", userData)
+      .then((res) => {
+        if (res.data.status !== false) {
+          dispatch(login(res.data.data));
+          navigate("/");
+        } else {
+          setError(res.data.message);
+          setDisableButton(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={cx("wrapper")}>
@@ -237,7 +263,7 @@ function Auth() {
                   })}
                   value={repassword}
                   onChange={(e) => setRepassword(e.target.value)}
-                  onBlur={() => validatePassword()}
+                  onBlur={() => validateRepassword()}
                   onFocus={() => {
                     setRepasswordError(false);
                     setDisableButton(false);
@@ -273,6 +299,8 @@ function Auth() {
               onClick={() => {
                 setRegistered(!registered);
                 setError("");
+                setRepassword("");
+                setDisableButton(false);
               }}
             >
               {registered ? "Đăng ký" : "Đăng nhập"}

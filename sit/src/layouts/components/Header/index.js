@@ -91,8 +91,12 @@ function Header() {
         </TippyHeadless>
 
         <div className={cx("actions")}>
-          <Button outline>Đăng ký</Button>
-          <Button primary>Đăng nhập</Button>
+          <Button outline to={"/auth/register"}>
+            Đăng ký
+          </Button>
+          <Button primary to={"/auth/login"}>
+            Đăng nhập
+          </Button>
         </div>
       </div>
     </header>
