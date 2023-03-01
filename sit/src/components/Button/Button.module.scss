@@ -169,9 +169,9 @@
 
 //Disable
 .disable {
-  opacity: 0.5;
-  pointer-events: none;
-  box-shadow: none;
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
 }
 
 //Orther

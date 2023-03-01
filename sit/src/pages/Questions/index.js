@@ -3,6 +3,8 @@ import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import axios from "axios";
+import { useEffect } from "react";
 
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
@@ -10,6 +12,15 @@ import style from "./Questions.module.scss";
 const cx = classNames.bind(style);
 
 const Home = () => {
+  useEffect(() => {
+    const getQuestion = async () => {
+      await axios.get("/questions").then((res) => {
+        // console.log(res.data);
+      });
+    };
+    getQuestion();
+  }, []);
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("header")}>

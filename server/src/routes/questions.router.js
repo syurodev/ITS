@@ -4,8 +4,10 @@ const router = express.Router();
 const questionsController = require("../app/controllers/QuestionsController");
 
 //[GET] /questions/:item
-router.use("/:item", questionsController.question);
+router.get("/:item", questionsController.question);
 //[GET] /questions
-router.use("/", questionsController.index);
+router.get("/", questionsController.index);
+//[POST] /questions
+router.post("/", questionsController.upload);
 
 module.exports = router;

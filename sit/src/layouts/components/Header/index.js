@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
 import TippyHeadless from "@tippyjs/react/headless";
+import { useSelector } from "react-redux";
 
 import style from "./Header.module.scss";
 import Button from "~/components/Button";
@@ -15,6 +16,10 @@ defineElement(lottie.loadAnimation);
 const cx = classNames.bind(style);
 
 function Header() {
+  const currentUser = useSelector((state) => {
+    return state.user.user;
+  });
+  console.log(currentUser);
   const [input, setInput] = useState("");
   const [changeSearchButton, setChangeSearchButton] = useState(false);
   const searchIcon = useRef();

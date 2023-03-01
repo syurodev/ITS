@@ -1,5 +1,6 @@
 .wrapper {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -47,6 +48,10 @@
       padding: 10px 10px;
       border-radius: 1.5rem;
     }
+
+    & .error {
+      background-color: var(--primary-color-light);
+    }
   }
 
   & :focus {
@@ -76,4 +81,12 @@
     color: var(--primary-color);
     font-weight: 500;
   }
+}
+
+.error-log {
+  transition: all 0.1s linear;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 500;
+  color: var(--red);
 }

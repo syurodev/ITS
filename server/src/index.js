@@ -8,6 +8,9 @@ const db = require("./config/db");
 //Connect DB
 db.connect();
 
+app.use(express.urlencoded());
+app.use(express.json());
+
 // Routes
 route(app);
 
