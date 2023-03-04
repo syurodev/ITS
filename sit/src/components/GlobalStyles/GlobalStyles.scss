@@ -12,6 +12,7 @@
   --orange: #f3722c;
   --white: #fff;
   --black: #030e12;
+  --code-color: #030e12;
   --light-gray: rgba(22, 24, 35, 0.04);
 
   --box-shadow-color: rgb(0 0 0 / 12%) 0px 0px 5px;
@@ -60,4 +61,42 @@ button {
 a[href] {
   text-decoration: none;
   color: var(--text-color-black);
+}
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+}
+h2 {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+small {
+  font-size: 15px;
+}
+
+//Code
+pre {
+  width: 100%;
+  max-height: 500px;
+  overflow: auto;
+  background-color: var(--light-gray) !important;
+  margin: 10px 0;
+  & code {
+    display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+    padding: 10px 20px;
+    max-height: 300px;
+    white-space: pre-wrap;
+    background-color: transparent !important;
+  }
+}
+
+code {
+  background-color: var(--light-gray) !important;
+  border-radius: 0.5rem;
+  padding: 2px 5px;
+  color: var(--code-color) !important;
+  font-weight: 500;
 }

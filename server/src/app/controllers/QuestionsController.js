@@ -3,21 +3,27 @@ const questionSchema = require("../models/Question");
 class QuestionsController {
   //[GET] /questions
   index(req, res) {
-    res.send({
-      title: "this is title",
-      body: "this is body",
+    questionSchema.find(function (err, questions) {
+      if (!err) {
+        res.send(questions);
+      }
     });
   }
   //[GET] /questions:item
   question(req, res) {
-    res.send("Question");
+    questionSchema.find({ _id: req.params.item }, function (err, question) {
+      if (!err) {
+        res.send(question);
+      }
+    });
   }
 
   //[POST] /questions:item
   async upload(req, res) {
     const questionData = new questionSchema({
       title: req.body.title,
-      body: req.body.body,
+      problem: req.body.problem,
+      expecting: req.body.expecting,
       tags: req.body.tags,
       user: req.body.user,
     });

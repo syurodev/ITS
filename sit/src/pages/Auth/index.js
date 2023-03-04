@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "./authSlice";
 import images from "~/assets/images";
 import Button from "~/components/Button";
+import routesConfig from "~/config/router";
 import style from "./Auth.module.scss";
 
 const cx = classNames.bind(style);
@@ -114,16 +115,17 @@ function Auth() {
       setDisableButton(true);
       setError("Vui lòng nhập đầy đủ thông tin");
     } else {
-      await axios.post("/user/check", userData).then((res) => {
+      await axios.post("/api/user/check", userData).then((res) => {
         if (res.data.status === false) {
           setError(res.data.message);
           setDisableButton(true);
         } else {
           axios
-            .post("/user/create", userData)
+            .post("/api/user/create", userData)
             .then((res) => {
+              localStorage.setItem("itsSession", JSON.stringify(res.data.data));
               dispatch(login(res.data.data));
-              navigate("/");
+              navigate(routesConfig.home);
             })
             .catch((err) => {
               console.log(err);
@@ -140,11 +142,12 @@ function Auth() {
     };
 
     await axios
-      .post("/user/login", userData)
+      .post("/api/user/login", userData)
       .then((res) => {
         if (res.data.status !== false) {
+          localStorage.setItem("itsSession", JSON.stringify(res.data.data));
           dispatch(login(res.data.data));
-          navigate("/");
+          navigate(routesConfig.home);
         } else {
           setError(res.data.message);
           setDisableButton(true);

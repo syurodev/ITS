@@ -8,6 +8,6 @@ router.get("/:item", questionsController.question);
 //[GET] /questions
 router.get("/", questionsController.index);
 //[POST] /questions
-router.post("/", questionsController.upload);
+router.post("/ask", questionsController.upload);
 
 module.exports = router;

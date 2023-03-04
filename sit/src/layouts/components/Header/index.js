@@ -1,60 +1,47 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
-import TippyHeadless from "@tippyjs/react/headless";
 import { useSelector } from "react-redux";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import TippyHeadless from "@tippyjs/react/headless";
 
 import style from "./Header.module.scss";
 import Button from "~/components/Button";
-import { Wrapper as PopperWrapper } from "~/components/Popper";
-import SearchQuestionItem from "~/components/SearchQuestionItem";
-
 import images from "~/assets/images";
+import { LoadUserState } from "~/redux/loadstate";
+import Search from "../Search";
+import routesConfig from "~/config/router";
+import { Wrapper as PopperWrapper } from "~/components/Popper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 defineElement(lottie.loadAnimation);
 const cx = classNames.bind(style);
 
 function Header() {
-  const currentUser = useSelector((state) => {
+  let currentUser = useSelector((state) => {
     return state.user.user;
   });
-  console.log(currentUser);
-  const [input, setInput] = useState("");
-  const [changeSearchButton, setChangeSearchButton] = useState(false);
-  const searchIcon = useRef();
 
-  useEffect(() => {
-    if (input.length > 0) {
-      setChangeSearchButton(true);
-    } else {
-      setChangeSearchButton(false);
-    }
-  }, [input]);
+  LoadUserState(currentUser);
 
-  useEffect(() => {
-    if (changeSearchButton) {
-      searchIcon.current.innerHTML = `<lord-icon
-          src="https://cdn.lordicon.com/xfftupfv.json"
-          trigger="loop"
-          delay="500"
-          colors="primary:#ed7966"
-          style={{ width: "30px", height: "30px" }}
-      </lord-icon>`;
+  const session = () => {
+    if (Object.keys(currentUser).length === 0) {
+      return false;
     } else {
-      searchIcon.current.innerHTML = `<lord-icon
-        src="https://cdn.lordicon.com/xfftupfv.json"
-        trigger="click"
-        colors="primary:#030e12"
-        style={{ width: "30px", height: "30px" }}
-      ></lord-icon>`;
+      return true;
     }
-  }, [changeSearchButton]);
+  };
+
+  const [user, setUser] = useState(session);
 
   return (
     <header className={cx("wrapper")}>
       <div className={cx("topbar-container")}>
-        <Button text ntd to="/">
+        <Button text ntd to={routesConfig.home}>
           <div className={cx("logo")}>
             <img
               className={cx("logo-image")}
@@ -66,38 +53,87 @@ function Header() {
         </Button>
 
         {/* Search Box */}
-        <TippyHeadless
-          interactive
-          render={(attrs) => (
-            <div className={cx("search-result")} tabIndex="-1" {...attrs}>
-              <PopperWrapper>
-                <SearchQuestionItem />
-                <SearchQuestionItem />
-                <SearchQuestionItem />
-                <SearchQuestionItem />
-              </PopperWrapper>
-            </div>
-          )}
-        >
-          <div className={cx("search-box")}>
-            <input
-              className={cx("search-input")}
-              type="text"
-              placeholder="Search..."
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <button ref={searchIcon} className={cx("search-button")}></button>
-          </div>
-        </TippyHeadless>
+        <Search />
 
-        <div className={cx("actions")}>
-          <Button outline to={"/auth/register"}>
-            Đăng ký
-          </Button>
-          <Button primary to={"/auth/login"}>
-            Đăng nhập
-          </Button>
-        </div>
+        {user ? (
+          <div className={cx("actions")}>
+            <div className={cx("items")}>
+              <Tippy content="Thông báo">
+                <div>
+                  <Button
+                    text
+                    leftIcon={
+                      <lord-icon
+                        src="https://cdn.lordicon.com/psnhyobz.json"
+                        trigger="hover"
+                        colors="primary:#030e12"
+                        state="hover"
+                        style={{ width: "250", height: "250" }}
+                      ></lord-icon>
+                    }
+                  ></Button>
+                </div>
+              </Tippy>
+              <Tippy content="Tạo câu hỏi">
+                <div>
+                  <Button
+                    to={routesConfig.ask}
+                    text
+                    leftIcon={
+                      <lord-icon
+                        src="https://cdn.lordicon.com/wfadduyp.json"
+                        trigger="hover"
+                        colors="primary:#030e12"
+                        state="hover-2"
+                        style={{ width: "250", height: "250" }}
+                      ></lord-icon>
+                    }
+                  ></Button>
+                </div>
+              </Tippy>
+            </div>
+            <TippyHeadless
+              interactive
+              render={(attrs) => (
+                <div className={cx("search-result")} tabIndex="-1" {...attrs}>
+                  <PopperWrapper>
+                    <Button
+                      fwidth
+                      text
+                      ntd
+                      leftIcon={<FontAwesomeIcon icon={faUser} />}
+                    >
+                      Xem hồ sơ
+                    </Button>
+                    <Button
+                      fwidth
+                      text
+                      ntd
+                      leftIcon={
+                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                      }
+                    >
+                      Đăng xuất
+                    </Button>
+                  </PopperWrapper>
+                </div>
+              )}
+            >
+              <div className={cx("avatar")}>
+                <img src={currentUser.avatar} alt={currentUser.username} />
+              </div>
+            </TippyHeadless>
+          </div>
+        ) : (
+          <div className={cx("actions")}>
+            <Button outline to={routesConfig.register}>
+              Đăng ký
+            </Button>
+            <Button primary to={routesConfig.login}>
+              Đăng nhập
+            </Button>
+          </div>
+        )}
       </div>
     </header>
   );

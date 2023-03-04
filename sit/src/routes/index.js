@@ -1,3 +1,5 @@
+import routesConfig from "~/config/router";
+
 //Layouts
 import { NoSidebar } from "~/layouts";
 
@@ -12,19 +14,16 @@ import Auth from "~/pages/Auth";
 
 //Public Routes
 const publicRoutes = [
-  { path: "/", component: Questions },
-  { path: "/question", component: Question },
-  { path: "/tags", component: Tags },
-  { path: "/users", component: Users },
-  { path: "/auth/register", component: Auth, layout: null },
-  { path: "/auth/login", component: Auth, layout: null },
-  { path: "/auth", component: Auth, layout: null },
+  { path: routesConfig.home, component: Questions },
+  { path: routesConfig.question, component: Question },
+  { path: routesConfig.tags, component: Tags },
+  { path: routesConfig.users, component: Users },
+  { path: routesConfig.register, component: Auth, layout: null },
+  { path: routesConfig.login, component: Auth, layout: null },
+  { path: routesConfig.ask, component: Ask, layout: NoSidebar },
 ];
 
 //Private Routes
-const privateRoutes = [
-  { path: "/works", component: Works },
-  { path: "/questions/ask", component: Ask, layout: NoSidebar },
-];
+const privateRoutes = [{ path: routesConfig.works, component: Works }];
 
 export { publicRoutes, privateRoutes };

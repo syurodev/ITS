@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import style from "./Sidebar.module.scss";
 
 import Button from "~/components/Button";
+import routesConfig from "~/config/router";
 
 const cx = classNames.bind(style);
 
@@ -9,7 +10,7 @@ function Sidebar() {
   return (
     <div className={cx("wrapper")}>
       <Button
-        to="/questions"
+        to={routesConfig.home}
         text
         start
         leftIcon={
@@ -43,7 +44,7 @@ function Sidebar() {
 
       <Button
         text
-        to="/tags"
+        to={routesConfig.tags}
         start
         small
         smallLeft
@@ -61,7 +62,7 @@ function Sidebar() {
 
       <Button
         text
-        to="/users"
+        to={routesConfig.users}
         start
         small
         smallLeft
@@ -79,7 +80,7 @@ function Sidebar() {
 
       <Button
         text
-        to="/works"
+        to={routesConfig.works}
         start
         small
         smallLeft
