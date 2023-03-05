@@ -1,0 +1,77 @@
+.ProseMirror {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  outline: none;
+  padding: 10px;
+  border: 2px solid black;
+  min-height: 100px;
+  max-height: 500px;
+  overflow: auto;
+  font-size: 16px !important;
+}
+
+.menu-bar {
+  margin-top: 15px;
+  border: 2px solid black;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.text-editor:last-child>div>div>p {
+  outline: none;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+ul,
+ol {
+  padding: 0 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+}
+
+code {
+  background-color: rgba(#616161, 0.1);
+  color: #616161;
+}
+
+pre {
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 16px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(#0d0d0d, 0.1);
+}
+
+hr {
+  border: none;
+  border-top: 2px solid rgba(#0d0d0d, 0.1);
+  margin: 2rem 0;
+}
