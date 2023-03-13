@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import parse from "html-react-parser";
 import Tippy from "@tippyjs/react";
 import { useSelector } from "react-redux";
+import * as userServices from "~/services/authServices";
 import { Link } from "react-router-dom";
 import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
@@ -56,9 +57,18 @@ const Question = () => {
   let urlSplit = window.location.href.split("/", -1);
   let idQuestion = urlSplit[4];
 
+  //CHECK USER BOOKMARK
   useEffect(() => {
-    setUserBookmarks(bookmarks.data);
-  }, [bookmarks.data]);
+    if (Object.keys(bookmarks).length === 0) {
+      const getData = async () => {
+        const result = await userServices.getBookmark(currentUser._id);
+        setUserBookmarks(result.data);
+      };
+      getData();
+    } else {
+      setUserBookmarks(bookmarks);
+    }
+  }, [bookmarks]);
 
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
@@ -157,8 +167,8 @@ const Question = () => {
 
     const fetchApi = async () => {
       const result = await authServices.addBookmark(queryData);
-      sessionStorage.setItem("bookmark", JSON.stringify(result));
-      dispatch(bookmark(result));
+      sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+      dispatch(bookmark(result.data));
     };
     fetchApi();
   };

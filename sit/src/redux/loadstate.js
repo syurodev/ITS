@@ -13,7 +13,7 @@ const LoadUserState = (state) => {
   }
   if (Object.keys(state.bookmarks).length === 0) {
     let userBookmarks = sessionStorage.getItem("bookmark");
-    if (userBookmarks === null) {
+    if (userBookmarks === null || userBookmarks === {}) {
       return state.bookmarks;
     }
     dispatch(bookmark(JSON.parse(userBookmarks)));

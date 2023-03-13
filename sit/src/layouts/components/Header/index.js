@@ -33,14 +33,12 @@ function Header() {
   });
 
   useEffect(() => {
-    if (bookmarks === null) {
-      const getBookmark = async () => {
-        const result = await userServices.getBookmark(currentUser._id);
-        sessionStorage.setItem("bookmark", JSON.stringify(result.data));
-      };
-      getBookmark();
-    }
-  }, [window.location.href]);
+    const getBookmark = async () => {
+      const result = await userServices.getBookmark(currentUser._id);
+      sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+    };
+    getBookmark();
+  }, []);
 
   let state = {
     currentUser,

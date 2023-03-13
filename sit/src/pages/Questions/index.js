@@ -6,6 +6,8 @@ import "tippy.js/dist/tippy.css";
 import { useEffect } from "react";
 import timeElapsed from "~/future/timeElapsed";
 
+import { useSelector } from "react-redux";
+
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
 import { getQuestions } from "~/services/questionServices";
@@ -13,6 +15,10 @@ import { getQuestions } from "~/services/questionServices";
 const cx = classNames.bind(style);
 
 const Home = () => {
+  let bookmarks = useSelector((state) => {
+    return state.user.bookmark;
+  });
+
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {

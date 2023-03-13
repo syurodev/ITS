@@ -12,19 +12,38 @@ import timeElapsed from "~/future/timeElapsed";
 const cx = classNames.bind(style);
 
 function Bookmarks() {
-  const [questions, setQuestions] = useState([]);
+  let currentUser = useSelector((state) => {
+    return state.user.user;
+  });
+
   let bookmarks = useSelector((state) => {
     return state.user.bookmark;
   });
 
+  const [questions, setQuestions] = useState([]);
+  const [userBookmarks, setUserBookmarks] = useState([]);
+
+  //GET USER BOOKMARKS
+  useEffect(() => {
+    if (Object.keys(bookmarks).length === 0) {
+      const getData = async () => {
+        const result = await userServices.getBookmark(currentUser._id);
+        setUserBookmarks(result.data);
+      };
+      getData();
+    } else {
+      setUserBookmarks(bookmarks);
+    }
+  }, [bookmarks]);
+
+  //GET USER BOOKMARKS DATA
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await userServices.getAllBookmark(bookmarks.data);
+      const result = await userServices.getAllBookmark(userBookmarks);
       setQuestions(result.data);
-      console.log(result);
     };
     fetchApi();
-  }, []);
+  }, [userBookmarks]);
 
   return (
     <div className={cx("wrapper")}>
@@ -32,7 +51,6 @@ function Bookmarks() {
       <div className={cx("container")}>
         {questions.map((question) => {
           let tags = JSON.parse(question.tags[0]);
-
           let questionTime = timeElapsed(question.createdAt);
 
           return (
