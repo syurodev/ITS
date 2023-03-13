@@ -39,3 +39,12 @@ export const getBookmark = async (user) => {
     console.log(error);
   }
 };
+
+export const getAllBookmark = async (data) => {
+  try {
+    const res = await request.post(`questions/bookmarks`, data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

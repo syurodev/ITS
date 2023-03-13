@@ -7,6 +7,9 @@ const questionsController = require("../app/controllers/QuestionsController");
 router.get("/question/", questionsController.question);
 
 //[GET] /questions
+router.post("/bookmarks", questionsController.getAllBookmark);
+
+//[GET] /questions
 router.get("/", questionsController.index);
 
 //[PATCH] /questions/upvote:item

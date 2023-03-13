@@ -185,6 +185,24 @@ class QuestionsController {
         }
       });
   }
+
+  async getAllBookmark(req, res) {
+    await questionSchema
+      .find(
+        {
+          _id: { $in: req.body },
+        },
+        function (err, data) {
+          if (!err) {
+            res.status(201).send({
+              status: true,
+              data: data,
+            });
+          }
+        }
+      )
+      .clone();
+  }
 }
 
 module.exports = new QuestionsController();
