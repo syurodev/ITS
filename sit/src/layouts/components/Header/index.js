@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
@@ -17,8 +17,10 @@ import { Wrapper as PopperWrapper } from "~/components/Popper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import * as userServices from "~/services/authServices";
 
 defineElement(lottie.loadAnimation);
+
 const cx = classNames.bind(style);
 
 function Header() {
@@ -26,7 +28,25 @@ function Header() {
     return state.user.user;
   });
 
-  LoadUserState(currentUser);
+  let bookmarks = useSelector((state) => {
+    return state.user.bookmark;
+  });
+
+  useEffect(() => {
+    if (bookmarks === null) {
+      const getBookmark = async () => {
+        const result = await userServices.getBookmark(currentUser._id);
+        sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+      };
+      getBookmark();
+    }
+  }, [window.location.href]);
+
+  let state = {
+    currentUser,
+    bookmarks,
+  };
+  LoadUserState(state);
 
   const session = () => {
     if (Object.keys(currentUser).length === 0) {

@@ -3,6 +3,8 @@ const routes = {
   question: "/question/:item",
   tags: "/tags",
   users: "/users",
+  profile: "/profile/:id",
+  bookmarks: "/bookmarks",
   works: "/works",
   ask: "/ask",
   register: "/auth/register",

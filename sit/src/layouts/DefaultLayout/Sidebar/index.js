@@ -26,6 +26,7 @@ function Sidebar() {
       </Button>
 
       <Button
+        to={routesConfig.bookmarks}
         text
         start
         small

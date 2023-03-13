@@ -3,13 +3,12 @@ import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import axios from "axios";
 import { useEffect } from "react";
 import timeElapsed from "~/future/timeElapsed";
 
-import routesConfig from "~/config/router";
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
+import { getQuestions } from "~/services/questionServices";
 
 const cx = classNames.bind(style);
 
@@ -18,9 +17,8 @@ const Home = () => {
 
   useEffect(() => {
     const getQuestion = async () => {
-      await axios.get("/api/questions").then((res) => {
-        setQuestions(res.data);
-      });
+      const result = await getQuestions();
+      setQuestions(result);
     };
     getQuestion();
   }, []);
@@ -39,7 +37,10 @@ const Home = () => {
           return (
             <div key={question._id} className={cx("item")}>
               <div className={cx("header")}>
-                <Link className={cx("user")} to={routesConfig.home}>
+                <Link
+                  className={cx("user")}
+                  to={`/profile/${question.user._id}`}
+                >
                   <div className={cx("avata")}>
                     <img
                       src={question.user.avatar}
@@ -55,7 +56,9 @@ const Home = () => {
                 </Link>
 
                 <div className={cx("info")}>
-                  <span>{question.upvote + question.downvote} vote</span>
+                  <span>
+                    {question.upvote.length - question.downvote.length} vote
+                  </span>
                   <span>0 answers</span>
                   <span>{question.viewed} views</span>
                   <span>asked {questionTime}</span>

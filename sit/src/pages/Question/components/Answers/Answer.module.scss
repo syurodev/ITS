@@ -1,0 +1,59 @@
+//ANSWER
+.answer {
+  .title {
+    font-size: 25px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+
+    div {
+      width: fit-content;
+    }
+
+    span + span {
+      margin-left: 8px;
+    }
+  }
+
+  .btns {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+
+    .cancel-btn {
+      margin-left: 8px;
+    }
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block !important;
+}
+
+//answer-item
+.answer-item {
+  margin-top: 30px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--box-shadow-color);
+  border-radius: var(--box-border-radius);
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.error {
+  font-size: 15px;
+  margin-left: 10px;
+  color: var(--red);
+}

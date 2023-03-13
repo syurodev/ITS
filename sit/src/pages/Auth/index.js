@@ -2,7 +2,6 @@ import classNames from "classnames/bind";
 import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { auth, provider } from "~/firebase";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +10,7 @@ import images from "~/assets/images";
 import Button from "~/components/Button";
 import routesConfig from "~/config/router";
 import style from "./Auth.module.scss";
+import * as userServices from "~/services/authServices";
 
 const cx = classNames.bind(style);
 
@@ -104,7 +104,7 @@ function Auth() {
     }
   };
 
-  const handelRegister = async () => {
+  const handelRegister = () => {
     userData.email = email;
     userData.username = username;
     userData.password = password;
@@ -115,47 +115,41 @@ function Auth() {
       setDisableButton(true);
       setError("Vui lòng nhập đầy đủ thông tin");
     } else {
-      await axios.post("/api/user/check", userData).then((res) => {
-        if (res.data.status === false) {
-          setError(res.data.message);
+      const createAccount = async () => {
+        const result = await userServices.register(userData);
+        if (result.status === false) {
+          setError(result.message);
           setDisableButton(true);
         } else {
-          axios
-            .post("/api/user/create", userData)
-            .then((res) => {
-              localStorage.setItem("itsSession", JSON.stringify(res.data.data));
-              dispatch(login(res.data.data));
-              navigate(routesConfig.home);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          localStorage.setItem("itsSession", JSON.stringify(result.data));
+          dispatch(login(result.data));
+          navigate(routesConfig.home);
         }
-      });
+      };
+
+      createAccount();
     }
   };
 
-  const handelLogin = async () => {
+  const handelLogin = () => {
     const userData = {
       username: username,
       password: password,
     };
 
-    await axios
-      .post("/api/user/login", userData)
-      .then((res) => {
-        if (res.data.status !== false) {
-          localStorage.setItem("itsSession", JSON.stringify(res.data.data));
-          dispatch(login(res.data.data));
-          navigate(routesConfig.home);
-        } else {
-          setError(res.data.message);
-          setDisableButton(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const userLogin = async () => {
+      const result = await userServices.login(userData);
+      if (result.status) {
+        localStorage.setItem("itsSession", JSON.stringify(result.data));
+        dispatch(login(result.data));
+        navigate(routesConfig.home);
+      } else {
+        setError(result.message);
+        setDisableButton(true);
+      }
+    };
+
+    userLogin();
   };
 
   return (

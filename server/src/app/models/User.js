@@ -12,6 +12,7 @@ const userSchema = new Schema({
   dateCreate: { type: Date, default: Date.now },
   role: { type: Number, default: 1 },
   reputationScore: { type: Number, default: 0 },
+  bookmark: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
 });
 
 module.exports = mongoose.model("User", userSchema);

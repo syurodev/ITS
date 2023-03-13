@@ -23,6 +23,7 @@
   //lord-icon support
   .icon {
     lord-icon {
+      box-sizing: border-box;
       max-width: 27px;
       max-height: 27px;
       position: relative;
@@ -91,6 +92,12 @@
   }
 }
 
+.onlyicon {
+  & .title {
+    display: none;
+  }
+}
+
 //Button Align Items
 .start {
   justify-content: left;
@@ -154,6 +161,48 @@
     lord-icon {
       max-width: 33px;
       max-height: 33px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: transparent;
+        width: 500px;
+        height: 100px;
+        top: -10px;
+        left: -30px;
+      }
+    }
+  }
+}
+
+.licon {
+  .icon {
+    lord-icon {
+      max-height: 50px;
+      max-width: 50px;
+      height: 50px;
+      width: 50px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: transparent;
+        width: 500px;
+        height: 100px;
+        top: -10px;
+        left: -30px;
+      }
+    }
+  }
+}
+
+.micon {
+  .icon {
+    lord-icon {
+      max-height: 42px;
+      max-width: 42px;
+      height: 42px;
+      width: 42px;
 
       &::after {
         content: "";

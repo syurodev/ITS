@@ -18,7 +18,7 @@
 .question-option {
   box-shadow: var(--box-shadow-color);
   padding: 25px;
-  border-radius: 15px;
+  border-radius: var(--box-border-radius);
 
   + .question-option {
     margin-top: 15px;

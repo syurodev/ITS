@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
+  bookmark: {},
 };
 
 export const userSlice = createSlice({
@@ -14,9 +15,12 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = {};
     },
+    bookmark: (state, action) => {
+      state.bookmark = action.payload;
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, bookmark } = userSlice.actions;
 
 export default userSlice.reducer;

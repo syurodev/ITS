@@ -1,0 +1,64 @@
+//COMMENT
+.comment {
+  margin-top: 20px;
+  margin-left: 30px;
+
+  .title {
+    font-weight: 500;
+    font-size: 18px;
+
+    span {
+      position: relative;
+      width: 100%;
+      display: inline-block;
+
+      &::before {
+        content: "";
+        position: absolute;
+        height: 1px;
+        width: 88%;
+        transform: translateY(-50%);
+        right: 0;
+        top: 50%;
+        background-color: var(--gray);
+      }
+    }
+  }
+
+  .content {
+    border-bottom: 1px solid var(--gray);
+    margin-left: 12px;
+    font-size: 15px;
+    color: var(--text-color);
+    display: flex;
+    padding: 5px 0;
+
+    .user-comment {
+      font-weight: 500;
+      margin-right: 8px;
+
+      .score {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .btn {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-top: 8px;
+
+    .cancel-btn {
+      margin-right: 8px;
+    }
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block !important;
+}

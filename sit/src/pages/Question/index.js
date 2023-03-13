@@ -1,21 +1,37 @@
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
-import axios from "axios";
 import parse from "html-react-parser";
-import hljs from "highlight.js";
-import "highlight.js/styles/github.css";
 import Tippy from "@tippyjs/react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Prism from "~/future/prism";
+import { useDispatch } from "react-redux";
 
 import style from "./Question.module.scss";
 import timeElapsed from "~/future/timeElapsed";
 import Button from "~/components/Button";
+import Comment from "./components/Comment";
+import Answers from "./components/Answers";
+import "~/future/prism-laserwave.css";
+import * as questionServices from "~/services/questionServices";
+import * as authServices from "~/services/authServices";
+import { bookmark } from "~/pages/Auth/authSlice";
 
 const cx = classNames.bind(style);
 
 const Question = () => {
+  const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => {
+    return state.user.user;
+  });
+
+  let bookmarks = useSelector((state) => {
+    return state.user.bookmark;
+  });
+
+  // DATA
   const [title, setTitle] = useState("");
-  const [upvote, setUpvote] = useState(0);
-  const [downvote, setDownvote] = useState(0);
   const [viewed, setViewed] = useState(0);
   const [createdAt, setCreatedAt] = useState();
   const [editAt, setEditAt] = useState();
@@ -24,102 +40,210 @@ const Question = () => {
   const [solved, setSolved] = useState(false);
   const [user, setUser] = useState({});
   const [tags, setTags] = useState([]);
+  const [userBookmarks, setUserBookmarks] = useState([]);
+  const [bookmarkIconColor, setBookmarkIconColor] = useState("030e12");
+
+  // VOTE
+  const [upvote, setUpvote] = useState([]);
+  const [voteNumber, setVoteNumber] = useState(0);
+  const [downvote, setDownvote] = useState([]);
+  const [upvoteIconColor, setUpvoteIconColor] = useState("030e12");
+  const [downvoteIconColor, setDownvoteIconColor] = useState("030e12");
+
+  // COMMENT
+  const [comments, setComments] = useState([]);
+
+  let urlSplit = window.location.href.split("/", -1);
+  let idQuestion = urlSplit[4];
 
   useEffect(() => {
-    let urlSplit = window.location.href.split("/", -1);
-    let idQuestion = urlSplit[4];
+    setUserBookmarks(bookmarks.data);
+  }, [bookmarks.data]);
 
+  //FETCH API GET QUESTION DETAIL
+  useEffect(() => {
     const getQuestionDetail = async () => {
-      // const data =
-      await axios
-        .get(`/api/questions/${idQuestion}`)
-        .then((res) => {
-          console.log("dataRes: ", res);
-          setTitle(res.data[0].title);
-          setUpvote(res.data[0].upvote);
-          setDownvote(res.data[0].downvote);
-          setViewed(res.data[0].viewed);
-          setCreatedAt(res.data[0].createdAt);
-          setEditAt(res.data[0].editAt);
-          setProblem(res.data[0].problem);
-          setExpecting(res.data[0].expecting);
-          setSolved(res.data[0].solved);
-          setUser(res.data[0].user);
-          setTags(JSON.parse(res.data[0].tags[0]));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      // .finally(() => {
-      //   console.log("FormatText");
-      //   hljs.highlightAll();
-      // });
-      // console.log(data);
+      const result = await questionServices.questionDetail(idQuestion);
+
+      setTitle(result.title);
+      setViewed(result.viewed);
+      setCreatedAt(result.createdAt);
+      setEditAt(result.editAt);
+      setProblem(result.problem);
+      setExpecting(result.expecting);
+      setSolved(result.solved);
+      setUser(result.user);
+      setTags(JSON.parse(result.tags[0]));
+      setComments(result.comments);
+      setUpvote(result.upvote);
+      setDownvote(result.downvote);
     };
     getQuestionDetail();
-  }, [window.location.href]);
+  }, [idQuestion]);
+
+  //FORMAT UI
+  useEffect(() => {
+    if (upvote.length > 0 || downvote.length > 0) {
+      if (upvote.includes(currentUser._id)) {
+        setUpvoteIconColor("ed7966");
+      }
+
+      if (downvote.includes(currentUser._id)) {
+        setDownvoteIconColor("ed7966");
+      }
+    }
+    if (userBookmarks.includes(idQuestion)) {
+      setBookmarkIconColor("ed7966");
+    } else {
+      setBookmarkIconColor("030e12");
+    }
+
+    Prism.highlightAll();
+  }, [upvote, downvote, problem, expecting, currentUser._id, userBookmarks]);
+
+  //VOTE NUMBER
+  useEffect(() => {
+    setVoteNumber(upvote.length - downvote.length);
+  }, [upvote.length, downvote.length]);
+
+  // UNVOTE
+  const handelUnvote = async () => {
+    const result = await questionServices.unvote(idQuestion, {
+      user: currentUser._id,
+    });
+    setUpvote(result.data.upvote);
+    setDownvote(result.data.downvote);
+    setUpvoteIconColor("030e12");
+    setDownvoteIconColor("030e12");
+  };
+
+  //UPVOTE / DOWNVOTE
+  const handelVote = async (type) => {
+    if (type === "upvote") {
+      if (!upvote.includes(currentUser._id)) {
+        const result = await questionServices.upvote(idQuestion, {
+          user: currentUser._id,
+        });
+
+        setUpvote(result.data.upvote);
+        setDownvote(result.data.downvote);
+        setUpvoteIconColor("ed7966");
+        setDownvoteIconColor("030e12");
+      } else {
+        handelUnvote();
+      }
+    } else if (type === "downvote") {
+      if (!downvote.includes(currentUser._id)) {
+        const result = await questionServices.downvote(idQuestion, {
+          user: currentUser._id,
+        });
+
+        setUpvote(result.data.upvote);
+        setDownvote(result.data.downvote);
+        setUpvoteIconColor("030e12");
+        setDownvoteIconColor("ed7966");
+      } else {
+        handelUnvote();
+      }
+    }
+  };
+
+  //HANDEL BOOKMARK
+  const handelBookmark = () => {
+    const queryData = {
+      id: idQuestion,
+      user: user._id,
+    };
+
+    const fetchApi = async () => {
+      const result = await authServices.addBookmark(queryData);
+      sessionStorage.setItem("bookmark", JSON.stringify(result));
+      dispatch(bookmark(result));
+    };
+    fetchApi();
+  };
 
   const questionTime = timeElapsed(createdAt);
   const modifiedTime = timeElapsed(editAt);
-
-  if (expecting) {
-    console.log("FormatText if");
-    hljs.highlightAll();
-  }
-
-  // setTimeout(() => {
-  //   console.log("FormatText");
-  //   hljs.highlightAll();
-  // }, 3000);
 
   return (
     <div className={cx("wrapper")}>
       <div className={cx("header")}>
         <h1 className={cx("title")}>{title}</h1>
         <div className={cx("info")}>
-          <div className={cx("user")}>
-            <img src={user.avatar} alt={user.username} />
-            <span className={cx("username")}>{user.username}</span>
-          </div>
-
+          <Link to={`/profile/${user._id}`}>
+            <div className={cx("user")}>
+              <img src={user.avatar} alt={user.username} />
+              <span className={cx("username")}>{user.username}</span>
+            </div>
+          </Link>
           <span>Asked {questionTime}</span>
           <span>Modified {modifiedTime}</span>
           <span>Viewed {viewed} times</span>
         </div>
       </div>
+
+      {/* // QUESTION */}
       <div className={cx("question")}>
         <div className={cx("action")}>
-          <Tippy content="Upvote">
+          <Tippy content="Upvote" placement="left">
             <div>
               <Button
                 text
                 licon
+                onlyicon
                 leftIcon={
                   <lord-icon
                     src="https://cdn.lordicon.com/xsdtfyne.json"
-                    trigger="hover"
-                    colors="primary:#030e12"
+                    trigger="click"
+                    colors={`primary:#${upvoteIconColor}`}
                     state="hover-2"
                     style={{ width: "250", height: "250" }}
                   ></lord-icon>
                 }
+                onClick={() => {
+                  handelVote("upvote");
+                }}
               ></Button>
             </div>
           </Tippy>
-          <Tippy content="Upvote">
+          <div className={cx("vote")}>{voteNumber}</div>
+          <Tippy content="Downvote" placement="left">
             <div>
               <Button
                 text
                 licon
+                onlyicon
                 leftIcon={
                   <lord-icon
                     src="https://cdn.lordicon.com/rxufjlal.json"
-                    trigger="hover"
-                    colors="primary:#030e12"
+                    trigger="click"
+                    colors={`primary:#${downvoteIconColor}`}
                     state="hover-2"
                     style={{ width: "250", height: "250" }}
                   ></lord-icon>
                 }
+                onClick={() => {
+                  handelVote("downvote");
+                }}
+              ></Button>
+            </div>
+          </Tippy>
+          <Tippy content="Save to Bookmark" placement="left">
+            <div>
+              <Button
+                text
+                onlyicon
+                leftIcon={
+                  <lord-icon
+                    src="https://cdn.lordicon.com/gigfpovs.json"
+                    trigger="click"
+                    colors={`primary:#${bookmarkIconColor}`}
+                    state="hover-1"
+                    style={{ width: "250", height: "250" }}
+                  ></lord-icon>
+                }
+                onClick={handelBookmark}
               ></Button>
             </div>
           </Tippy>
@@ -136,22 +260,14 @@ const Question = () => {
               </Button>
             ))}
           </div>
+
+          {/* COMMENT */}
+          <Comment data={comments} id={idQuestion} currentUser={currentUser} />
         </div>
-
-        {console.log("DOM")}
       </div>
 
-      <div className={cx("comment")}>
-        <span className={cx("user")}>đasadsadas:</span>
-        <span className={cx("content")}>
-          As far as I know window.onload waits for image loads too. I see the
-          question is from 2012, maybe old browsers worked differently, I am not
-          sure. If backward compatibility is important to you, then you can
-          always add a script, which checks whether your images are loaded
-          before you continue.
-        </span>
-      </div>
-      <div className={cx("answer")}></div>
+      {/* ANSWER */}
+      <Answers questionId={idQuestion} />
     </div>
   );
 };

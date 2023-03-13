@@ -1,84 +1,58 @@
 const mongoose = require("mongoose");
 
-const questionSchema = require("../models/Question");
+const answerSchema = require("../models/Answer");
 
-class QuestionsController {
-  //[GET] /questions
-  index(req, res) {
-    questionSchema.find(
-      null,
-      null,
-      { sort: { createdAt: -1 } },
-      function (err, questions) {
-        if (!err) {
-          res.send(questions);
-        }
-      }
-    );
-  }
-
-  //[GET] /questions/question
-  async question(req, res) {
-    //   questionSchema.findOneAndUpdate(
-    //     { _id: mongoose.Types.ObjectId(req.query.id) },
-    //     {
-    //       $inc: { viewed: 1 },
-    //     },
-    //     {
-    //       new: true,
-    //     }
-    //   );
-    questionSchema
+class AnswersController {
+  async answer(req, res) {
+    await answerSchema
       .aggregate([
         {
-          $match: { _id: mongoose.Types.ObjectId(req.query.id) },
-        },
-        {
-          $lookup: {
-            from: "comments",
-            let: { question_id: "$_id" },
-            pipeline: [
-              {
-                $match: {
-                  question_id: mongoose.Types.ObjectId(req.query.id),
-                },
-              },
-              {
-                $project: {
-                  _id: 1,
-                  question_id: 1,
-                  user: 1,
-                  comment: 1,
-                  createdAt: 1,
-                  editAt: 1,
-                },
-              },
-            ],
-            as: "comments",
+          $match: {
+            question_id: mongoose.Types.ObjectId(req.query.id),
           },
+          // },
+          // {
+          //   $lookup: {
+          //     from: "comments",
+          //     pipeline: [
+          //       {
+          //         $match: {
+          //           question_id: mongoose.Types.ObjectId(req.query.id),
+          //         },
+          //       },
+          //       {
+          //         $project: {
+          //           _id: 1,
+          //           question_id: 1,
+          //           answer_id: 1,
+          //           user: 1,
+          //           comment: 1,
+          //           createdAt: 1,
+          //           editAt: 1,
+          //         },
+          //       },
+          //     ],
+          //     as: "comments",
+          //   },
         },
       ])
       .exec()
-      .then((questionDetails) => {
-        res.status(200).send(questionDetails);
+      .then((answerDetails) => {
+        res.status(200).send(answerDetails);
       })
       .catch((e) => {
         console.log("Error: ", e);
-        res.status(400).send(error);
+        res.status(400).send(e);
       });
   }
 
-  //[POST] /questions/ask
-  async upload(req, res) {
-    const questionData = new questionSchema({
-      title: req.body.title,
-      problem: req.body.problem,
-      expecting: req.body.expecting,
-      tags: req.body.tags,
+  async create(req, res) {
+    const answerData = new answerSchema({
+      question_id: req.body.question_id,
+      answer: req.body.answer,
       user: req.body.user,
     });
-
-    await questionData
+    await answerData
       .save()
       .then((doc) => {
         res.status(201).send({
@@ -89,15 +63,15 @@ class QuestionsController {
       .catch((err) => {
         res.status(400).send({
           status: false,
-          message: "Error adding question",
+          message: "Answer not added successfully",
         });
       });
   }
 
-  //[PATCH] /questions/upvote:item
+  //[PATCH] /answers/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;
-    await questionSchema
+    await answerSchema
       .findOneAndUpdate(
         {
           _id: req.params.item,
@@ -114,7 +88,7 @@ class QuestionsController {
         if (err) {
           return res.status(400).send({
             status: false,
-            message: "Error upvote question",
+            message: "Error upvote answer",
           });
         } else {
           res.status(201).send({
@@ -125,10 +99,10 @@ class QuestionsController {
       });
   }
 
-  //[PATCH] /questions/downvote:item
+  //[PATCH] /answers/downvote:item
   async updateDownvote(req, res) {
     const userUpvote = req.body.user;
-    await questionSchema
+    await answerSchema
       .findOneAndUpdate(
         {
           _id: req.params.item,
@@ -145,7 +119,7 @@ class QuestionsController {
         if (err) {
           return res.status(400).send({
             status: false,
-            message: "Error downvote question",
+            message: "Error downvote answer",
           });
         } else {
           res.status(201).send({
@@ -156,10 +130,10 @@ class QuestionsController {
       });
   }
 
-  //[PATCH] /questions/unvote:item
+  //[PATCH] /answers/unvote:item
   async updateUnvote(req, res) {
     const userUpvote = req.body.user;
-    await questionSchema
+    await answerSchema
       .findOneAndUpdate(
         {
           _id: req.params.item,
@@ -175,7 +149,7 @@ class QuestionsController {
         if (err) {
           return res.status(400).send({
             status: false,
-            message: "Error unvote question",
+            message: "Error unvote answer",
           });
         } else {
           res.status(201).send({
@@ -187,4 +161,4 @@ class QuestionsController {
   }
 }
 
-module.exports = new QuestionsController();
+module.exports = new AnswersController();

@@ -10,7 +10,7 @@
   width: fit-content;
   height: fit-content;
   box-shadow: var(--box-shadow-color);
-  border-radius: 1.5rem;
+  border-radius: var(--box-border-radius);
 }
 
 .options {
@@ -46,7 +46,7 @@
       border: none;
       outline: none;
       padding: 10px 10px;
-      border-radius: 1.5rem;
+      border-radius: var(--box-border-radius);
     }
 
     & .error {
