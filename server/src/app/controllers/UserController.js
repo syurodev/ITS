@@ -158,10 +158,16 @@ class UserController {
   async getBookmark(req, res) {
     await userSchema
       .find({ _id: req.query.user }, function (err, data) {
-        res.status(201).send({
-          status: true,
-          data: data[0].bookmark,
-        });
+        if (data.length === 0) {
+          return res.status(400).send({
+            status: false,
+          });
+        } else {
+          res.status(201).send({
+            status: true,
+            data: data[0].bookmark,
+          });
+        }
       })
       .clone();
   }

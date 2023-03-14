@@ -1,70 +1,41 @@
 const mongoose = require("mongoose");
 
 const questionSchema = require("../models/Question");
+const userSchema = require("../models/User");
 
 class QuestionsController {
   //[GET] /questions
   index(req, res) {
-    questionSchema.find(
-      null,
-      null,
-      { sort: { createdAt: -1 } },
-      function (err, questions) {
-        if (!err) {
-          res.send(questions);
+    questionSchema
+      .find({}, "_id upvote downvote viewed title tags solved createdAt")
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .sort({ createdAt: -1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
         }
-      }
-    );
+      });
   }
 
   //[GET] /questions/question
   async question(req, res) {
-    //   questionSchema.findOneAndUpdate(
-    //     { _id: mongoose.Types.ObjectId(req.query.id) },
-    //     {
-    //       $inc: { viewed: 1 },
-    //     },
-    //     {
-    //       new: true,
-    //     }
-    //   );
     questionSchema
-      .aggregate([
-        {
-          $match: { _id: mongoose.Types.ObjectId(req.query.id) },
-        },
-        {
-          $lookup: {
-            from: "comments",
-            let: { question_id: "$_id" },
-            pipeline: [
-              {
-                $match: {
-                  question_id: mongoose.Types.ObjectId(req.query.id),
-                },
-              },
-              {
-                $project: {
-                  _id: 1,
-                  question_id: 1,
-                  user: 1,
-                  comment: 1,
-                  createdAt: 1,
-                  editAt: 1,
-                },
-              },
-            ],
-            as: "comments",
-          },
-        },
-      ])
-      .exec()
-      .then((questionDetails) => {
-        res.status(200).send(questionDetails);
-      })
-      .catch((e) => {
-        console.log("Error: ", e);
-        res.status(400).send(error);
+      .find({ _id: mongoose.Types.ObjectId(req.query.id) })
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
       });
   }
 
@@ -77,6 +48,20 @@ class QuestionsController {
       tags: req.body.tags,
       user: req.body.user,
     });
+
+    userSchema
+      .findOneAndUpdate(
+        {
+          _id: req.body.user._id,
+        },
+        {
+          $inc: { reputationScore: 10 },
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
 
     await questionData
       .save()
@@ -97,6 +82,21 @@ class QuestionsController {
   //[PATCH] /questions/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: 2 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
     await questionSchema
       .findOneAndUpdate(
         {
@@ -128,6 +128,22 @@ class QuestionsController {
   //[PATCH] /questions/downvote:item
   async updateDownvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: -2 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
+
     await questionSchema
       .findOneAndUpdate(
         {
@@ -159,6 +175,22 @@ class QuestionsController {
   //[PATCH] /questions/unvote:item
   async updateUnvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: -2 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
+
     await questionSchema
       .findOneAndUpdate(
         {

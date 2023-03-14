@@ -3,18 +3,24 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Tippy from "@tippyjs/react";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Bookmarks.module.scss";
 import * as userServices from "~/services/authServices";
 import Button from "~/components/Button";
+import routesConfig from "~/config/router";
 import timeElapsed from "~/future/timeElapsed";
 
-const cx = classNames.bind(style);
-
 function Bookmarks() {
+  const cx = classNames.bind(style);
+  const navigate = useNavigate();
   let currentUser = useSelector((state) => {
     return state.user.user;
   });
+
+  if (Object.keys(currentUser).length === 0) {
+    navigate(routesConfig.login);
+  }
 
   let bookmarks = useSelector((state) => {
     return state.user.bookmark;
@@ -29,6 +35,7 @@ function Bookmarks() {
       const getData = async () => {
         const result = await userServices.getBookmark(currentUser._id);
         setUserBookmarks(result.data);
+        sessionStorage.setItem("bookmark", JSON.stringify(result.data));
       };
       getData();
     } else {
@@ -38,11 +45,13 @@ function Bookmarks() {
 
   //GET USER BOOKMARKS DATA
   useEffect(() => {
-    const fetchApi = async () => {
-      const result = await userServices.getAllBookmark(userBookmarks);
-      setQuestions(result.data);
-    };
-    fetchApi();
+    if (Object.keys(currentUser).length !== 0) {
+      const fetchApi = async () => {
+        const result = await userServices.getAllBookmark(userBookmarks);
+        setQuestions(result.data);
+      };
+      fetchApi();
+    }
   }, [userBookmarks]);
 
   return (

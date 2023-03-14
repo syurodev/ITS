@@ -11,7 +11,7 @@ const questionSchema = new Schema({
   downvote: { type: Array },
   viewed: { type: Number, default: 0 },
   solved: { type: Boolean, default: false },
-  user: { type: Object, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   comment_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Comments",

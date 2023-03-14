@@ -6,6 +6,9 @@ import { useSelector } from "react-redux";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import TippyHeadless from "@tippyjs/react/headless";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 import style from "./Header.module.scss";
 import Button from "~/components/Button";
@@ -16,14 +19,18 @@ import routesConfig from "~/config/router";
 import { Wrapper as PopperWrapper } from "~/components/Popper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import * as userServices from "~/services/authServices";
+import { logout } from "~/pages/Auth/authSlice";
 
 defineElement(lottie.loadAnimation);
 
-const cx = classNames.bind(style);
-
 function Header() {
+  const [userSession, setUserSession] = useState(false);
+
+  const cx = classNames.bind(style);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   let currentUser = useSelector((state) => {
     return state.user.user;
   });
@@ -32,29 +39,37 @@ function Header() {
     return state.user.bookmark;
   });
 
-  useEffect(() => {
-    const getBookmark = async () => {
-      const result = await userServices.getBookmark(currentUser._id);
-      sessionStorage.setItem("bookmark", JSON.stringify(result.data));
-    };
-    getBookmark();
-  }, []);
+  // //GET USER BOOKMARK
+  // useEffect(() => {
+  //   const getBookmark = async () => {
+  //     const result = await userServices.getBookmark(currentUser._id);
+  //     sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+  //   };
+  //   getBookmark();
+  // }, []);
 
   let state = {
     currentUser,
     bookmarks,
   };
+
   LoadUserState(state);
 
-  const session = () => {
-    if (Object.keys(currentUser).length === 0) {
-      return false;
-    } else {
-      return true;
-    }
-  };
+  useEffect(() => {
+    const session = () => {
+      if (Object.keys(currentUser).length === 0) {
+        setUserSession(false);
+      } else {
+        setUserSession(true);
+      }
+    };
+    session();
+  }, [currentUser]);
 
-  const [user, setUser] = useState(session);
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate(routesConfig.login);
+  };
 
   return (
     <header className={cx("wrapper")}>
@@ -73,7 +88,7 @@ function Header() {
         {/* Search Box */}
         <Search />
 
-        {user ? (
+        {userSession ? (
           <div className={cx("actions")}>
             <div className={cx("items")}>
               <Tippy content="Thông báo">
@@ -130,6 +145,7 @@ function Header() {
                       leftIcon={
                         <FontAwesomeIcon icon={faArrowRightFromBracket} />
                       }
+                      onClick={handleLogout}
                     >
                       Đăng xuất
                     </Button>

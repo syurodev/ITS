@@ -25,9 +25,7 @@ const publicRoutes = [
   { path: routesConfig.register, component: Auth, layout: null },
   { path: routesConfig.login, component: Auth, layout: null },
   { path: routesConfig.ask, component: Ask, layout: NoSidebar },
+  { path: routesConfig.works, component: Works },
 ];
 
-//Private Routes
-const privateRoutes = [{ path: routesConfig.works, component: Works }];
-
-export { publicRoutes, privateRoutes };
+export { publicRoutes };

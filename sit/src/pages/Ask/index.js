@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import style from "./Ask.module.scss";
 import Button from "~/components/Button";
 import routesConfig from "~/config/router";
+import * as questionServices from "~/services/questionServices";
 
 const cx = classNames.bind(style);
 
@@ -36,17 +37,14 @@ const Ask = () => {
         problem: problem,
         expecting: expecting,
         tags: JSON.stringify(tags),
-        user: currentUser,
+        user: currentUser._id,
       };
 
-      await axios
-        .post("/api/questions/ask", bodyJSON)
-        .then((res) => {
-          navigate(`/question/${res.data.data._id}`);
-        })
-        .catch((err) => {
-          console.log("Error!!");
-        });
+      const fetchApi = async () => {
+        const result = await questionServices.ask(bodyJSON);
+        navigate(`/question/${result._id}`);
+      };
+      fetchApi();
     }
   };
 

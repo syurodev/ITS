@@ -1,23 +1,30 @@
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import parse from "html-react-parser";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Comment.module.scss";
 import Button from "~/components/Button";
 import Tiptap from "~/future/tiptapEditor";
 import * as commentServices from "~/services/commentServices";
+import routesConfig from "~/config/router";
 
-const cx = classNames.bind(style);
+function Comment({ id, currentUser = [], type = "question" }) {
+  const cx = classNames.bind(style);
+  const navigate = useNavigate();
 
-function Comment({ data = [], id, currentUser = [], type = "question" }) {
   const [comments, setComments] = useState([]);
   const [showCommentEditor, setShowCommentEditor] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setComments(data);
-  }, [data]);
+    const fetchApi = async () => {
+      const result = await commentServices.getComments(id);
+      setComments(result);
+    };
+    fetchApi();
+  }, []);
 
   useEffect(() => {
     if (newComment.trim() !== "") {
@@ -26,37 +33,43 @@ function Comment({ data = [], id, currentUser = [], type = "question" }) {
   }, [newComment]);
 
   const handelAddComment = () => {
-    if (!showCommentEditor) {
-      setShowCommentEditor(true);
-    } else if (newComment.trim() === "") {
-      setError("Nội dung bình luận không được bỏ trống");
+    if (Object.keys(currentUser).length !== 0) {
+      if (!showCommentEditor) {
+        setShowCommentEditor(true);
+      } else if (newComment.trim() === "") {
+        setError("Nội dung bình luận không được bỏ trống");
+      } else {
+        const fetchApi = async () => {
+          if (type === "question") {
+            const commentData = {
+              question_id: id,
+              comment: newComment,
+              user: currentUser._id,
+            };
+
+            const result = await commentServices.addCommentQuestion(
+              commentData
+            );
+            setComments([result.data, ...comments]);
+            setShowCommentEditor(false);
+            setNewComment("");
+          } else if (type === "answer") {
+            const commentData = {
+              answer_id: id,
+              comment: newComment,
+              user: currentUser._id,
+            };
+
+            const result = await commentServices.addCommentAnswer(commentData);
+            setComments([result.data, ...comments]);
+            setShowCommentEditor(false);
+            setNewComment("");
+          }
+        };
+        fetchApi();
+      }
     } else {
-      const fetchApi = async () => {
-        if (type === "question") {
-          const commentData = {
-            question_id: id,
-            comment: newComment,
-            user: currentUser,
-          };
-
-          const result = await commentServices.addCommentQuestion(commentData);
-          setComments([result.data, ...comments]);
-          setShowCommentEditor(false);
-          setNewComment("");
-        } else if (type === "answer") {
-          const commentData = {
-            answer_id: id,
-            comment: newComment,
-            user: currentUser,
-          };
-
-          const result = await commentServices.addCommentAnswer(commentData);
-          setComments([result.data, ...comments]);
-          setShowCommentEditor(false);
-          setNewComment("");
-        }
-      };
-      fetchApi();
+      navigate(routesConfig.login);
     }
   };
 

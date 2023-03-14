@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Answer.module.scss";
 import Button from "~/components/Button";
 import Tiptap from "~/future/tiptapEditor";
 import Answer from "./Answer";
 import * as AnswerServices from "~/services/answerServices";
-
-const cx = classNames.bind(style);
+import routesConfig from "~/config/router";
 
 function Answers({ questionId }) {
+  const navigate = useNavigate();
+  const cx = classNames.bind(style);
   const [newAnswerContent, setNewAnswerContent] = useState("");
   const [showAnswerEditor, setShowAnswerEditor] = useState(false);
   const [answers, setAnswers] = useState([]);
-  const [answerstest, setAnswersTest] = useState([]);
   const [error, setError] = useState("");
 
   const currentUser = useSelector((state) => {
@@ -31,29 +32,31 @@ function Answers({ questionId }) {
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerData(questionId);
       setAnswers(result);
-      setAnswersTest(result);
     };
     fetchApi();
   }, [questionId]);
 
   const handelAddAnswer = () => {
-    if (!showAnswerEditor) {
-      setShowAnswerEditor(true);
-    } else if (newAnswerContent.trim() === "") {
-      setError("Nội dung câu trả lời không được bỏ trống");
+    if (Object.keys(currentUser).length !== 0) {
+      if (!showAnswerEditor) {
+        setShowAnswerEditor(true);
+      } else if (newAnswerContent.trim() === "") {
+        setError("Nội dung câu trả lời không được bỏ trống");
+      } else {
+        const answerData = {
+          question_id: questionId,
+          answer: newAnswerContent,
+          user: currentUser._id,
+        };
+        const fetchApi = async () => {
+          const result = await AnswerServices.addAnswer(answerData);
+          setAnswers([result.data, ...answers]);
+          setShowAnswerEditor(false);
+        };
+        fetchApi();
+      }
     } else {
-      const answerData = {
-        question_id: questionId,
-        answer: newAnswerContent,
-        user: currentUser,
-      };
-      const fetchApi = async () => {
-        const result = await AnswerServices.addAnswer(answerData);
-        console.log(result);
-        setAnswers([result.data, ...answers]);
-        setShowAnswerEditor(false);
-      };
-      fetchApi();
+      navigate(routesConfig.login);
     }
   };
 

@@ -14,6 +14,7 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.user = {};
+      localStorage.removeItem("itsSession");
     },
     bookmark: (state, action) => {
       state.bookmark = action.payload;

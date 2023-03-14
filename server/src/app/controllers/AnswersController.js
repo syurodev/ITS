@@ -1,48 +1,25 @@
 const mongoose = require("mongoose");
 
 const answerSchema = require("../models/Answer");
+const userSchema = require("../models/User");
 
 class AnswersController {
   async answer(req, res) {
     await answerSchema
-      .aggregate([
-        {
-          $match: {
-            question_id: mongoose.Types.ObjectId(req.query.id),
-          },
-          // },
-          // {
-          //   $lookup: {
-          //     from: "comments",
-          //     pipeline: [
-          //       {
-          //         $match: {
-          //           question_id: mongoose.Types.ObjectId(req.query.id),
-          //         },
-          //       },
-          //       {
-          //         $project: {
-          //           _id: 1,
-          //           question_id: 1,
-          //           answer_id: 1,
-          //           user: 1,
-          //           comment: 1,
-          //           createdAt: 1,
-          //           editAt: 1,
-          //         },
-          //       },
-          //     ],
-          //     as: "comments",
-          //   },
-        },
-      ])
-      .exec()
-      .then((answerDetails) => {
-        res.status(200).send(answerDetails);
-      })
-      .catch((e) => {
-        console.log("Error: ", e);
-        res.status(400).send(e);
+      .find(
+        { question_id: mongoose.Types.ObjectId(req.query.id) },
+        "answer createdAt downvote question_id solved upvote _id"
+      )
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
       });
   }
 
@@ -52,6 +29,19 @@ class AnswersController {
       answer: req.body.answer,
       user: req.body.user,
     });
+    await userSchema
+      .findOneAndUpdate(
+        {
+          _id: req.body.user,
+        },
+        {
+          $inc: { reputationScore: 5 },
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
     await answerData
       .save()
       .then((doc) => {
@@ -71,6 +61,21 @@ class AnswersController {
   //[PATCH] /answers/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: 3 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
     await answerSchema
       .findOneAndUpdate(
         {
@@ -102,6 +107,21 @@ class AnswersController {
   //[PATCH] /answers/downvote:item
   async updateDownvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: -3 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
     await answerSchema
       .findOneAndUpdate(
         {
@@ -133,6 +153,21 @@ class AnswersController {
   //[PATCH] /answers/unvote:item
   async updateUnvote(req, res) {
     const userUpvote = req.body.user;
+    if (req.body.user !== req.body.score) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.score,
+          },
+          {
+            $inc: { reputationScore: -3 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
     await answerSchema
       .findOneAndUpdate(
         {

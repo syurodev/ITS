@@ -3,11 +3,13 @@ import classNames from "classnames/bind";
 import parse from "html-react-parser";
 import Tippy from "@tippyjs/react";
 import { useSelector } from "react-redux";
-import * as userServices from "~/services/authServices";
 import { Link } from "react-router-dom";
 import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
+import * as userServices from "~/services/authServices";
+import routesConfig from "~/config/router";
 import style from "./Question.module.scss";
 import timeElapsed from "~/future/timeElapsed";
 import Button from "~/components/Button";
@@ -18,10 +20,12 @@ import * as questionServices from "~/services/questionServices";
 import * as authServices from "~/services/authServices";
 import { bookmark } from "~/pages/Auth/authSlice";
 
-const cx = classNames.bind(style);
-
 const Question = () => {
+  const cx = classNames.bind(style);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [session, setSession] = useState(false);
 
   const currentUser = useSelector((state) => {
     return state.user.user;
@@ -30,6 +34,14 @@ const Question = () => {
   let bookmarks = useSelector((state) => {
     return state.user.bookmark;
   });
+
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0) {
+      setSession(false);
+    } else {
+      setSession(true);
+    }
+  }, [currentUser]);
 
   // DATA
   const [title, setTitle] = useState("");
@@ -59,14 +71,19 @@ const Question = () => {
 
   //CHECK USER BOOKMARK
   useEffect(() => {
-    if (Object.keys(bookmarks).length === 0) {
-      const getData = async () => {
-        const result = await userServices.getBookmark(currentUser._id);
-        setUserBookmarks(result.data);
-      };
-      getData();
+    if (session) {
+      if (Object.keys(bookmarks).length === 0) {
+        const getData = async () => {
+          const result = await userServices.getBookmark(currentUser._id);
+          setUserBookmarks(result.data);
+          sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+        };
+        getData();
+      } else {
+        setUserBookmarks(bookmarks);
+      }
     } else {
-      setUserBookmarks(bookmarks);
+      setUserBookmarks([]);
     }
   }, [bookmarks]);
 
@@ -74,7 +91,6 @@ const Question = () => {
   useEffect(() => {
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
-
       setTitle(result.title);
       setViewed(result.viewed);
       setCreatedAt(result.createdAt);
@@ -118,59 +134,72 @@ const Question = () => {
 
   // UNVOTE
   const handelUnvote = async () => {
-    const result = await questionServices.unvote(idQuestion, {
-      user: currentUser._id,
-    });
-    setUpvote(result.data.upvote);
-    setDownvote(result.data.downvote);
-    setUpvoteIconColor("030e12");
-    setDownvoteIconColor("030e12");
+    if (session) {
+      const result = await questionServices.unvote(idQuestion, {
+        user: currentUser._id,
+        score: user._id,
+      });
+      setUpvote(result.data.upvote);
+      setDownvote(result.data.downvote);
+      setUpvoteIconColor("030e12");
+      setDownvoteIconColor("030e12");
+    }
   };
 
   //UPVOTE / DOWNVOTE
   const handelVote = async (type) => {
-    if (type === "upvote") {
-      if (!upvote.includes(currentUser._id)) {
-        const result = await questionServices.upvote(idQuestion, {
-          user: currentUser._id,
-        });
+    if (session) {
+      if (type === "upvote") {
+        if (!upvote.includes(currentUser._id)) {
+          const result = await questionServices.upvote(idQuestion, {
+            user: currentUser._id,
+            score: user._id,
+          });
 
-        setUpvote(result.data.upvote);
-        setDownvote(result.data.downvote);
-        setUpvoteIconColor("ed7966");
-        setDownvoteIconColor("030e12");
-      } else {
-        handelUnvote();
-      }
-    } else if (type === "downvote") {
-      if (!downvote.includes(currentUser._id)) {
-        const result = await questionServices.downvote(idQuestion, {
-          user: currentUser._id,
-        });
+          setUpvote(result.data.upvote);
+          setDownvote(result.data.downvote);
+          setUpvoteIconColor("ed7966");
+          setDownvoteIconColor("030e12");
+        } else {
+          handelUnvote();
+        }
+      } else if (type === "downvote") {
+        if (!downvote.includes(currentUser._id)) {
+          const result = await questionServices.downvote(idQuestion, {
+            user: currentUser._id,
+            score: user._id,
+          });
 
-        setUpvote(result.data.upvote);
-        setDownvote(result.data.downvote);
-        setUpvoteIconColor("030e12");
-        setDownvoteIconColor("ed7966");
-      } else {
-        handelUnvote();
+          setUpvote(result.data.upvote);
+          setDownvote(result.data.downvote);
+          setUpvoteIconColor("030e12");
+          setDownvoteIconColor("ed7966");
+        } else {
+          handelUnvote();
+        }
       }
+    } else {
+      navigate(routesConfig.login);
     }
   };
 
   //HANDEL BOOKMARK
   const handelBookmark = () => {
-    const queryData = {
-      id: idQuestion,
-      user: user._id,
-    };
+    if (session) {
+      const queryData = {
+        id: idQuestion,
+        user: currentUser._id,
+      };
 
-    const fetchApi = async () => {
-      const result = await authServices.addBookmark(queryData);
-      sessionStorage.setItem("bookmark", JSON.stringify(result.data));
-      dispatch(bookmark(result.data));
-    };
-    fetchApi();
+      const fetchApi = async () => {
+        const result = await authServices.addBookmark(queryData);
+        sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+        dispatch(bookmark(result.data));
+      };
+      fetchApi();
+    } else {
+      navigate(routesConfig.login);
+    }
   };
 
   const questionTime = timeElapsed(createdAt);
