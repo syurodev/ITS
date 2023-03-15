@@ -21,17 +21,7 @@ class UserController {
             res.status(201).send({
               status: true,
               data: {
-                username: user[0].username,
-                avatar: user[0].avatar,
-                email: user[0].email,
-                phone: user[0].phone,
-                role: user[0].role,
-                reputationScore: user[0].reputationScore,
-                dateCreate: user[0].dateCreate,
                 _id: user[0]._id,
-                bookmark: user[0].bookmark,
-                upvote: user[0].upvote,
-                downvote: user[0].downvote,
               },
             });
           }
@@ -70,13 +60,6 @@ class UserController {
                 res.status(201).send({
                   status: true,
                   data: {
-                    username: doc.username,
-                    avatar: doc.avatar,
-                    email: doc.email,
-                    phone: doc.phone,
-                    role: doc.role,
-                    reputationScore: doc.reputationScore,
-                    dateCreate: doc.dateCreate,
                     _id: doc._id,
                   },
                 });
@@ -93,6 +76,24 @@ class UserController {
         }
       }
     );
+  }
+
+  async getUserInfo(req, res) {
+    await userSchema
+      .find(
+        { _id: req.query.id },
+        "username avatar email phone role reputationScore bookmark dateCreate"
+      )
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
   }
 
   async bookmark(req, res) {

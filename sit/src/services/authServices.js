@@ -18,6 +18,19 @@ export const login = async (userData) => {
   }
 };
 
+export const getUserInfo = async (userId) => {
+  try {
+    const res = await request.get("user/login/info", {
+      params: {
+        id: userId,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const addBookmark = async (data = {}) => {
   try {
     const res = await request.post(`user/bookmark`, data);
@@ -29,7 +42,7 @@ export const addBookmark = async (data = {}) => {
 
 export const getBookmark = async (user) => {
   try {
-    const res = await request.get(`user/bookmark`, {
+    const res = await request.get("user/bookmark", {
       params: {
         user,
       },

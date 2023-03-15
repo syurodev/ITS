@@ -13,47 +13,36 @@ import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import style from "./Header.module.scss";
 import Button from "~/components/Button";
 import images from "~/assets/images";
-import { LoadUserState } from "~/redux/loadstate";
 import Search from "../Search";
 import routesConfig from "~/config/router";
 import { Wrapper as PopperWrapper } from "~/components/Popper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { login, logout, getData, bookmark } from "~/pages/Auth/authSlice";
 import * as userServices from "~/services/authServices";
-import { logout } from "~/pages/Auth/authSlice";
-
-defineElement(lottie.loadAnimation);
 
 function Header() {
+  defineElement(lottie.loadAnimation);
   const [userSession, setUserSession] = useState(false);
 
   const cx = classNames.bind(style);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userData, setUserData] = useState([]);
+  const [currentUserId, setCurrentUserId] = useState({});
 
-  let currentUser = useSelector((state) => {
-    return state.user.user;
-  });
-
-  let bookmarks = useSelector((state) => {
-    return state.user.bookmark;
-  });
-
-  // //GET USER BOOKMARK
-  // useEffect(() => {
-  //   const getBookmark = async () => {
-  //     const result = await userServices.getBookmark(currentUser._id);
-  //     sessionStorage.setItem("bookmark", JSON.stringify(result.data));
-  //   };
-  //   getBookmark();
-  // }, []);
-
-  let state = {
-    currentUser,
-    bookmarks,
-  };
-
-  LoadUserState(state);
+  const currentUser = useSelector((state) => state.user.userId);
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0) {
+      const userSession = localStorage.getItem("itsSession");
+      if (userSession) {
+        setCurrentUserId(JSON.parse(userSession));
+        dispatch(login(JSON.parse(userSession)));
+      }
+    } else {
+      setCurrentUserId(currentUser);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const session = () => {
@@ -64,7 +53,28 @@ function Header() {
       }
     };
     session();
-  }, [currentUser]);
+  }, [currentUserId]);
+
+  useEffect(() => {
+    const sessionData = localStorage.getItem("userData");
+    if (sessionData) {
+      const parsedData = JSON.parse(sessionData);
+      if (parsedData !== userData) {
+        setUserData(parsedData);
+      }
+    } else if (Object.keys(currentUserId).length !== 0) {
+      const fetchApi = async () => {
+        const result = await userServices.getUserInfo(currentUserId);
+        if (result) {
+          sessionStorage.setItem("userData", JSON.stringify(result[0]));
+          setUserData(result[0]);
+          dispatch(getData(result[0]));
+          dispatch(bookmark(result[0].bookmark));
+        }
+      };
+      fetchApi();
+    }
+  }, [currentUserId]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -154,7 +164,7 @@ function Header() {
               )}
             >
               <div className={cx("avatar")}>
-                <img src={currentUser.avatar} alt={currentUser.username} />
+                <img src={userData.avatar} alt={userData.username} />
               </div>
             </TippyHeadless>
           </div>

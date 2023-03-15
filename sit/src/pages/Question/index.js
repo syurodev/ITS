@@ -28,7 +28,7 @@ const Question = () => {
   const [session, setSession] = useState(false);
 
   const currentUser = useSelector((state) => {
-    return state.user.user;
+    return state.user.userId;
   });
 
   let bookmarks = useSelector((state) => {
@@ -74,9 +74,17 @@ const Question = () => {
     if (session) {
       if (Object.keys(bookmarks).length === 0) {
         const getData = async () => {
-          const result = await userServices.getBookmark(currentUser._id);
-          setUserBookmarks(result.data);
-          sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+          let sessionStorageBookmarks = sessionStorage.getItem("bookmark");
+          if (
+            sessionStorageBookmarks === null ||
+            sessionStorageBookmarks === {}
+          ) {
+            const result = await userServices.getBookmark(currentUser._id);
+            setUserBookmarks(result.data);
+            sessionStorage.setItem("bookmark", JSON.stringify(result.data));
+          } else {
+            setUserBookmarks(JSON.parse(sessionStorageBookmarks));
+          }
         };
         getData();
       } else {

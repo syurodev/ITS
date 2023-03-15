@@ -4,12 +4,32 @@ const questionSchema = require("../models/Question");
 const userSchema = require("../models/User");
 
 class QuestionsController {
-  //[GET] /questions
-  index(req, res) {
+  //[GET] /questions/new
+  questionSortNew(req, res) {
     questionSchema
       .find({}, "_id upvote downvote viewed title tags solved createdAt")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
-      .sort({ createdAt: -1 })
+      .limit(req.query.limit)
+      .sort({ createdAt: req.query.sort })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
+  }
+
+  //[GET] /questions/vote
+  questionSortVote(req, res) {
+    questionSchema
+      .find({}, "_id upvote downvote viewed title tags solved createdAt")
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .limit(req.query.limit)
+      .sort({ upvote: req.query.sort })
       .exec(function (error, result) {
         if (error) {
           res.status(400).send({
@@ -224,16 +244,19 @@ class QuestionsController {
         {
           _id: { $in: req.body },
         },
-        function (err, data) {
-          if (!err) {
-            res.status(201).send({
-              status: true,
-              data: data,
-            });
-          }
-        }
+        "_id upvote downvote viewed title tags solved createdAt"
       )
-      .clone();
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
   }
 }
 

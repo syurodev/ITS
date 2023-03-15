@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import { TagsInput } from "react-tag-input-component";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import Tiptap from "~/future/tiptapEditor";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +15,7 @@ const cx = classNames.bind(style);
 
 const Ask = () => {
   const currentUser = useSelector((state) => {
-    return state.user.user;
+    return state.user.userId;
   });
 
   const [title, setTitle] = useState("");

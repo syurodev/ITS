@@ -16,6 +16,32 @@
     }
   }
 
+  .content {
+    .respondent {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      font-weight: 500;
+
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 100rem;
+        object-fit: cover;
+        margin-right: 10px;
+      }
+
+      .reputationScore {
+        margin-left: 8px;
+        color: var(--primary-color);
+      }
+    }
+
+    .answer-data {
+      margin-bottom: 20px;
+    }
+  }
+
   .btns {
     display: flex;
     align-items: center;

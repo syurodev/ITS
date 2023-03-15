@@ -12,7 +12,7 @@ import routesConfig from "~/config/router";
 
 function Answer(data) {
   const currentUser = useSelector((state) => {
-    return state.user.user;
+    return state.user.userId;
   });
 
   const cx = classNames.bind(style);
@@ -143,7 +143,18 @@ function Answer(data) {
         </div>
 
         <div className={cx("content")}>
-          {parse(data.data.answer)}
+          <div className={cx("respondent")}>
+            <img
+              className={cx("avatar")}
+              src={data.data.user.avatar}
+              alt={data.data.user.username}
+            />
+            <span>{data.data.user.username}</span>
+            <span className={cx("reputationScore")}>
+              {data.data.user.reputationScore}
+            </span>
+          </div>
+          <div className={cx("answer-data")}>{parse(data.data.answer)}</div>
           {/* <Comment
             data={data.data.comments}
             questionId={"idQuestion"}

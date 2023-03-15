@@ -9,8 +9,11 @@ router.get("/question/", questionsController.question);
 //[GET] /questions/bookmarks
 router.post("/bookmarks", questionsController.getAllBookmark);
 
-//[GET] /questions
-router.get("/", questionsController.index);
+//[GET] /questions/new
+router.get("/new", questionsController.questionSortNew);
+
+//[GET] /questions/vote
+router.get("/vote", questionsController.questionSortVote);
 
 //[PATCH] /questions/upvote:item
 router.patch("/upvote/:item", questionsController.updateUpvote);

@@ -15,44 +15,32 @@ function Bookmarks() {
   const cx = classNames.bind(style);
   const navigate = useNavigate();
   let currentUser = useSelector((state) => {
-    return state.user.user;
+    return state.user.userId;
   });
 
-  if (Object.keys(currentUser).length === 0) {
-    navigate(routesConfig.login);
-  }
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0) {
+      navigate(routesConfig.login);
+    }
+  }, []);
 
   let bookmarks = useSelector((state) => {
     return state.user.bookmark;
   });
 
   const [questions, setQuestions] = useState([]);
-  const [userBookmarks, setUserBookmarks] = useState([]);
-
-  //GET USER BOOKMARKS
-  useEffect(() => {
-    if (Object.keys(bookmarks).length === 0) {
-      const getData = async () => {
-        const result = await userServices.getBookmark(currentUser._id);
-        setUserBookmarks(result.data);
-        sessionStorage.setItem("bookmark", JSON.stringify(result.data));
-      };
-      getData();
-    } else {
-      setUserBookmarks(bookmarks);
-    }
-  }, [bookmarks]);
 
   //GET USER BOOKMARKS DATA
   useEffect(() => {
     if (Object.keys(currentUser).length !== 0) {
       const fetchApi = async () => {
-        const result = await userServices.getAllBookmark(userBookmarks);
-        setQuestions(result.data);
+        const result = await userServices.getAllBookmark(bookmarks);
+
+        setQuestions(result);
       };
       fetchApi();
     }
-  }, [userBookmarks]);
+  }, [bookmarks]);
 
   return (
     <div className={cx("wrapper")}>

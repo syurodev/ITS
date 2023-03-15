@@ -19,7 +19,7 @@ function Answers({ questionId }) {
   const [error, setError] = useState("");
 
   const currentUser = useSelector((state) => {
-    return state.user.user;
+    return state.user.userId;
   });
 
   useEffect(() => {

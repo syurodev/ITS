@@ -9,9 +9,28 @@ export const ask = async (data) => {
   }
 };
 
-export const getQuestions = async () => {
+export const getQuestionsSortNew = async (limit = 10, sort = -1) => {
   try {
-    const res = await request.get("questions");
+    const res = await request.get("questions/new", {
+      params: {
+        limit,
+        sort,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getQuestionsSortVote = async (limit = 10, sort = -1) => {
+  try {
+    const res = await request.get("questions/vote", {
+      params: {
+        limit,
+        sort,
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

@@ -8,25 +8,64 @@ import timeElapsed from "~/future/timeElapsed";
 
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
-import { getQuestions } from "~/services/questionServices";
+import * as questionServices from "~/services/questionServices";
 
 const cx = classNames.bind(style);
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
+  const [sortActive, setSortActive] = useState(true);
 
   useEffect(() => {
     const getQuestion = async () => {
-      const result = await getQuestions();
+      const result = await questionServices.getQuestionsSortNew();
       setQuestions(result);
     };
     getQuestion();
   }, []);
 
+  const handelSortVote = () => {
+    setSortActive(!sortActive);
+    const getQuestion = async () => {
+      const result = await questionServices.getQuestionsSortVote();
+      setQuestions(result);
+    };
+    getQuestion();
+  };
+
+  const handelSortNew = () => {
+    setSortActive(!sortActive);
+    const getQuestion = async () => {
+      const result = await questionServices.getQuestionsSortNew();
+      setQuestions(result);
+    };
+    getQuestion();
+  };
+
   return (
     <div className={cx("wrapper")}>
-      <div className={cx("header")}>
+      <div className={cx("top-nav")}>
         <h1>Top Questions</h1>
+        <div className={cx("sort")}>
+          {sortActive ? (
+            <Button primary small nmw>
+              New
+            </Button>
+          ) : (
+            <Button outline small nmw onClick={handelSortNew}>
+              New
+            </Button>
+          )}
+          {sortActive ? (
+            <Button outline small nmw onClick={handelSortVote}>
+              Vote
+            </Button>
+          ) : (
+            <Button primary small nmw>
+              Vote
+            </Button>
+          )}
+        </div>
       </div>
       <div className={cx("container")}>
         {questions.map((question) => {

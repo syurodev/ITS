@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: {},
-  bookmark: {},
+  userId: {},
+  userData: [],
+  bookmark: [],
 };
 
 export const userSlice = createSlice({
@@ -10,10 +11,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.user = action.payload;
+      state.userId = action.payload;
+    },
+    getData: (state, action) => {
+      state.userData = action.payload;
     },
     logout: (state) => {
-      state.user = {};
+      state.userId = {};
+      state.userData = {};
       localStorage.removeItem("itsSession");
     },
     bookmark: (state, action) => {
@@ -22,6 +27,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, bookmark } = userSlice.actions;
+export const { login, getData, logout, bookmark } = userSlice.actions;
 
 export default userSlice.reducer;
