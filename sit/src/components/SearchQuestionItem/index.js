@@ -9,34 +9,32 @@ import {
 import style from "./SearchQuestionItem.module.scss";
 import Button from "../Button";
 
-const cx = classNames.bind(style);
-
-function SearchQuestionItem() {
+function SearchQuestionItem({ data }) {
+  const cx = classNames.bind(style);
   return (
     <div className={cx("wrapper")}>
-      <h2 className={cx("title")}>Loop inside React JSX</h2>
+      <p className={cx("title")}>{data.title}</p>
       <div className={cx("tags")}>
-        <Button text small className={cx("tag")}>
-          #javascript
-        </Button>
-        <Button text small className={cx("tag")}>
-          #react
-        </Button>
-        <Button text small className={cx("tag")}>
-          #jsx
-        </Button>
+        {JSON.parse(data.tags[0]).map((tag, index) => {
+          return (
+            <Button text small className={cx("tag")} key={index}>
+              #{tag}
+            </Button>
+          );
+        })}
       </div>
       <div className={cx("info")}>
         <div className={cx("info-item")}>
           <FontAwesomeIcon icon={faAngleUp} />
-          <span>2k</span>
+          <span>{data.upvote.length}</span>
         </div>
         <div className={cx("info-item")}>
-          <FontAwesomeIcon icon={faAngleDown} /> <samp>2</samp>
+          <FontAwesomeIcon icon={faAngleDown} />{" "}
+          <samp>{data.downvote.length}</samp>
         </div>
         <div className={cx("info-item")}>
           <FontAwesomeIcon icon={faEye} />
-          <span>3k</span>
+          <span>{data.viewed}</span>
         </div>
       </div>
     </div>

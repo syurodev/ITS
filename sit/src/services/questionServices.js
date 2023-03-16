@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import * as request from "~/utils/request";
 
 //ASK
@@ -86,6 +85,25 @@ export const downvote = async (id, user) => {
 export const getTags = async () => {
   try {
     const res = await request.get("questions/tags");
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//SEARCH
+export const search = async (value, limit = 5) => {
+  // const regex = /#\w+/g;
+  // const tags = value.match(regex).map((tag) => tag.substring(1));
+
+  try {
+    const res = await request.get("questions/search", {
+      params: {
+        value,
+        limit,
+        // tags,
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

@@ -259,17 +259,45 @@ class QuestionsController {
       });
   }
 
+  //[GET] /questions/search
+  async questionSearch(req, res) {
+    const query = req.query.value;
+    // const tags = req.query.tags ? req.query.tags : [];
+
+    console.log(tags);
+
+    const searchQuery = {
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { problem: { $regex: query, $options: "i" } },
+        { expecting: { $regex: query, $options: "i" } },
+      ],
+    };
+
+    // if (tags.length > 0) {
+    //   searchQuery.tags = { $in: tags };
+    // }
+
+    try {
+      const questions = await questionSchema
+        .find(searchQuery, "title upvote downvote tags createAt viewed")
+        .limit(req.query.limit)
+        .populate("user", "username avatar reputationScore");
+      res.status(201).send(questions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   //[GET] /questions/tags
   async getAllTags(req, res) {
     questionSchema
       .aggregate([
+        // unwind the tags array
         { $unwind: "$tags" },
-        {
-          $group: {
-            _id: "$tags",
-            count: { $sum: 1 },
-          },
-        },
+        // group by tag and count the number of occurrences
+        { $group: { _id: "$tags", count: { $sum: 1 } } },
+        // sort by count in descending order
         { $sort: { count: -1 } },
       ])
       .exec(function (error, result) {

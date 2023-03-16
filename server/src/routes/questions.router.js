@@ -12,6 +12,9 @@ router.get("/tags", questionsController.getAllTags);
 //[GET] /questions/bookmarks
 router.post("/bookmarks", questionsController.getAllBookmark);
 
+//[GET] /questions/search
+router.get("/search", questionsController.questionSearch);
+
 //[GET] /questions/new
 router.get("/new", questionsController.questionSortNew);
 

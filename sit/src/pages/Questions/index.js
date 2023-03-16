@@ -69,7 +69,6 @@ const Home = () => {
       </div>
       <div className={cx("container")}>
         {questions.map((question) => {
-          console.log(questions);
           let tags = JSON.parse(question.tags[0]);
 
           let questionTime = timeElapsed(question.createdAt);
