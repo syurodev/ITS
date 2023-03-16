@@ -62,3 +62,12 @@
 .show {
   display: block !important;
 }
+
+.no-item {
+  display: flex;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--light-gray);
+  user-select: none;
+}

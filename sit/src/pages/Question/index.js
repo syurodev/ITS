@@ -35,14 +35,6 @@ const Question = () => {
     return state.user.bookmark;
   });
 
-  useEffect(() => {
-    if (Object.keys(currentUser).length === 0) {
-      setSession(false);
-    } else {
-      setSession(true);
-    }
-  }, [currentUser]);
-
   // DATA
   const [title, setTitle] = useState("");
   const [viewed, setViewed] = useState(0);
@@ -60,25 +52,45 @@ const Question = () => {
   const [upvote, setUpvote] = useState([]);
   const [voteNumber, setVoteNumber] = useState(0);
   const [downvote, setDownvote] = useState([]);
-  const [upvoteIconColor, setUpvoteIconColor] = useState("030e12");
-  const [downvoteIconColor, setDownvoteIconColor] = useState("030e12");
+  const [upvoteIconColor, setUpvoteIconColor] = useState("#030e12");
+  const [downvoteIconColor, setDownvoteIconColor] = useState("#030e12");
 
   // COMMENT
   const [comments, setComments] = useState([]);
 
+  const [auth, setAuth] = useState(false);
+
   let urlSplit = window.location.href.split("/", -1);
   let idQuestion = urlSplit[4];
+
+  //CHECK SESSION
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0) {
+      const userSession = localStorage.getItem("itsSession");
+      if (userSession) {
+        setSession(true);
+      } else {
+        setSession(false);
+      }
+    } else {
+      setSession(true);
+    }
+  }, []);
+
+  //CHECK AUTH
+  useEffect(() => {
+    if (currentUser._id === user._id) {
+      setAuth(true);
+    }
+  }, [user._id, currentUser._id]);
 
   //CHECK USER BOOKMARK
   useEffect(() => {
     if (session) {
-      if (Object.keys(bookmarks).length === 0) {
+      if (Object.keys(bookmarks).length === 0 || userBookmarks.length === 0) {
         const getData = async () => {
           let sessionStorageBookmarks = sessionStorage.getItem("bookmark");
-          if (
-            sessionStorageBookmarks === null ||
-            sessionStorageBookmarks === {}
-          ) {
+          if (!sessionStorageBookmarks) {
             const result = await userServices.getBookmark(currentUser._id);
             setUserBookmarks(result.data);
             sessionStorage.setItem("bookmark", JSON.stringify(result.data));
@@ -93,7 +105,7 @@ const Question = () => {
     } else {
       setUserBookmarks([]);
     }
-  }, [bookmarks]);
+  }, [session]);
 
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
@@ -119,17 +131,17 @@ const Question = () => {
   useEffect(() => {
     if (upvote.length > 0 || downvote.length > 0) {
       if (upvote.includes(currentUser._id)) {
-        setUpvoteIconColor("ed7966");
+        setUpvoteIconColor("#ed7966");
       }
 
       if (downvote.includes(currentUser._id)) {
-        setDownvoteIconColor("ed7966");
+        setDownvoteIconColor("#ed7966");
       }
     }
     if (userBookmarks.includes(idQuestion)) {
-      setBookmarkIconColor("ed7966");
+      setBookmarkIconColor("#ed7966");
     } else {
-      setBookmarkIconColor("030e12");
+      setBookmarkIconColor("#030e12");
     }
 
     Prism.highlightAll();
@@ -141,7 +153,7 @@ const Question = () => {
   }, [upvote.length, downvote.length]);
 
   // UNVOTE
-  const handelUnvote = async () => {
+  const handleUnvote = async () => {
     if (session) {
       const result = await questionServices.unvote(idQuestion, {
         user: currentUser._id,
@@ -149,13 +161,13 @@ const Question = () => {
       });
       setUpvote(result.data.upvote);
       setDownvote(result.data.downvote);
-      setUpvoteIconColor("030e12");
-      setDownvoteIconColor("030e12");
+      setUpvoteIconColor("#030e12");
+      setDownvoteIconColor("#030e12");
     }
   };
 
   //UPVOTE / DOWNVOTE
-  const handelVote = async (type) => {
+  const handleVote = async (type) => {
     if (session) {
       if (type === "upvote") {
         if (!upvote.includes(currentUser._id)) {
@@ -166,10 +178,10 @@ const Question = () => {
 
           setUpvote(result.data.upvote);
           setDownvote(result.data.downvote);
-          setUpvoteIconColor("ed7966");
-          setDownvoteIconColor("030e12");
+          setUpvoteIconColor("#ed7966");
+          setDownvoteIconColor("#030e12");
         } else {
-          handelUnvote();
+          handleUnvote();
         }
       } else if (type === "downvote") {
         if (!downvote.includes(currentUser._id)) {
@@ -180,10 +192,10 @@ const Question = () => {
 
           setUpvote(result.data.upvote);
           setDownvote(result.data.downvote);
-          setUpvoteIconColor("030e12");
-          setDownvoteIconColor("ed7966");
+          setUpvoteIconColor("#030e12");
+          setDownvoteIconColor("#ed7966");
         } else {
-          handelUnvote();
+          handleUnvote();
         }
       }
     } else {
@@ -192,7 +204,7 @@ const Question = () => {
   };
 
   //HANDEL BOOKMARK
-  const handelBookmark = () => {
+  const handleBookmark = () => {
     if (session) {
       const queryData = {
         id: idQuestion,
@@ -201,6 +213,7 @@ const Question = () => {
 
       const fetchApi = async () => {
         const result = await authServices.addBookmark(queryData);
+        setUserBookmarks(result.data);
         sessionStorage.setItem("bookmark", JSON.stringify(result.data));
         dispatch(bookmark(result.data));
       };
@@ -227,6 +240,7 @@ const Question = () => {
           <span>Asked {questionTime}</span>
           <span>Modified {modifiedTime}</span>
           <span>Viewed {viewed} times</span>
+          {solved ? <span className={cx("solved")}>Solved</span> : <></>}
         </div>
       </div>
 
@@ -243,13 +257,13 @@ const Question = () => {
                   <lord-icon
                     src="https://cdn.lordicon.com/xsdtfyne.json"
                     trigger="click"
-                    colors={`primary:#${upvoteIconColor}`}
+                    colors={`primary:${upvoteIconColor}`}
                     state="hover-2"
                     style={{ width: "250", height: "250" }}
                   ></lord-icon>
                 }
                 onClick={() => {
-                  handelVote("upvote");
+                  handleVote("upvote");
                 }}
               ></Button>
             </div>
@@ -265,13 +279,13 @@ const Question = () => {
                   <lord-icon
                     src="https://cdn.lordicon.com/rxufjlal.json"
                     trigger="click"
-                    colors={`primary:#${downvoteIconColor}`}
+                    colors={`primary:${downvoteIconColor}`}
                     state="hover-2"
                     style={{ width: "250", height: "250" }}
                   ></lord-icon>
                 }
                 onClick={() => {
-                  handelVote("downvote");
+                  handleVote("downvote");
                 }}
               ></Button>
             </div>
@@ -285,12 +299,12 @@ const Question = () => {
                   <lord-icon
                     src="https://cdn.lordicon.com/gigfpovs.json"
                     trigger="click"
-                    colors={`primary:#${bookmarkIconColor}`}
+                    colors={`primary:${bookmarkIconColor}`}
                     state="hover-1"
                     style={{ width: "250", height: "250" }}
                   ></lord-icon>
                 }
-                onClick={handelBookmark}
+                onClick={handleBookmark}
               ></Button>
             </div>
           </Tippy>
@@ -314,7 +328,7 @@ const Question = () => {
       </div>
 
       {/* ANSWER */}
-      <Answers questionId={idQuestion} />
+      <Answers questionId={idQuestion} auth={auth} />
     </div>
   );
 };

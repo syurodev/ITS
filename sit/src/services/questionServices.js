@@ -1,5 +1,7 @@
+import { async } from "@firebase/util";
 import * as request from "~/utils/request";
 
+//ASK
 export const ask = async (data) => {
   try {
     const res = await request.post("questions/ask", data);
@@ -9,6 +11,7 @@ export const ask = async (data) => {
   }
 };
 
+//GET ALL QUESTIONS AND SORT
 export const getQuestionsSortNew = async (limit = 10, sort = -1) => {
   try {
     const res = await request.get("questions/new", {
@@ -37,6 +40,7 @@ export const getQuestionsSortVote = async (limit = 10, sort = -1) => {
   }
 };
 
+//GET QUESTION DETAIL
 export const questionDetail = async (id) => {
   try {
     const res = await request.get("questions/question", {
@@ -50,6 +54,7 @@ export const questionDetail = async (id) => {
   }
 };
 
+//VOTE
 export const unvote = async (id, user) => {
   try {
     const res = await request.patch(`questions/unvote/${id}`, user);
@@ -71,6 +76,16 @@ export const upvote = async (id, user) => {
 export const downvote = async (id, user) => {
   try {
     const res = await request.patch(`questions/downvote/${id}`, user);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//TAGS
+export const getTags = async () => {
+  try {
+    const res = await request.get("questions/tags");
     return res;
   } catch (error) {
     console.log(error);

@@ -2,14 +2,38 @@ const mongoose = require("mongoose");
 
 const answerSchema = require("../models/Answer");
 const userSchema = require("../models/User");
+const questionSchema = require("../models/Question");
 
 class AnswersController {
-  async answer(req, res) {
+  async answerSortNew(req, res) {
     await answerSchema
       .find(
         { question_id: mongoose.Types.ObjectId(req.query.id) },
         "answer createdAt downvote question_id solved upvote _id"
       )
+      .limit(req.query.limit)
+      .sort({ createdAt: -1 })
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
+  }
+
+  async answerSortVote(req, res) {
+    await answerSchema
+      .find(
+        { question_id: mongoose.Types.ObjectId(req.query.id) },
+        "answer createdAt downvote question_id solved upvote _id"
+      )
+      .limit(req.query.limit)
+      .sort({ upvote: -1 })
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .exec(function (error, result) {
         if (error) {
@@ -47,7 +71,7 @@ class AnswersController {
       .then((doc) => {
         res.status(201).send({
           status: true,
-          data: doc,
+          message: "Add answer successfully",
         });
       })
       .catch((err) => {
@@ -190,6 +214,78 @@ class AnswersController {
           res.status(201).send({
             status: true,
             data: result,
+          });
+        }
+      });
+  }
+
+  //[PATCH] /answers/solved
+  async solved(req, res) {
+    await answerSchema
+      .findOneAndUpdate(
+        {
+          _id: req.body.id,
+        },
+        {
+          solved: req.body.solved,
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
+
+    if (req.body.solved) {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.auth,
+          },
+          {
+            $inc: { reputationScore: 10 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    } else {
+      await userSchema
+        .findOneAndUpdate(
+          {
+            _id: req.body.auth,
+          },
+          {
+            $inc: { reputationScore: -10 },
+          },
+          {
+            new: true,
+          }
+        )
+        .exec();
+    }
+
+    await questionSchema
+      .findOneAndUpdate(
+        {
+          _id: req.body.question,
+        },
+        {
+          solved: req.body.solved,
+        },
+        {
+          new: true,
+        }
+      )
+      .exec((err, result) => {
+        if (err) {
+          return res.status(400).send({
+            status: false,
+            message: "Error unvote answer",
+          });
+        } else {
+          res.status(201).send({
+            status: true,
           });
         }
       });

@@ -20,7 +20,10 @@ function Bookmarks() {
 
   useEffect(() => {
     if (Object.keys(currentUser).length === 0) {
-      navigate(routesConfig.login);
+      const userSession = localStorage.getItem("itsSession");
+      if (!userSession) {
+        navigate(routesConfig.login);
+      }
     }
   }, []);
 
@@ -35,7 +38,6 @@ function Bookmarks() {
     if (Object.keys(currentUser).length !== 0) {
       const fetchApi = async () => {
         const result = await userServices.getAllBookmark(bookmarks);
-
         setQuestions(result);
       };
       fetchApi();
@@ -78,6 +80,11 @@ function Bookmarks() {
                   <span>0 answers</span>
                   <span>{question.viewed} views</span>
                   <span>asked {questionTime}</span>
+                  {question.solved ? (
+                    <span className={cx("solved")}>Solved</span>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div className={cx("title")}>

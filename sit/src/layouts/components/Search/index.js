@@ -19,7 +19,7 @@ function Search() {
     }, 0);
   }, []);
 
-  const handelHideResult = () => {
+  const handleHideResult = () => {
     setShowResult(false);
   };
 
@@ -37,7 +37,7 @@ function Search() {
           </PopperWrapper>
         </div>
       )}
-      onClickOutside={handelHideResult}
+      onClickOutside={handleHideResult}
     >
       <div className={cx("search-box")}>
         <input

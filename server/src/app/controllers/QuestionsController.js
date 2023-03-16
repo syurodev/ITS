@@ -258,6 +258,31 @@ class QuestionsController {
         }
       });
   }
+
+  //[GET] /questions/tags
+  async getAllTags(req, res) {
+    questionSchema
+      .aggregate([
+        { $unwind: "$tags" },
+        {
+          $group: {
+            _id: "$tags",
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+      ])
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
+  }
 }
 
 module.exports = new QuestionsController();

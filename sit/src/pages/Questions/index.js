@@ -24,7 +24,7 @@ const Home = () => {
     getQuestion();
   }, []);
 
-  const handelSortVote = () => {
+  const handleSortVote = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
       const result = await questionServices.getQuestionsSortVote();
@@ -33,7 +33,7 @@ const Home = () => {
     getQuestion();
   };
 
-  const handelSortNew = () => {
+  const handleSortNew = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
       const result = await questionServices.getQuestionsSortNew();
@@ -52,12 +52,12 @@ const Home = () => {
               New
             </Button>
           ) : (
-            <Button outline small nmw onClick={handelSortNew}>
+            <Button outline small nmw onClick={handleSortNew}>
               New
             </Button>
           )}
           {sortActive ? (
-            <Button outline small nmw onClick={handelSortVote}>
+            <Button outline small nmw onClick={handleSortVote}>
               Vote
             </Button>
           ) : (
@@ -69,6 +69,7 @@ const Home = () => {
       </div>
       <div className={cx("container")}>
         {questions.map((question) => {
+          console.log(questions);
           let tags = JSON.parse(question.tags[0]);
 
           let questionTime = timeElapsed(question.createdAt);
@@ -101,6 +102,11 @@ const Home = () => {
                   <span>0 answers</span>
                   <span>{question.viewed} views</span>
                   <span>asked {questionTime}</span>
+                  {question.solved ? (
+                    <span className={cx("solved")}>Solved</span>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div className={cx("title")}>

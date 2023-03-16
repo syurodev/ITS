@@ -17,11 +17,17 @@ function Comment({ id, currentUser = [], type = "question" }) {
   const [showCommentEditor, setShowCommentEditor] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
+  const [noCommennt, setNoCommennt] = useState(false);
 
   useEffect(() => {
     const fetchApi = async () => {
       const result = await commentServices.getComments(id);
-      setComments(result);
+      if (result.length === 0) {
+        setNoCommennt(true);
+      } else {
+        setComments(result);
+        setNoCommennt(false);
+      }
     };
     fetchApi();
   }, []);
@@ -32,7 +38,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
     }
   }, [newComment]);
 
-  const handelAddComment = () => {
+  const handleAddComment = () => {
     if (Object.keys(currentUser).length !== 0) {
       if (!showCommentEditor) {
         setShowCommentEditor(true);
@@ -50,9 +56,12 @@ function Comment({ id, currentUser = [], type = "question" }) {
             const result = await commentServices.addCommentQuestion(
               commentData
             );
-            setComments([result.data, ...comments]);
-            setShowCommentEditor(false);
-            setNewComment("");
+            if (result.status) {
+              const newData = await commentServices.getComments(id);
+              setComments(newData);
+              setShowCommentEditor(false);
+              setNewComment("");
+            }
           } else if (type === "answer") {
             const commentData = {
               answer_id: id,
@@ -79,22 +88,28 @@ function Comment({ id, currentUser = [], type = "question" }) {
         <div className={cx("title")}>
           <span>Comments</span>
         </div>
-        {comments.map((comment) => {
-          return (
-            <div className={cx("content")} key={comment._id}>
-              <span className={cx("user-comment")}>
-                <span>{comment.user.username} </span>
-                <span className={cx("score")}>
-                  {comment.user.reputationScore}{" "}
+        {!noCommennt ? (
+          comments.map((comment) => {
+            return (
+              <div className={cx("content")} key={comment._id}>
+                <span className={cx("user-comment")}>
+                  <span>{comment.user.username} </span>
+                  <span className={cx("score")}>
+                    {comment.user.reputationScore}{" "}
+                  </span>
+                  :
                 </span>
-                :
-              </span>
-              <span className={cx("comment-content")}>
-                {parse(comment.comment)}
-              </span>
-            </div>
-          );
-        })}
+                <span className={cx("comment-content")}>
+                  {parse(comment.comment)}
+                </span>
+              </div>
+            );
+          })
+        ) : (
+          <div className={cx("no-item")}>
+            <span>No Comment</span>
+          </div>
+        )}
 
         <div className={cx("btn")}>
           <span
@@ -113,7 +128,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
               Cancel
             </Button>
           </div>
-          <Button small primary onClick={handelAddComment}>
+          <Button small primary onClick={handleAddComment}>
             {showCommentEditor ? "Add" : "Add a comment"}
           </Button>
         </div>

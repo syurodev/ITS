@@ -8,6 +8,14 @@
       display: flex;
       align-items: center;
 
+      .solved {
+        background-color: var(--green);
+        padding: 5px 15px;
+        font-size: 14px;
+        color: white;
+        border-radius: var(--box-border-radius);
+      }
+
       & .user {
         display: flex;
         align-items: center;

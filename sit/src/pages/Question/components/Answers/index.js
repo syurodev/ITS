@@ -10,13 +10,15 @@ import Answer from "./Answer";
 import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 
-function Answers({ questionId }) {
+function Answers({ questionId, auth }) {
   const navigate = useNavigate();
   const cx = classNames.bind(style);
   const [newAnswerContent, setNewAnswerContent] = useState("");
   const [showAnswerEditor, setShowAnswerEditor] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [error, setError] = useState("");
+  const [noAnswer, setNoAnswer] = useState(false);
+  const [sortActive, setSortActive] = useState(true);
 
   const currentUser = useSelector((state) => {
     return state.user.userId;
@@ -30,13 +32,18 @@ function Answers({ questionId }) {
 
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await AnswerServices.getAnswerData(questionId);
-      setAnswers(result);
+      const result = await AnswerServices.getAnswerDataSortNew(questionId);
+      if (result.length === 0) {
+        setNoAnswer(true);
+      } else {
+        setAnswers(result);
+        setNoAnswer(false);
+      }
     };
     fetchApi();
   }, [questionId]);
 
-  const handelAddAnswer = () => {
+  const handleAddAnswer = () => {
     if (Object.keys(currentUser).length !== 0) {
       if (!showAnswerEditor) {
         setShowAnswerEditor(true);
@@ -50,14 +57,48 @@ function Answers({ questionId }) {
         };
         const fetchApi = async () => {
           const result = await AnswerServices.addAnswer(answerData);
-          setAnswers([result.data, ...answers]);
-          setShowAnswerEditor(false);
+          if (result.status) {
+            const newData = await AnswerServices.getAnswerDataSortNew(
+              questionId
+            );
+            setAnswers(newData);
+            setShowAnswerEditor(false);
+          }
         };
         fetchApi();
       }
     } else {
       navigate(routesConfig.login);
     }
+  };
+
+  //handle
+  const handleSortVote = () => {
+    setSortActive(!sortActive);
+    const fetchApi = async () => {
+      const result = await AnswerServices.getAnswerDataSortVote(questionId);
+      if (result.length === 0) {
+        setNoAnswer(true);
+      } else {
+        setAnswers(result);
+        setNoAnswer(false);
+      }
+    };
+    fetchApi();
+  };
+
+  const handleSortNew = () => {
+    setSortActive(!sortActive);
+    const fetchApi = async () => {
+      const result = await AnswerServices.getAnswerDataSortNew(questionId);
+      if (result.length === 0) {
+        setNoAnswer(true);
+      } else {
+        setAnswers(result);
+        setNoAnswer(false);
+      }
+    };
+    fetchApi();
   };
 
   return (
@@ -68,32 +109,58 @@ function Answers({ questionId }) {
             <span>Answers</span>
           </div>
           <div className={cx("btns")}>
-            <Button primary onClick={handelAddAnswer}>
-              {showAnswerEditor ? "Add" : "Your Answer"}
-            </Button>
-            <div
-              className={cx("cancel-btn", "hide", {
-                show: showAnswerEditor,
-              })}
-            >
-              <Button
-                outline
-                onClick={() => {
-                  setShowAnswerEditor(false);
-                  setError("");
-                }}
-              >
-                Cancel
+            <div className={cx("left")}>
+              <Button primary onClick={handleAddAnswer}>
+                {showAnswerEditor ? "Add" : "Your Answer"}
               </Button>
-            </div>
+              <div
+                className={cx("cancel-btn", "hide", {
+                  show: showAnswerEditor,
+                })}
+              >
+                <Button
+                  outline
+                  onClick={() => {
+                    setShowAnswerEditor(false);
+                    setError("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
 
-            <span
-              className={cx("error", "hide", {
-                show: showAnswerEditor,
-              })}
-            >
-              {error}
-            </span>
+              <span
+                className={cx("error", "hide", {
+                  show: showAnswerEditor,
+                })}
+              >
+                {error}
+              </span>
+            </div>
+            {!noAnswer ? (
+              <div>
+                {sortActive ? (
+                  <Button primary small nmw>
+                    New
+                  </Button>
+                ) : (
+                  <Button outline small nmw onClick={handleSortNew}>
+                    New
+                  </Button>
+                )}
+                {sortActive ? (
+                  <Button outline small nmw onClick={handleSortVote}>
+                    Vote
+                  </Button>
+                ) : (
+                  <Button primary small nmw>
+                    Vote
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
         {/* EDITOR */}
@@ -106,9 +173,22 @@ function Answers({ questionId }) {
         </div>
 
         {/* CONTENT */}
-        {answers.map((answer) => {
-          return <Answer key={answer._id} data={answer} />;
-        })}
+        {!noAnswer ? (
+          answers.map((answer) => {
+            return (
+              <Answer
+                key={answer._id}
+                data={answer}
+                auth={auth}
+                questionId={questionId}
+              />
+            );
+          })
+        ) : (
+          <div className={cx("no-item")}>
+            <span>No Answer</span>
+          </div>
+        )}
       </div>
     </div>
   );

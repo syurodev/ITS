@@ -14,7 +14,7 @@ const timeElapsed = (time) => {
 
   let QuestionTime;
 
-  const handelQuestionTime = () => {
+  const handleQuestionTime = () => {
     if (minutesElapsed <= 60) {
       QuestionTime = `${minutesElapsed} minute ago`;
     } else if (hoursElapsed <= 24) {
@@ -22,7 +22,7 @@ const timeElapsed = (time) => {
     } else QuestionTime = `${daysElapsed} days ago`;
   };
 
-  handelQuestionTime();
+  handleQuestionTime();
 
   return QuestionTime;
 };

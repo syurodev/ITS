@@ -41,7 +41,7 @@ function Auth() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handelSignWithGoogle = async () => {
+  const handleSignWithGoogle = async () => {
     signInWithPopup(auth, provider).then((res) => {
       return (
         setAvatar(res.user.photoURL),
@@ -104,7 +104,7 @@ function Auth() {
     }
   };
 
-  const handelRegister = () => {
+  const handleRegister = () => {
     userData.email = email;
     userData.username = username;
     userData.password = password;
@@ -131,7 +131,7 @@ function Auth() {
     }
   };
 
-  const handelLogin = () => {
+  const handleLogin = () => {
     const userData = {
       username: username,
       password: password,
@@ -168,7 +168,7 @@ function Auth() {
           ) : (
             <div>
               <Button
-                onClick={handelSignWithGoogle}
+                onClick={handleSignWithGoogle}
                 column
                 leftIcon={<img src={images.google} alt="Google" width={25} />}
               >
@@ -276,7 +276,7 @@ function Auth() {
           )}
           <div className={cx("btn")}>
             {registered ? (
-              <Button primary fwidth onClick={handelLogin}>
+              <Button primary fwidth onClick={handleLogin}>
                 Đăng nhập
               </Button>
             ) : disableButton ? (
@@ -284,7 +284,7 @@ function Auth() {
                 Đăng ký
               </Button>
             ) : (
-              <Button primary fwidth onClick={handelRegister}>
+              <Button primary fwidth onClick={handleRegister}>
                 Đăng ký
               </Button>
             )}

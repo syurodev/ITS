@@ -45,7 +45,7 @@ class CommentController {
       .then((doc) => {
         res.status(201).send({
           status: true,
-          data: doc,
+          message: "Add comment successfully",
         });
       })
       .catch((err) => {

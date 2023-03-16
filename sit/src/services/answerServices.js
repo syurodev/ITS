@@ -1,10 +1,25 @@
 import * as request from "~/utils/request";
 
-export const getAnswerData = async (id) => {
+export const getAnswerDataSortNew = async (id, limit = 10) => {
   try {
-    const res = await request.get("answers/item/", {
+    const res = await request.get("answers/new/", {
       params: {
         id,
+        limit,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAnswerDataSortVote = async (id, limit = 10) => {
+  try {
+    const res = await request.get("answers/vote/", {
+      params: {
+        id,
+        limit,
       },
     });
     return res;
@@ -43,6 +58,16 @@ export const upvote = async (id, user) => {
 export const downvote = async (id, user) => {
   try {
     const res = await request.patch(`answers/downvote/${id}`, user);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//SOLVED
+export const solved = async (data) => {
+  try {
+    const res = await request.patch("answers/solved", data);
     return res;
   } catch (error) {
     console.log(error);

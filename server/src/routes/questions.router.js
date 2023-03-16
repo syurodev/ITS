@@ -6,6 +6,9 @@ const questionsController = require("../app/controllers/QuestionsController");
 //[GET] /questions/question
 router.get("/question/", questionsController.question);
 
+//[GET] /questions/tags
+router.get("/tags", questionsController.getAllTags);
+
 //[GET] /questions/bookmarks
 router.post("/bookmarks", questionsController.getAllBookmark);
 
