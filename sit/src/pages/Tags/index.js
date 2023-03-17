@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 
 import * as questionServices from "~/services/questionServices";
 import style from "./Tags.module.scss";
+import { Link } from "react-router-dom";
 
 function Tags() {
   const cx = classNames.bind(style);
@@ -11,7 +12,7 @@ function Tags() {
   useEffect(() => {
     const fetchApi = async () => {
       const result = await questionServices.getTags();
-      console.log(result);
+      setTags(result.tags);
     };
     fetchApi();
   }, []);
@@ -22,7 +23,16 @@ function Tags() {
         <h1>Tags</h1>
       </div>
       <div className={cx("container")}>
-        <div className={cx("item")}></div>
+        {tags.map((tag, index) => {
+          return (
+            <Link key={index}>
+              <div className={cx("item")}>
+                <span className={cx("tag-name")}>#{tag.name}</span>
+                <span className={cx("count")}>{tag.count} questions</span>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

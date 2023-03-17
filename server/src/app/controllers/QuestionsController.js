@@ -291,25 +291,33 @@ class QuestionsController {
 
   //[GET] /questions/tags
   async getAllTags(req, res) {
-    questionSchema
-      .aggregate([
-        // unwind the tags array
-        { $unwind: "$tags" },
-        // group by tag and count the number of occurrences
-        { $group: { _id: "$tags", count: { $sum: 1 } } },
-        // sort by count in descending order
-        { $sort: { count: -1 } },
-      ])
-      .exec(function (error, result) {
-        if (error) {
-          res.status(400).send({
-            status: false,
-            message: "Error query question",
-          });
-        } else {
-          res.status(201).send(result);
-        }
+    // try {
+    //   const posts = await questionSchema.find();
+    //   const tags = [
+    //     ...new Set(posts.flatMap((post) => JSON.parse(post.tags))),
+    //   ].map((tag) => String(tag));
+    //   res.status(200).json({ tags });
+    // } catch (error) {
+    //   res.status(500).json({ error: error.message });
+    // }
+
+    try {
+      const posts = await questionSchema.find();
+      const tagCounts = {};
+      posts.forEach((post) => {
+        JSON.parse(post.tags).forEach((tag) => {
+          const tagString = String(tag);
+          tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
+        });
       });
+      const tags = Object.keys(tagCounts).map((tag) => ({
+        name: tag,
+        count: tagCounts[tag],
+      }));
+      res.status(200).json({ tags });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
 }
 

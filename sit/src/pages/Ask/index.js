@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Tiptap from "~/future/tiptapEditor";
 import { useNavigate } from "react-router-dom";
+import { ReactTags } from "react-tag-autocomplete";
 
 import style from "./Ask.module.scss";
 import Button from "~/components/Button";
@@ -99,6 +100,9 @@ const Ask = () => {
                   className={cx("input")}
                   value={tags}
                   onChange={setTags}
+                  onlyUnique
+                  addOnBlur
+                  addKeys={[9, 13, 32, 188]}
                 />
               </div>
             </div>
