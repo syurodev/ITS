@@ -16,6 +16,7 @@ import Bookmarks from "~/pages/Bookmarks";
 
 //Public Routes
 const publicRoutes = [
+  { path: routesConfig.tag, component: Questions },
   { path: routesConfig.home, component: Questions },
   { path: routesConfig.question, component: Question },
   { path: routesConfig.tags, component: Tags },

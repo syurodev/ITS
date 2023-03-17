@@ -1,9 +1,10 @@
 const routes = {
   home: "/",
-  question: "/question/:item",
+  tag: "/:tag",
+  question: "/question/:idQuestion",
   tags: "/tags",
   users: "/users",
-  profile: "/profile/:id",
+  profile: "/profile/:userId",
   bookmarks: "/bookmarks",
   works: "/works",
   ask: "/ask",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { useEffect } from "react";
@@ -15,19 +15,20 @@ const cx = classNames.bind(style);
 const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [sortActive, setSortActive] = useState(true);
+  const { tag = "" } = useParams();
 
   useEffect(() => {
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortNew();
+      const result = await questionServices.getQuestionsSortNew(10, -1, tag);
       setQuestions(result);
     };
     getQuestion();
-  }, []);
+  }, [window.location.href]);
 
   const handleSortVote = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortVote();
+      const result = await questionServices.getQuestionsSortVote(10, -1, tag);
       setQuestions(result);
     };
     getQuestion();
@@ -36,7 +37,7 @@ const Home = () => {
   const handleSortNew = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortNew();
+      const result = await questionServices.getQuestionsSortNew(10, -1, tag);
       setQuestions(result);
     };
     getQuestion();
@@ -115,7 +116,13 @@ const Home = () => {
               </div>
               <div className={cx("tags")}>
                 {tags.map((tag, index) => (
-                  <Button key={index} text small className={cx("tag")}>
+                  <Button
+                    key={index}
+                    text
+                    small
+                    className={cx("tag")}
+                    to={`/${tag}`}
+                  >
                     #{tag}
                   </Button>
                 ))}

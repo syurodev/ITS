@@ -2,6 +2,23 @@
   padding: 10px 20px 0px;
 
   .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .search-tag {
+      height: 35px;
+      width: 40%;
+      border-radius: var(--box-border-radius);
+      outline: none;
+      border: 1.5px solid var(--gray);
+      padding: 0 10px;
+      transition: all 0.1s linear;
+
+      &:focus {
+        border: 1.5px solid var(--primary-color);
+      }
+    }
   }
 
   .container {

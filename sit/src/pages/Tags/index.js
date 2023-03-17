@@ -21,11 +21,12 @@ function Tags() {
     <div className={cx("wrapper")}>
       <div className={cx("top-nav")}>
         <h1>Tags</h1>
+        <input className={cx("search-tag")} type="text" />
       </div>
       <div className={cx("container")}>
         {tags.map((tag, index) => {
           return (
-            <Link key={index}>
+            <Link key={index} to={`/${tag.name}`}>
               <div className={cx("item")}>
                 <span className={cx("tag-name")}>#{tag.name}</span>
                 <span className={cx("count")}>{tag.count} questions</span>

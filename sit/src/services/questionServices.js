@@ -11,12 +11,13 @@ export const ask = async (data) => {
 };
 
 //GET ALL QUESTIONS AND SORT
-export const getQuestionsSortNew = async (limit = 10, sort = -1) => {
+export const getQuestionsSortNew = async (limit = 10, sort = -1, tag = "") => {
   try {
     const res = await request.get("questions/new", {
       params: {
         limit,
         sort,
+        tag,
       },
     });
     return res;
@@ -25,12 +26,13 @@ export const getQuestionsSortNew = async (limit = 10, sort = -1) => {
   }
 };
 
-export const getQuestionsSortVote = async (limit = 10, sort = -1) => {
+export const getQuestionsSortVote = async (limit = 10, sort = -1, tag = "") => {
   try {
     const res = await request.get("questions/vote", {
       params: {
         limit,
         sort,
+        tag,
       },
     });
     return res;

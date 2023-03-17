@@ -94,7 +94,13 @@ function Bookmarks() {
               </div>
               <div className={cx("tags")}>
                 {tags.map((tag, index) => (
-                  <Button key={index} text small className={cx("tag")}>
+                  <Button
+                    key={index}
+                    text
+                    small
+                    className={cx("tag")}
+                    to={`/${tag}`}
+                  >
                     #{tag}
                   </Button>
                 ))}

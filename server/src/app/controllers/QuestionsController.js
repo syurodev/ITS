@@ -6,8 +6,12 @@ const userSchema = require("../models/User");
 class QuestionsController {
   //[GET] /questions/new
   questionSortNew(req, res) {
+    const tag = req.query.tag ? req.query.tag : "";
     questionSchema
-      .find({}, "_id upvote downvote viewed title tags solved createdAt")
+      .find(
+        { tags: { $regex: tag } },
+        "_id upvote downvote viewed title tags solved createdAt"
+      )
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .limit(req.query.limit)
       .sort({ createdAt: req.query.sort })
@@ -25,8 +29,12 @@ class QuestionsController {
 
   //[GET] /questions/vote
   questionSortVote(req, res) {
+    const tag = req.query.tag ? req.query.tag : "";
     questionSchema
-      .find({}, "_id upvote downvote viewed title tags solved createdAt")
+      .find(
+        { tags: { $regex: tag } },
+        "_id upvote downvote viewed title tags solved createdAt"
+      )
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .limit(req.query.limit)
       .sort({ upvote: req.query.sort })
@@ -264,8 +272,6 @@ class QuestionsController {
     const query = req.query.value;
     // const tags = req.query.tags ? req.query.tags : [];
 
-    console.log(tags);
-
     const searchQuery = {
       $or: [
         { title: { $regex: query, $options: "i" } },
@@ -291,19 +297,9 @@ class QuestionsController {
 
   //[GET] /questions/tags
   async getAllTags(req, res) {
-    // try {
-    //   const posts = await questionSchema.find();
-    //   const tags = [
-    //     ...new Set(posts.flatMap((post) => JSON.parse(post.tags))),
-    //   ].map((tag) => String(tag));
-    //   res.status(200).json({ tags });
-    // } catch (error) {
-    //   res.status(500).json({ error: error.message });
-    // }
-
     try {
-      const posts = await questionSchema.find();
       const tagCounts = {};
+      const posts = await questionSchema.find();
       posts.forEach((post) => {
         JSON.parse(post.tags).forEach((tag) => {
           const tagString = String(tag);

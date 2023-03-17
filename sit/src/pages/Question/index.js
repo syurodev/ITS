@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
@@ -24,6 +24,7 @@ const Question = () => {
   const cx = classNames.bind(style);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { idQuestion } = useParams();
 
   const [session, setSession] = useState(false);
 
@@ -59,9 +60,6 @@ const Question = () => {
   const [comments, setComments] = useState([]);
 
   const [auth, setAuth] = useState(false);
-
-  let urlSplit = window.location.href.split("/", -1);
-  let idQuestion = urlSplit[4];
 
   //CHECK SESSION
   useEffect(() => {
@@ -316,7 +314,13 @@ const Question = () => {
           </div>
           <div className={cx("tags")}>
             {tags.map((tag, index) => (
-              <Button key={index} text small className={cx("tag")}>
+              <Button
+                key={index}
+                text
+                small
+                className={cx("tag")}
+                to={`/${tag}`}
+              >
                 #{tag}
               </Button>
             ))}
