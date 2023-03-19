@@ -20,8 +20,8 @@
       font-weight: 500;
 
       .avatar {
-        width: 30px;
-        height: 30px;
+        max-width: 30px;
+        max-height: 30px;
         border-radius: 100rem;
         object-fit: cover;
         margin-right: 10px;

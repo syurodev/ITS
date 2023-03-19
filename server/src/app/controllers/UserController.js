@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
 const userSchema = require("../models/User");
+const questionSchema = require("../models/Question");
+const answerSchema = require("../models/Answer");
 
 class UserController {
   //[GET] /login
@@ -171,6 +173,49 @@ class UserController {
         }
       })
       .clone();
+  }
+
+  async profile(req, res) {
+    const id = req.query.id;
+    await userSchema
+      .findById(
+        id,
+        "username avatar dateCreate email phone reputationScore role"
+      )
+      .exec((err, user) => {
+        if (err) {
+          res.status(500).json({ error: "Error retrieving user" });
+        } else {
+          questionSchema
+            .find({ user: id }, "_id title tags upvote downvote viewed")
+            .exec((err, questions) => {
+              if (err) {
+                res.status(500).json({ error: "Error retrieving questions" });
+              } else {
+                const tagCounts = {};
+
+                questions.forEach((question) => {
+                  JSON.parse(question.tags).forEach((tag) => {
+                    const tagString = String(tag);
+                    tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
+                  });
+                });
+                const tags = Object.keys(tagCounts)
+                  .map((tag) => ({
+                    name: tag,
+                    count: tagCounts[tag],
+                  }))
+                  .sort((a, b) => b.count - a.count);
+                const userData = {
+                  user: user,
+                  questions: questions,
+                  tags: tags,
+                };
+                res.json(userData);
+              }
+            });
+        }
+      });
   }
 }
 

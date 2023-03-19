@@ -1,0 +1,16 @@
+.wrapper {
+  padding: 10px 20px 0;
+
+  .container {
+    .info {
+      .left {
+        .avatar {
+          max-width: 90px;
+          max-height: 90px;
+          object-fit: cover;
+          border-radius: 100rem;
+        }
+      }
+    }
+  }
+}

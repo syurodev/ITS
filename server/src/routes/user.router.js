@@ -3,6 +3,9 @@ const router = express.Router();
 
 const UserController = require("../app/controllers/UserController");
 
+//[GET] /profile
+router.get("/profile", UserController.profile);
+
 //[GET] /login/info
 router.get("/login/info", UserController.getUserInfo);
 

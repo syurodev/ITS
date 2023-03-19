@@ -19,6 +19,7 @@ import "~/future/prism-laserwave.css";
 import * as questionServices from "~/services/questionServices";
 import * as authServices from "~/services/authServices";
 import { bookmark } from "~/pages/Auth/authSlice";
+import Image from "~/components/Image";
 
 const Question = () => {
   const cx = classNames.bind(style);
@@ -231,7 +232,7 @@ const Question = () => {
         <div className={cx("info")}>
           <Link to={`/profile/${user._id}`}>
             <div className={cx("user")}>
-              <img src={user.avatar} alt={user.username} />
+              <Image src={user.avatar} alt={user.username} />
               <span className={cx("username")}>{user.username}</span>
             </div>
           </Link>

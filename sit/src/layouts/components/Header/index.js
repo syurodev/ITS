@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { login, logout, getData, bookmark } from "~/pages/Auth/authSlice";
 import * as userServices from "~/services/authServices";
+import Image from "~/components/Image";
 
 function Header() {
   defineElement(lottie.loadAnimation);
@@ -164,7 +165,8 @@ function Header() {
               )}
             >
               <div className={cx("avatar")}>
-                <img src={userData.avatar} alt={userData.username} />
+                <Image src={userData.avatar} alt={userData.username} />
+                {/* <img src={userData.avatar} alt={userData.username} /> */}
               </div>
             </TippyHeadless>
           </div>

@@ -55,7 +55,20 @@ export const getBookmark = async (user) => {
 
 export const getAllBookmark = async (data) => {
   try {
-    const res = await request.post(`questions/bookmarks`, data);
+    const res = await request.post("questions/bookmarks", data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const profile = async (id) => {
+  try {
+    const res = await request.get("user/profile", {
+      params: {
+        id,
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

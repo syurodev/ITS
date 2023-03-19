@@ -9,6 +9,7 @@ import timeElapsed from "~/future/timeElapsed";
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
 import * as questionServices from "~/services/questionServices";
+import Image from "~/components/Image";
 
 const cx = classNames.bind(style);
 
@@ -23,7 +24,7 @@ const Home = () => {
       setQuestions(result);
     };
     getQuestion();
-  }, [window.location.href]);
+  }, [tag]);
 
   const handleSortVote = () => {
     setSortActive(!sortActive);
@@ -82,7 +83,7 @@ const Home = () => {
                   to={`/profile/${question.user._id}`}
                 >
                   <div className={cx("avata")}>
-                    <img
+                    <Image
                       src={question.user.avatar}
                       alt={question.user.username}
                     />

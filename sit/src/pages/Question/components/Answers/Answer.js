@@ -9,6 +9,7 @@ import Button from "~/components/Button";
 import style from "./Answer.module.scss";
 import * as answerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
+import Image from "~/components/Image";
 
 function Answer({ data, auth, questionId }) {
   const currentUser = useSelector((state) => {
@@ -210,10 +211,10 @@ function Answer({ data, auth, questionId }) {
 
         <div className={cx("content")}>
           <div className={cx("respondent")}>
-            <img
-              className={cx("avatar")}
+            <Image
               src={data.user.avatar}
               alt={data.user.username}
+              className={cx("avatar")}
             />
             <span>{data.user.username}</span>
             <span className={cx("reputationScore")}>
