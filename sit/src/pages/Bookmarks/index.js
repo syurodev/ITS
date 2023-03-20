@@ -9,7 +9,7 @@ import style from "./Bookmarks.module.scss";
 import * as userServices from "~/services/authServices";
 import Button from "~/components/Button";
 import routesConfig from "~/config/router";
-import timeElapsed from "~/future/timeElapsed";
+import formatDate from "~/future/formatDate";
 
 function Bookmarks() {
   const cx = classNames.bind(style);
@@ -50,7 +50,7 @@ function Bookmarks() {
       <div className={cx("container")}>
         {questions.map((question) => {
           let tags = JSON.parse(question.tags[0]);
-          let questionTime = timeElapsed(question.createdAt);
+          let questionTime = formatDate(question.createdAt);
 
           return (
             <div key={question._id} className={cx("item")}>

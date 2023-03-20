@@ -1,6 +1,7 @@
 const routes = {
   home: "/",
   tag: "/:tag",
+  tagUser: "/:tag/:user",
   question: "/question/:idQuestion",
   tags: "/tags",
   users: "/users",

@@ -138,6 +138,7 @@ function Header() {
             </div>
             <TippyHeadless
               interactive
+              hideOnClick={false}
               render={(attrs) => (
                 <div className={cx("search-result")} tabIndex="-1" {...attrs}>
                   <PopperWrapper>
@@ -146,6 +147,7 @@ function Header() {
                       text
                       ntd
                       leftIcon={<FontAwesomeIcon icon={faUser} />}
+                      to={`/profile/${currentUserId._id}`}
                     >
                       Xem hồ sơ
                     </Button>

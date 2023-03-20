@@ -3,6 +3,9 @@
   width: 100%;
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-color);
+  z-index: 200;
+  position: relative;
+  bottom: 0;
 }
 
 .footer-container {

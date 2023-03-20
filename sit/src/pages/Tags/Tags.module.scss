@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 10px 20px 0px;
+  padding: var(--wrapper-padding);
 
   .top-nav {
     display: flex;

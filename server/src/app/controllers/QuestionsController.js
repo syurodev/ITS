@@ -6,15 +6,22 @@ const userSchema = require("../models/User");
 class QuestionsController {
   //[GET] /questions/new
   questionSortNew(req, res) {
-    const tag = req.query.tag ? req.query.tag : "";
+    const { user, tag, limit, sort } = req.query;
+    const query = {};
+
+    if (tag) {
+      query.tags = { $regex: tag };
+    }
+
+    if (user) {
+      query.user = user;
+    }
+
     questionSchema
-      .find(
-        { tags: { $regex: tag } },
-        "_id upvote downvote viewed title tags solved createdAt"
-      )
+      .find(query, "_id upvote downvote viewed title tags solved createdAt")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
-      .limit(req.query.limit)
-      .sort({ createdAt: req.query.sort })
+      .limit(limit)
+      .sort({ createdAt: sort })
       .exec(function (error, result) {
         if (error) {
           res.status(400).send({
@@ -29,15 +36,21 @@ class QuestionsController {
 
   //[GET] /questions/vote
   questionSortVote(req, res) {
-    const tag = req.query.tag ? req.query.tag : "";
+    const { user, tag, limit, sort } = req.query;
+    const query = {};
+
+    if (tag) {
+      query.tags = { $regex: tag };
+    }
+
+    if (user) {
+      query.user = user;
+    }
     questionSchema
-      .find(
-        { tags: { $regex: tag } },
-        "_id upvote downvote viewed title tags solved createdAt"
-      )
+      .find(query, "_id upvote downvote viewed title tags solved createdAt")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
-      .limit(req.query.limit)
-      .sort({ upvote: req.query.sort })
+      .limit(limit)
+      .sort({ upvote: sort })
       .exec(function (error, result) {
         if (error) {
           res.status(400).send({

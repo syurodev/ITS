@@ -8,6 +8,7 @@ import style from "./Search.module.scss";
 import * as questionServices from "~/services/questionServices";
 import { useDebounce } from "~/hooks";
 import { Link } from "react-router-dom";
+import Button from "~/components/Button";
 
 const cx = classNames.bind(style);
 
@@ -53,7 +54,13 @@ function Search() {
           <PopperWrapper>
             {searchResult.map((result) => {
               return (
-                <Link key={result._id} to={`/question/${result._id}`}>
+                <Link
+                  key={result._id}
+                  to={`/question/${result._id}`}
+                  onClick={() => {
+                    setSearchValue("");
+                  }}
+                >
                   <SearchQuestionItem data={result} />
                 </Link>
               );
@@ -84,14 +91,20 @@ function Search() {
           <></>
         )}
 
-        <button className={cx("search-button")}>
-          <lord-icon
-            src="https://cdn.lordicon.com/xfftupfv.json"
-            trigger="click"
-            colors="primary:#030e12"
-            style={{ width: "30px", height: "30px" }}
-          ></lord-icon>
-        </button>
+        <Button
+          text
+          small
+          nmw
+          onlyicon
+          leftIcon={
+            <lord-icon
+              src="https://cdn.lordicon.com/xfftupfv.json"
+              trigger="click"
+              colors={searchValue ? "primary:#ed7966" : "primary:#030e12"}
+              style={{ width: "30px", height: "30px" }}
+            ></lord-icon>
+          }
+        />
       </div>
     </TippyHeadless>
   );

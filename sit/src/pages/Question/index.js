@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
 import style from "./Question.module.scss";
-import timeElapsed from "~/future/timeElapsed";
+import formatDate from "~/future/formatDate";
 import Button from "~/components/Button";
 import Comment from "./components/Comment";
 import Answers from "./components/Answers";
@@ -61,6 +61,7 @@ const Question = () => {
   const [comments, setComments] = useState([]);
 
   const [auth, setAuth] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //CHECK SESSION
   useEffect(() => {
@@ -108,6 +109,7 @@ const Question = () => {
 
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
+    setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
       setTitle(result.title);
@@ -122,6 +124,7 @@ const Question = () => {
       setComments(result.comments);
       setUpvote(result.upvote);
       setDownvote(result.downvote);
+      setLoading(false);
     };
     getQuestionDetail();
   }, [idQuestion]);
@@ -222,8 +225,8 @@ const Question = () => {
     }
   };
 
-  const questionTime = timeElapsed(createdAt);
-  const modifiedTime = timeElapsed(editAt);
+  const questionTime = formatDate(createdAt);
+  const modifiedTime = formatDate(editAt);
 
   return (
     <div className={cx("wrapper")}>

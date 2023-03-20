@@ -4,8 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { useEffect } from "react";
-import timeElapsed from "~/future/timeElapsed";
 
+import formatDate from "~/future/formatDate";
 import Button from "~/components/Button";
 import style from "./Questions.module.scss";
 import * as questionServices from "~/services/questionServices";
@@ -16,20 +16,31 @@ const cx = classNames.bind(style);
 const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [sortActive, setSortActive] = useState(true);
-  const { tag = "" } = useParams();
+  const { tag = null } = useParams();
+  const { user = null } = useParams();
 
   useEffect(() => {
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortNew(10, -1, tag);
+      const result = await questionServices.getQuestionsSortNew(
+        10,
+        -1,
+        tag && tag,
+        user && user
+      );
       setQuestions(result);
     };
     getQuestion();
-  }, [tag]);
+  }, [window.location.href]);
 
   const handleSortVote = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortVote(10, -1, tag);
+      const result = await questionServices.getQuestionsSortVote(
+        10,
+        -1,
+        tag && tag,
+        user && user
+      );
       setQuestions(result);
     };
     getQuestion();
@@ -38,7 +49,12 @@ const Home = () => {
   const handleSortNew = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortNew(10, -1, tag);
+      const result = await questionServices.getQuestionsSortNew(
+        10,
+        -1,
+        tag && tag,
+        user && user
+      );
       setQuestions(result);
     };
     getQuestion();
@@ -71,9 +87,9 @@ const Home = () => {
       </div>
       <div className={cx("container")}>
         {questions.map((question) => {
-          let tags = JSON.parse(question.tags[0]);
+          const tags = JSON.parse(question.tags[0]);
 
-          let questionTime = timeElapsed(question.createdAt);
+          const questionTime = formatDate(question.createdAt);
 
           return (
             <div key={question._id} className={cx("item")}>

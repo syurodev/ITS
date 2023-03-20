@@ -2,8 +2,10 @@
   margin: 0 auto;
   width: var(--page-fwidth);
   display: flex;
+  padding: 60px 0 0 0;
 }
 
 .content {
   flex: 1;
+  padding: 0 0 100px 200px;
 }

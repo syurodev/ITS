@@ -46,6 +46,10 @@
   align-items: center;
 }
 
+.nbg {
+  background-color: transparent !important;
+}
+
 .icon + .title,
 .title + .icon {
   margin-left: 8px;

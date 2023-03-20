@@ -1,14 +1,180 @@
 .wrapper {
-  padding: 10px 20px 0;
+  padding: var(--wrapper-padding);
 
   .container {
     .info {
-      .left {
-        .avatar {
-          max-width: 90px;
-          max-height: 90px;
-          object-fit: cover;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--box-border-radius);
+      padding: 20px;
+      box-shadow: var(--box-shadow-color);
+      .avatar {
+        max-width: 90px;
+        max-height: 90px;
+        margin-bottom: 15px;
+        margin-left: 9px;
+        position: relative;
+
+        img {
           border-radius: 100rem;
+          object-fit: cover;
+        }
+
+        .edit-icon {
+          background-color: var(--primary-color);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 5px;
+          width: 30px;
+          height: 30px;
+          border-radius: 100rem;
+          color: white;
+          position: absolute;
+          bottom: -5px;
+          left: 50%;
+          transform: translate(-50%, 50%);
+          cursor: pointer;
+          user-select: none;
+          z-index: 2;
+        }
+
+        .edit-icon-bg {
+          position: absolute;
+          bottom: -5px;
+          left: 50%;
+          transform: translate(-50%, 50%);
+          width: 35px;
+          height: 35px;
+          background-color: white;
+          border-radius: 100rem;
+          z-index: 1;
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          width: 106px;
+          height: 106px;
+          border-radius: 100rem;
+          border: 3px dashed var(--primary-color);
+          top: -5px;
+          left: -5px;
+        }
+      }
+
+      .details {
+        padding: 0 0 0 30px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .user-name {
+          font-size: 25px;
+          font-weight: 500;
+          line-height: 1;
+        }
+
+        .job {
+          font-size: 18px;
+          color: var(--dark-gray);
+          font-weight: 500;
+        }
+
+        .content {
+          display: flex;
+          margin-top: 8px;
+          border-top: 1px solid var(--light-gray);
+          width: 100%;
+          padding: 10px 0 0;
+          justify-content: space-between;
+
+          .title {
+            font-size: 14px;
+            line-height: 1;
+            color: var(--dark-gray);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .activate {
+      margin-top: 20px;
+
+      .top-posts,
+      .top-tags {
+        border: 1px solid var(--light-gray);
+        border-radius: var(--box-border-radius);
+        padding: 20px;
+        margin-top: 15px;
+
+        .title {
+          margin-bottom: 20px;
+        }
+      }
+
+      .top-tags {
+        .tag-list {
+          display: flex;
+          flex-direction: column;
+
+          .tag {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-top: 1px solid var(--light-gray);
+
+            .tag-name {
+              color: var(--primary-color);
+            }
+
+            .count {
+              .count-title {
+                font-size: 14px;
+                color: var(--dark-gray);
+              }
+            }
+          }
+        }
+      }
+
+      .top-posts {
+        .post {
+          padding: 15px 0;
+          border-top: 1px solid var(--light-gray);
+
+          .content {
+            display: flex;
+            justify-content: space-between;
+
+            .title {
+              font-size: 18px;
+            }
+
+            .date-post {
+              font-size: 14px;
+              color: var(--dark-gray);
+              min-width: 130px;
+              text-align: end;
+              margin-left: 8px;
+            }
+          }
+          .detail {
+            display: flex;
+            padding: 5px 0 0;
+
+            .detail-item {
+              span {
+                margin-left: 8px;
+              }
+            }
+
+            .detail-item + .detail-item {
+              margin-left: 20px;
+            }
+          }
         }
       }
     }

@@ -180,14 +180,17 @@ class UserController {
     await userSchema
       .findById(
         id,
-        "username avatar dateCreate email phone reputationScore role"
+        "username avatar dateCreate email phone reputationScore role job"
       )
       .exec((err, user) => {
         if (err) {
           res.status(500).json({ error: "Error retrieving user" });
         } else {
           questionSchema
-            .find({ user: id }, "_id title tags upvote downvote viewed")
+            .find(
+              { user: id },
+              "_id title tags upvote downvote viewed createdAt"
+            )
             .exec((err, questions) => {
               if (err) {
                 res.status(500).json({ error: "Error retrieving questions" });
