@@ -10,6 +10,20 @@ export const ask = async (data) => {
   }
 };
 
+//DELETE QUESTION
+export const deleteQuestion = async (id) => {
+  try {
+    const res = await request.destroy("questions/question/delete", {
+      params: {
+        id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //GET ALL QUESTIONS AND SORT
 export const getQuestionsSortNew = async (
   limit = 10,

@@ -20,6 +20,7 @@ import * as questionServices from "~/services/questionServices";
 import * as authServices from "~/services/authServices";
 import { bookmark } from "~/pages/Auth/authSlice";
 import Image from "~/components/Image";
+import Modal from "~/components/Modal";
 
 const Question = () => {
   const cx = classNames.bind(style);
@@ -62,6 +63,7 @@ const Question = () => {
 
   const [auth, setAuth] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   //CHECK SESSION
   useEffect(() => {
@@ -76,13 +78,6 @@ const Question = () => {
       setSession(true);
     }
   }, []);
-
-  //CHECK AUTH
-  useEffect(() => {
-    if (currentUser._id === user._id) {
-      setAuth(true);
-    }
-  }, [user._id, currentUser._id]);
 
   //CHECK USER BOOKMARK
   useEffect(() => {
@@ -112,6 +107,7 @@ const Question = () => {
     setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
+
       setTitle(result.title);
       setViewed(result.viewed);
       setCreatedAt(result.createdAt);
@@ -124,6 +120,7 @@ const Question = () => {
       setComments(result.comments);
       setUpvote(result.upvote);
       setDownvote(result.downvote);
+      setAuth(result.user._id && result.user._id === currentUser._id);
       setLoading(false);
     };
     getQuestionDetail();
@@ -225,119 +222,173 @@ const Question = () => {
     }
   };
 
+  //HANDEL DELETE
+  const handleDelete = () => {
+    const fetchApi = async () => {
+      const result = await questionServices.deleteQuestion(idQuestion);
+      navigate(routesConfig.home);
+    };
+    fetchApi();
+  };
+
   const questionTime = formatDate(createdAt);
   const modifiedTime = formatDate(editAt);
 
   return (
-    <div className={cx("wrapper")}>
-      <div className={cx("header")}>
-        <h1 className={cx("title")}>{title}</h1>
-        <div className={cx("info")}>
-          <Link to={`/profile/${user._id}`}>
-            <div className={cx("user")}>
-              <Image src={user.avatar} alt={user.username} />
-              <span className={cx("username")}>{user.username}</span>
-            </div>
-          </Link>
-          <span>Asked {questionTime}</span>
-          <span>Modified {modifiedTime}</span>
-          <span>Viewed {viewed} times</span>
-          {solved ? <span className={cx("solved")}>Solved</span> : <></>}
-        </div>
-      </div>
-
-      {/* // QUESTION */}
-      <div className={cx("question")}>
-        <div className={cx("action")}>
-          <Tippy content="Upvote" placement="left">
-            <div>
-              <Button
-                text
-                licon
-                onlyicon
-                leftIcon={
-                  <lord-icon
-                    src="https://cdn.lordicon.com/xsdtfyne.json"
-                    trigger="click"
-                    colors={`primary:${upvoteIconColor}`}
-                    state="hover-2"
-                    style={{ width: "250", height: "250" }}
-                  ></lord-icon>
-                }
-                onClick={() => {
-                  handleVote("upvote");
-                }}
-              ></Button>
-            </div>
-          </Tippy>
-          <div className={cx("vote")}>{voteNumber}</div>
-          <Tippy content="Downvote" placement="left">
-            <div>
-              <Button
-                text
-                licon
-                onlyicon
-                leftIcon={
-                  <lord-icon
-                    src="https://cdn.lordicon.com/rxufjlal.json"
-                    trigger="click"
-                    colors={`primary:${downvoteIconColor}`}
-                    state="hover-2"
-                    style={{ width: "250", height: "250" }}
-                  ></lord-icon>
-                }
-                onClick={() => {
-                  handleVote("downvote");
-                }}
-              ></Button>
-            </div>
-          </Tippy>
-          <Tippy content="Save to Bookmark" placement="left">
-            <div>
-              <Button
-                text
-                onlyicon
-                leftIcon={
-                  <lord-icon
-                    src="https://cdn.lordicon.com/gigfpovs.json"
-                    trigger="click"
-                    colors={`primary:${bookmarkIconColor}`}
-                    state="hover-1"
-                    style={{ width: "250", height: "250" }}
-                  ></lord-icon>
-                }
-                onClick={handleBookmark}
-              ></Button>
-            </div>
-          </Tippy>
-        </div>
-        <div className={cx("content")}>
-          <div className={cx("question-content")}>
-            <div className={cx("problem")}>{parse(problem)}</div>
-            <div className={cx("expecting")}>{parse(expecting)}</div>
+    title && (
+      <div className={cx("wrapper")}>
+        <div className={cx("header")}>
+          <h1 className={cx("title")}>{title}</h1>
+          <div className={cx("info")}>
+            <Link to={`/profile/${user._id}`}>
+              <div className={cx("user")}>
+                <Image src={user.avatar} alt={user.username} />
+                <span className={cx("username")}>{user.username}</span>
+              </div>
+            </Link>
+            <span>Asked {questionTime}</span>
+            <span>Modified {modifiedTime}</span>
+            <span>Viewed {viewed} times</span>
+            {solved ? <span className={cx("solved")}>Solved</span> : <></>}
           </div>
-          <div className={cx("tags")}>
-            {tags.map((tag, index) => (
-              <Button
-                key={index}
-                text
-                small
-                className={cx("tag")}
-                to={`/${tag}`}
-              >
-                #{tag}
+        </div>
+        {/* // QUESTION */}
+        <div className={cx("question")}>
+          <div className={cx("action")}>
+            <Tippy content="Upvote" placement="left">
+              <div>
+                <Button
+                  text
+                  licon
+                  onlyicon
+                  leftIcon={
+                    <lord-icon
+                      src="https://cdn.lordicon.com/xsdtfyne.json"
+                      trigger="click"
+                      colors={`primary:${upvoteIconColor}`}
+                      state="hover-2"
+                      style={{ width: "250", height: "250" }}
+                    ></lord-icon>
+                  }
+                  onClick={() => {
+                    handleVote("upvote");
+                  }}
+                ></Button>
+              </div>
+            </Tippy>
+            <div className={cx("vote")}>{voteNumber}</div>
+            <Tippy content="Downvote" placement="left">
+              <div>
+                <Button
+                  text
+                  licon
+                  onlyicon
+                  leftIcon={
+                    <lord-icon
+                      src="https://cdn.lordicon.com/rxufjlal.json"
+                      trigger="click"
+                      colors={`primary:${downvoteIconColor}`}
+                      state="hover-2"
+                      style={{ width: "250", height: "250" }}
+                    ></lord-icon>
+                  }
+                  onClick={() => {
+                    handleVote("downvote");
+                  }}
+                ></Button>
+              </div>
+            </Tippy>
+            <Tippy content="Save to Bookmark" placement="left">
+              <div>
+                <Button
+                  text
+                  onlyicon
+                  leftIcon={
+                    <lord-icon
+                      src="https://cdn.lordicon.com/gigfpovs.json"
+                      trigger="click"
+                      colors={`primary:${bookmarkIconColor}`}
+                      state="hover-1"
+                      style={{ width: "250", height: "250" }}
+                    ></lord-icon>
+                  }
+                  onClick={handleBookmark}
+                ></Button>
+              </div>
+            </Tippy>
+
+            {auth ? (
+              <Tippy content="Delete" placement="left">
+                <div>
+                  <Button
+                    text
+                    onlyicon
+                    leftIcon={
+                      <lord-icon
+                        src="https://cdn.lordicon.com/kfzfxczd.json"
+                        trigger="click"
+                        colors="primary:#030e12"
+                        state="hover-empty"
+                        style={{ width: "250", height: "250" }}
+                      ></lord-icon>
+                    }
+                    onClick={() => setDeleteConfirm(true)}
+                  ></Button>
+                </div>
+              </Tippy>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className={cx("content")}>
+            <div className={cx("question-content")}>
+              <div className={cx("problem")}>{parse(problem)}</div>
+              <div className={cx("expecting")}>{parse(expecting)}</div>
+            </div>
+            <div className={cx("tags")}>
+              {tags.map((tag, index) => (
+                <Button
+                  key={index}
+                  text
+                  small
+                  className={cx("tag")}
+                  to={`/${tag}`}
+                >
+                  #{tag}
+                </Button>
+              ))}
+            </div>
+
+            {/* COMMENT */}
+            <Comment
+              data={comments}
+              id={idQuestion}
+              currentUser={currentUser}
+            />
+          </div>
+        </div>
+        {/* ANSWER */}
+        <Answers questionId={idQuestion} auth={auth} />
+
+        {/* DELETE CONFIRM */}
+        {deleteConfirm && (
+          <Modal closeModal={setDeleteConfirm}>
+            <h1 className={cx("delete-modal-title")}>
+              Bạn có chắc muốn xoá bài viết
+            </h1>
+            <h2 className={cx("post-title-delete")}>{title}</h2>
+            <div className={cx("btns")}>
+              <Button danger onClick={handleDelete}>
+                Xoá
               </Button>
-            ))}
-          </div>
-
-          {/* COMMENT */}
-          <Comment data={comments} id={idQuestion} currentUser={currentUser} />
-        </div>
+              <Button outline onClick={() => setDeleteConfirm(false)}>
+                Huỷ
+              </Button>
+            </div>
+          </Modal>
+        )}
       </div>
-
-      {/* ANSWER */}
-      <Answers questionId={idQuestion} auth={auth} />
-    </div>
+    )
   );
 };
 
