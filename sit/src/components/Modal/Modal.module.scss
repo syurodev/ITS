@@ -1,0 +1,26 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gray);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+
+  .container {
+    position: relative;
+    background-color: white;
+    padding: 100px;
+    border-radius: var(--box-border-radius);
+    box-shadow: var(--bold-box-shadow-color);
+
+    .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+  }
+}
