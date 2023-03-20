@@ -13,7 +13,9 @@
   .container {
     position: relative;
     background-color: white;
-    padding: 100px;
+    padding: 40px 20px 20px;
+    max-width: 80%;
+    max-height: 80%;
     border-radius: var(--box-border-radius);
     box-shadow: var(--bold-box-shadow-color);
 

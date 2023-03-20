@@ -123,3 +123,18 @@
 .show {
   display: block !important;
 }
+
+.btns {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.delete-modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.post-title-delete {
+  text-align: center;
+}

@@ -21,6 +21,7 @@ function Button({
   rounded = false,
   start = false,
   end = false,
+  danger = false,
   column = false,
   smallLeft = false,
   ntd = false,
@@ -55,6 +56,7 @@ function Button({
     micon,
     className,
     disable,
+    danger,
   });
 
   if (to) {

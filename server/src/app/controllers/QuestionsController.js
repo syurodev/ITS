@@ -328,6 +328,21 @@ class QuestionsController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  //[DELETE] /questions/delete/
+  async delete(req, res) {
+    try {
+      const { id } = req.query;
+      const result = await questionSchema.deleteOne({ _id: id });
+      if (result.deletedCount === 1) {
+        res.status(204).send();
+      } else {
+        res.status(404).json({ message: "Question not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new QuestionsController();

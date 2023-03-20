@@ -6,6 +6,9 @@ const questionsController = require("../app/controllers/QuestionsController");
 //[GET] /questions/question
 router.get("/question/", questionsController.question);
 
+//[DELETE] /questions/delete/
+router.delete("/question/delete/", questionsController.delete);
+
 //[GET] /questions/tags
 router.get("/tags", questionsController.getAllTags);
 
