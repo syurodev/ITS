@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
@@ -102,12 +103,16 @@ const Question = () => {
     }
   }, [session]);
 
+  document.cookie =
+    "question-64182f6c5f4c2a7c28c68cd7-viewed=true; path=/; domain=localhost";
+
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
     setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
 
+      console.log(result);
       setTitle(result.title);
       setViewed(result.viewed);
       setCreatedAt(result.createdAt);
@@ -122,6 +127,10 @@ const Question = () => {
       setDownvote(result.downvote);
       setAuth(result.user._id && result.user._id === currentUser._id);
       setLoading(false);
+      if (!Cookies.get(`question-${idQuestion}-viewed`)) {
+        Cookies.set(`question-${idQuestion}-viewed`, true, { expires: 1 });
+        setViewed(viewed + 1);
+      }
     };
     getQuestionDetail();
   }, [idQuestion]);

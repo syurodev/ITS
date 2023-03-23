@@ -4,6 +4,7 @@ import Tippy from "@tippyjs/react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Prism from "~/future/prism";
 
 import Button from "~/components/Button";
 import style from "./Answer.module.scss";
@@ -48,6 +49,8 @@ function Answer({ data, auth, questionId }) {
     } else {
       setSoldIconColor("#030e12");
     }
+
+    Prism.highlightAll();
   }, [upvote, downvote, currentUser._id, sold]);
 
   // UNVOTE

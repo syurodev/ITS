@@ -68,14 +68,47 @@ export const getQuestionsSortVote = async (
 };
 
 //GET QUESTION DETAIL
+// export const questionDetail = async (id) => {
+//   try {
+//     const res = await request.get("questions/question", {
+//       params: {
+//         id,
+//       },
+
+//       withCredentials: true,
+//       headers: {
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//       },
+//     });
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 export const questionDetail = async (id) => {
   try {
     const res = await request.get("questions/question", {
       params: {
         id,
       },
+      withCredentials: true, // send cookies with request
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
-    return res[0];
+
+    // Extract and set cookies
+    // const cookies = res.headers["set-cookie"];
+    // if (cookies) {
+    //   cookies.forEach((cookie) => {
+    //     document.cookie = cookie;
+    //   });
+    // }
+
+    return res;
   } catch (error) {
     console.log(error);
   }

@@ -65,8 +65,9 @@ class QuestionsController {
 
   //[GET] /questions/question
   async question(req, res) {
-    questionSchema
-      .find({ _id: mongoose.Types.ObjectId(req.query.id) })
+    const questionId = req.query.id;
+    await questionSchema
+      .findByIdAndUpdate(questionId, { $inc: { viewed: 1 } }, { new: true })
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .exec(function (error, result) {
         if (error) {
