@@ -58,6 +58,7 @@
 //Button Style
 .primary {
   background-color: var(--primary-color);
+  color: white;
 
   &:hover {
     background-color: var(--primary-color-hover);
@@ -67,6 +68,12 @@
 
 .danger {
   background-color: var(--red);
+  color: white;
+
+  &:hover {
+    background-color: var(--red-hover);
+    box-shadow: var(--box-shadow-color-hover);
+  }
 }
 
 .outline {

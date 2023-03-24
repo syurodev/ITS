@@ -12,6 +12,7 @@ function Modal({ closeModal, children }) {
           <Button
             text
             onlyicon
+            nmw
             onClick={() => closeModal(false)}
             leftIcon={
               <lord-icon

@@ -21,4 +21,7 @@ router.post("/bookmark", UserController.bookmark);
 //[GET] /bookmark
 router.get("/bookmark", UserController.getBookmark);
 
+//[POST] /avatar
+router.post("/avatar", UserController.changeAvatar);
+
 module.exports = router;

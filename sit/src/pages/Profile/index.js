@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,22 +8,36 @@ import {
   faAngleUp,
   faEye,
 } from "@fortawesome/free-solid-svg-icons";
+import AvatarEditor from "react-avatar-editor";
 
 import * as userServices from "~/services/authServices";
 import style from "./Profile.module.scss";
 import Image from "~/components/Image";
 import formatDate from "~/future/formatDate";
+import Modal from "~/components/Modal";
+import Button from "~/components/Button";
 
 function Profile() {
   const cx = classNames.bind(style);
   const { userId } = useParams();
   const [userData, setUserData] = useState([]);
+  const [avatar, setAvatar] = useState("");
+  const [changeAvatarModal, setChangeAvatarModal] = useState(false);
+  const [newAvatarName, setNewAvatarName] = useState("");
+  const [newAvatarPreview, setNewAvatarPreview] = useState("");
+  const editorRef = useRef(null);
+  const [zoom, setZoom] = useState(1);
+  const [auth, setAuth] = useState(false);
 
   useEffect(() => {
     const fetchApi = async () => {
       const result = await userServices.profile(userId);
       setUserData(result);
-      console.log(result);
+      setAvatar(result.user.avatar);
+
+      const storedUserId = localStorage.getItem("itsSession");
+      const currentUserId = JSON.parse(storedUserId);
+      setAuth(userId && userId === currentUserId?._id);
     };
     fetchApi();
   }, []);
@@ -34,17 +48,44 @@ function Profile() {
     ? "Loading..."
     : "";
 
+  const handleChooseAvatar = (e) => {
+    const newImage = e.target.files[0];
+    setNewAvatarPreview(URL.createObjectURL(newImage));
+  };
+
+  const handleChangeAvatar = () => {
+    const canvas = editorRef.current.getImageScaledToCanvas().toDataURL();
+    const fetchApi = async () => {
+      const result = await userServices.changeAvatar({
+        avatar: canvas,
+        userId,
+      });
+      if (result.status === true) {
+        setChangeAvatarModal(false);
+        setAvatar(canvas);
+      }
+    };
+    fetchApi();
+  };
+
   return (
     <div className={cx("wrapper")}>
       {userData.user && (
         <div className={cx("container")}>
           <div className={cx("info")}>
             <div className={cx("avatar")}>
-              <span className={cx("edit-icon")}>
-                <FontAwesomeIcon icon={faPencil} />
-              </span>
-              <span className={cx("edit-icon-bg")}></span>
-              <Image src={userData.user.avatar} alt={userData.user.username} />
+              {auth && (
+                <div>
+                  <span
+                    className={cx("edit-icon")}
+                    onClick={() => setChangeAvatarModal(true)}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </span>
+                  <span className={cx("edit-icon-bg")}></span>
+                </div>
+              )}
+              <Image src={avatar} alt={userData.user.username} />
             </div>
             <div className={cx("details")}>
               <div>
@@ -137,6 +178,71 @@ function Profile() {
               </div>
             </div>
           </div>
+          {changeAvatarModal && (
+            <Modal closeModal={setChangeAvatarModal}>
+              <div className={cx("change-avatar-modal")}>
+                <p className={cx("change-avatar-title")}>Change Avatar</p>
+                <div className={cx("avatar-preview")}>
+                  {newAvatarPreview ? (
+                    <AvatarEditor
+                      ref={editorRef}
+                      image={newAvatarPreview}
+                      width={350}
+                      height={350}
+                      border={50}
+                      color={[255, 255, 255, 0.6]}
+                      scale={zoom}
+                    />
+                  ) : (
+                    <Image src={avatar} alt={userData.user.username} />
+                  )}
+                </div>
+
+                {newAvatarPreview && (
+                  <input
+                    type="range"
+                    min="1"
+                    max="3"
+                    step="0.01"
+                    value={zoom}
+                    onChange={(e) => setZoom(parseFloat(e.target.value))}
+                  />
+                )}
+
+                <label
+                  className={cx("choose-file-btn", {
+                    choosed: !!newAvatarPreview,
+                  })}
+                >
+                  <span className={cx("btn-title")}>Choose new avatar</span>
+                  <span className={cx("btn-sub-title")}>
+                    {!!newAvatarName ? newAvatarName : "click to select file"}
+                  </span>
+                  <input
+                    type="file"
+                    onChange={handleChooseAvatar}
+                    accept="image/png, image/jpeg"
+                  />
+                </label>
+
+                <div className={cx("btns")}>
+                  <Button primary small onClick={handleChangeAvatar}>
+                    Đổi
+                  </Button>
+                  <Button
+                    outline
+                    small
+                    onClick={() => {
+                      setChangeAvatarModal(false);
+                      setNewAvatarName("");
+                    }}
+                  >
+                    Huỷ
+                  </Button>
+                </div>
+              </div>
+            </Modal>
+          )}
         </div>
       )}
     </div>

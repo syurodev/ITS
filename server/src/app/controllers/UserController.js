@@ -1,8 +1,5 @@
-const mongoose = require("mongoose");
-
 const userSchema = require("../models/User");
 const questionSchema = require("../models/Question");
-const answerSchema = require("../models/Answer");
 
 class UserController {
   //[GET] /login
@@ -219,6 +216,30 @@ class UserController {
             });
         }
       });
+  }
+
+  async changeAvatar(req, res, next) {
+    try {
+      const base64EncodedAvatar = req.body.avatar;
+      const userId = req.body.userId;
+
+      if (!base64EncodedAvatar) {
+        throw new Error("Please provide a base64 encoded avatar");
+      }
+
+      const user = await userSchema.findByIdAndUpdate(
+        userId,
+        { avatar: base64EncodedAvatar },
+        { new: true }
+      );
+
+      res
+        .status(201)
+        .json({ status: true, message: "Change avatar successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to change avatar" });
+    }
   }
 }
 

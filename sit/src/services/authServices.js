@@ -74,3 +74,16 @@ export const profile = async (id) => {
     console.log(error);
   }
 };
+
+export const changeAvatar = async (data) => {
+  try {
+    const res = await request.post("user/avatar", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

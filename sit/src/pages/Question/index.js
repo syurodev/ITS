@@ -103,16 +103,12 @@ const Question = () => {
     }
   }, [session]);
 
-  document.cookie =
-    "question-64182f6c5f4c2a7c28c68cd7-viewed=true; path=/; domain=localhost";
-
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
     setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
 
-      console.log(result);
       setTitle(result.title);
       setViewed(result.viewed);
       setCreatedAt(result.createdAt);
@@ -125,12 +121,12 @@ const Question = () => {
       setComments(result.comments);
       setUpvote(result.upvote);
       setDownvote(result.downvote);
-      setAuth(result.user._id && result.user._id === currentUser._id);
+
+      const storedUserId = localStorage.getItem("itsSession");
+      const userId = JSON.parse(storedUserId);
+      setAuth(result.user._id && result.user._id === userId?._id);
+
       setLoading(false);
-      if (!Cookies.get(`question-${idQuestion}-viewed`)) {
-        Cookies.set(`question-${idQuestion}-viewed`, true, { expires: 1 });
-        setViewed(viewed + 1);
-      }
     };
     getQuestionDetail();
   }, [idQuestion]);
@@ -382,15 +378,15 @@ const Question = () => {
         {/* DELETE CONFIRM */}
         {deleteConfirm && (
           <Modal closeModal={setDeleteConfirm}>
-            <h1 className={cx("delete-modal-title")}>
+            <p className={cx("delete-modal-title")}>
               Bạn có chắc muốn xoá bài viết
-            </h1>
-            <h2 className={cx("post-title-delete")}>{title}</h2>
+            </p>
+            <p className={cx("post-title-delete")}>{title}</p>
             <div className={cx("btns")}>
-              <Button danger onClick={handleDelete}>
+              <Button danger small onClick={handleDelete}>
                 Xoá
               </Button>
-              <Button outline onClick={() => setDeleteConfirm(false)}>
+              <Button outline small onClick={() => setDeleteConfirm(false)}>
                 Huỷ
               </Button>
             </div>
