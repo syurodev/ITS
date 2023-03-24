@@ -7,6 +7,7 @@ import {
   faAngleDown,
   faAngleUp,
   faEye,
+  faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
 import AvatarEditor from "react-avatar-editor";
 
@@ -40,7 +41,7 @@ function Profile() {
       setAuth(userId && userId === currentUserId?._id);
     };
     fetchApi();
-  }, []);
+  }, [userId]);
 
   const memberFor = userData.user?.dateCreate
     ? formatDate(userData.user.dateCreate, "user")
@@ -73,6 +74,12 @@ function Profile() {
       {userData.user && (
         <div className={cx("container")}>
           <div className={cx("info")}>
+            {auth && (
+              <FontAwesomeIcon
+                className={cx("edit-profile-icon")}
+                icon={faEllipsis}
+              />
+            )}
             <div className={cx("avatar")}>
               {auth && (
                 <div>

@@ -9,6 +9,13 @@
       border-radius: var(--box-border-radius);
       padding: 20px;
       box-shadow: var(--box-shadow-color);
+      position: relative;
+
+      .edit-profile-icon {
+        position: absolute;
+        top: 5px;
+        right: 15px;
+      }
 
       .avatar {
         margin-bottom: 15px;
@@ -163,7 +170,7 @@
               font-size: 14px;
               color: var(--dark-gray);
               min-width: 130px;
-              text-align: end;
+              text-align: right;
               margin-left: 8px;
             }
           }

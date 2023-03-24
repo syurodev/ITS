@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
@@ -63,7 +62,7 @@ const Question = () => {
   const [comments, setComments] = useState([]);
 
   const [auth, setAuth] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   //CHECK SESSION
@@ -78,7 +77,7 @@ const Question = () => {
     } else {
       setSession(true);
     }
-  }, []);
+  }, [currentUser]);
 
   //CHECK USER BOOKMARK
   useEffect(() => {
@@ -101,11 +100,12 @@ const Question = () => {
     } else {
       setUserBookmarks([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
 
@@ -126,7 +126,7 @@ const Question = () => {
       const userId = JSON.parse(storedUserId);
       setAuth(result.user._id && result.user._id === userId?._id);
 
-      setLoading(false);
+      // setLoading(false);
     };
     getQuestionDetail();
   }, [idQuestion]);
@@ -149,6 +149,7 @@ const Question = () => {
     }
 
     Prism.highlightAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upvote, downvote, problem, expecting, currentUser._id, userBookmarks]);
 
   //VOTE NUMBER
@@ -227,7 +228,7 @@ const Question = () => {
   //HANDEL DELETE
   const handleDelete = () => {
     const fetchApi = async () => {
-      const result = await questionServices.deleteQuestion(idQuestion);
+      await questionServices.deleteQuestion(idQuestion);
       navigate(routesConfig.home);
     };
     fetchApi();
