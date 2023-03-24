@@ -161,7 +161,6 @@ const Question = () => {
     if (session) {
       const result = await questionServices.unvote(idQuestion, {
         user: currentUser._id,
-        score: user._id,
       });
       setUpvote(result.data.upvote);
       setDownvote(result.data.downvote);
@@ -177,7 +176,6 @@ const Question = () => {
         if (!upvote.includes(currentUser._id)) {
           const result = await questionServices.upvote(idQuestion, {
             user: currentUser._id,
-            score: user._id,
           });
 
           setUpvote(result.data.upvote);
@@ -191,7 +189,6 @@ const Question = () => {
         if (!downvote.includes(currentUser._id)) {
           const result = await questionServices.downvote(idQuestion, {
             user: currentUser._id,
-            score: user._id,
           });
 
           setUpvote(result.data.upvote);
@@ -249,12 +246,17 @@ const Question = () => {
               <div className={cx("user")}>
                 <Image src={user.avatar} alt={user.username} />
                 <span className={cx("username")}>{user.username}</span>
+                <span className={cx("reputation-score")}>
+                  {user.reputationScore}
+                </span>
               </div>
             </Link>
-            <span>Asked {questionTime}</span>
-            <span>Modified {modifiedTime}</span>
-            <span>Viewed {viewed} times</span>
-            {solved ? <span className={cx("solved")}>Solved</span> : <></>}
+            <div className={cx("question-info")}>
+              <span>Asked {questionTime}</span>
+              <span>Modified {modifiedTime}</span>
+              <span>Viewed {viewed} times</span>
+              {solved ? <span className={cx("solved")}>Solved</span> : <></>}
+            </div>
           </div>
         </div>
         {/* // QUESTION */}

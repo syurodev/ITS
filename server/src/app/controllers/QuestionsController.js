@@ -91,20 +91,6 @@ class QuestionsController {
       user: req.body.user,
     });
 
-    userSchema
-      .findOneAndUpdate(
-        {
-          _id: req.body.user._id,
-        },
-        {
-          $inc: { reputationScore: 10 },
-        },
-        {
-          new: true,
-        }
-      )
-      .exec();
-
     await questionData
       .save()
       .then((doc) => {
@@ -124,21 +110,7 @@ class QuestionsController {
   //[PATCH] /questions/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;
-    if (req.body.user !== req.body.score) {
-      await userSchema
-        .findOneAndUpdate(
-          {
-            _id: req.body.score,
-          },
-          {
-            $inc: { reputationScore: 2 },
-          },
-          {
-            new: true,
-          }
-        )
-        .exec();
-    }
+
     await questionSchema
       .findOneAndUpdate(
         {
@@ -169,22 +141,7 @@ class QuestionsController {
 
   //[PATCH] /questions/downvote:item
   async updateDownvote(req, res) {
-    const userUpvote = req.body.user;
-    if (req.body.user !== req.body.score) {
-      await userSchema
-        .findOneAndUpdate(
-          {
-            _id: req.body.score,
-          },
-          {
-            $inc: { reputationScore: -2 },
-          },
-          {
-            new: true,
-          }
-        )
-        .exec();
-    }
+    const userDownvote = req.body.user;
 
     await questionSchema
       .findOneAndUpdate(
@@ -192,8 +149,8 @@ class QuestionsController {
           _id: req.params.item,
         },
         {
-          $pull: { upvote: userUpvote },
-          $push: { downvote: userUpvote },
+          $pull: { upvote: userDownvote },
+          $push: { downvote: userDownvote },
         },
         {
           new: true,
@@ -216,22 +173,7 @@ class QuestionsController {
 
   //[PATCH] /questions/unvote:item
   async updateUnvote(req, res) {
-    const userUpvote = req.body.user;
-    if (req.body.user !== req.body.score) {
-      await userSchema
-        .findOneAndUpdate(
-          {
-            _id: req.body.score,
-          },
-          {
-            $inc: { reputationScore: -2 },
-          },
-          {
-            new: true,
-          }
-        )
-        .exec();
-    }
+    const userUnvote = req.body.user;
 
     await questionSchema
       .findOneAndUpdate(
@@ -239,7 +181,7 @@ class QuestionsController {
           _id: req.params.item,
         },
         {
-          $pull: { upvote: userUpvote, downvote: userUpvote },
+          $pull: { upvote: userUnvote, downvote: userUnvote },
         },
         {
           new: true,

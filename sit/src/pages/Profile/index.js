@@ -109,7 +109,9 @@ function Profile() {
                 </div>
                 <div>
                   <p className={cx("title")}>Reputation Score</p>
-                  <p>{userData.user.reputationScore}</p>
+                  <p className={cx("reputation-score")}>
+                    {userData.user.reputationScore}
+                  </p>
                 </div>
               </div>
             </div>

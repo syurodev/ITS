@@ -29,10 +29,15 @@
       }
 
       & .username {
+        margin-left: 10px;
+        font-weight: 500;
+      }
+
+      .reputation-score {
         position: relative;
-        margin-right: 10px;
         color: var(--primary-color);
         font-weight: 500;
+        margin: 0 10px;
 
         &::before {
           content: "";
@@ -46,26 +51,28 @@
         }
       }
 
-      & span {
-        font-size: 16px;
-        margin-left: 10px;
-        margin-right: 10px;
-        position: relative;
+      .question-info {
+        & span {
+          font-size: 16px;
+          margin-left: 10px;
+          margin-right: 10px;
+          position: relative;
 
-        &::after {
-          content: "";
-          position: absolute;
-          top: 50%;
-          right: -10px;
-          height: 15px;
-          width: 1px;
-          transform: translateY(-50%);
-          background-color: var(--gray);
-        }
-
-        &:last-child {
           &::after {
-            background-color: transparent;
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            height: 15px;
+            width: 1px;
+            transform: translateY(-50%);
+            background-color: var(--gray);
+          }
+
+          &:last-child {
+            &::after {
+              background-color: transparent;
+            }
           }
         }
       }
