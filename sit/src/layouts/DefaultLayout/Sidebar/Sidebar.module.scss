@@ -5,4 +5,12 @@
   clip-path: inset(5px -15px 5px 5px);
   position: fixed;
   background-color: var(--main-bg);
+
+  .btn {
+    width: fit-content;
+  }
+
+  .active {
+    scale: 1.2;
+  }
 }

@@ -188,6 +188,7 @@ class UserController {
               { user: id },
               "_id title tags upvote downvote viewed createdAt"
             )
+            .limit(10)
             .exec((err, questions) => {
               if (err) {
                 res.status(500).json({ error: "Error retrieving questions" });
@@ -200,12 +201,13 @@ class UserController {
                     tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
                   });
                 });
-                const tags = Object.keys(tagCounts)
+                let tags = Object.keys(tagCounts)
                   .map((tag) => ({
                     name: tag,
                     count: tagCounts[tag],
                   }))
                   .sort((a, b) => b.count - a.count);
+                tags = tags.slice(0, 5);
                 const userData = {
                   user: user,
                   questions: questions,

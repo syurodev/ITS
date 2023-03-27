@@ -4,12 +4,10 @@
   outline: none;
   padding: 10px;
   border: 2px solid black;
-  background-color: #0d0d0d;
-  color: white;
   min-height: 100px;
   max-height: 500px;
   overflow: auto;
-  font-size: 16px !important;
+  line-height: 1.5;
 }
 
 .menu-bar {
@@ -25,21 +23,38 @@
 }
 
 .text-editor:last-child > div > div {
+  pre {
+    background-color: #27212d;
+    padding: 5px 10px;
+    border-radius: 10px;
+    code {
+      font-family: "JetBrainsMono", monospace;
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: #ed7966;
+    }
+  }
   p,
   span {
-    color: white !important;
     outline: none;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
-    background-color: #0d0d0d;
+    background-color: white;
+    line-height: 1.5;
+    margin-bottom: 1em;
+    color: var(--text-color-black) !important;
 
     a {
       color: #ed7966 !important;
+      text-decoration: underline;
     }
 
     ul,
     ol {
       padding: 0 1rem;
+      list-style-type: disc;
+      margin-bottom: 1em;
+      margin-left: 2em;
     }
 
     & h1,
@@ -54,6 +69,8 @@
     code {
       font-family: "JetBrainsMono", monospace;
       background-color: #27212d;
+      padding: 3px 8px;
+      border-radius: 5px;
       color: #ed7966;
     }
 
@@ -63,27 +80,18 @@
       border-radius: 0.5rem;
     }
 
-    pre code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 16px;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
     blockquote {
       padding-left: 1rem;
       border-left: 2px solid rgba(#0d0d0d, 0.1);
+      margin: 1em 0;
+      padding: 0 1em;
+      border-left: 4px solid #ccc;
     }
 
     hr {
       border: none;
       border-top: 2px solid rgba(#0d0d0d, 0.1);
-      margin: 2rem 0;
+      margin: 1.5em 0;
     }
   }
 }

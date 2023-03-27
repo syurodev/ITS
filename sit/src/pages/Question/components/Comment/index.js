@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import style from "./Comment.module.scss";
 import Button from "~/components/Button";
-import Tiptap from "~/future/tiptapEditor";
+import Tiptap from "~/components/TiptapEditor";
 import * as commentServices from "~/services/commentServices";
 import routesConfig from "~/config/router";
 

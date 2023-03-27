@@ -4,7 +4,6 @@ import parse from "html-react-parser";
 import Tippy from "@tippyjs/react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Prism from "~/future/prism";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -15,6 +14,7 @@ import formatDate from "~/future/formatDate";
 import Button from "~/components/Button";
 import Comment from "./components/Comment";
 import Answers from "./components/Answers";
+import Prism from "~/future/prism";
 import "~/future/prism-laserwave.css";
 import * as questionServices from "~/services/questionServices";
 import * as authServices from "~/services/authServices";

@@ -3,9 +3,8 @@ import classNames from "classnames/bind";
 import { TagsInput } from "react-tag-input-component";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Tiptap from "~/future/tiptapEditor";
+import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";
-import { ReactTags } from "react-tag-autocomplete";
 
 import style from "./Ask.module.scss";
 import Button from "~/components/Button";
@@ -77,7 +76,6 @@ const Ask = () => {
               <div className={cx("question-problem")}>
                 <h2 className={cx("title")}>Chi tiết vấn đề của bạn là gì?</h2>
                 <small>Mô tả chi tiết những gì bạn đặt ở tiêu đề</small>
-
                 <Tiptap setState={setProblem} />
               </div>
             </div>

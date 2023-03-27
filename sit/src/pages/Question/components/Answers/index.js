@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import style from "./Answer.module.scss";
 import Button from "~/components/Button";
-import Tiptap from "~/future/tiptapEditor";
+import Tiptap from "~/components/TiptapEditor";
 import Answer from "./Answer";
 import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";

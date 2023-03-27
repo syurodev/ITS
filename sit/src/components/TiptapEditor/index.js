@@ -2,12 +2,10 @@ import "./tiptapEditor.scss";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import Link from "@tiptap/extension-link";
-// import Dropcursor from "@tiptap/extension-dropcursor";
-import Image from "@tiptap/extension-image";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React, { useCallback } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBold,
@@ -22,17 +20,10 @@ import {
   faRulerHorizontal,
   faStrikethrough,
 } from "@fortawesome/free-solid-svg-icons";
-import { faFileCode, faImage } from "@fortawesome/free-regular-svg-icons";
+import { faFileCode } from "@fortawesome/free-regular-svg-icons";
+import DOMPurify from "dompurify";
 
 const MenuBar = ({ editor }) => {
-  const addImage = useCallback(() => {
-    const url = window.prompt("URL");
-
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
-
   if (!editor) {
     return null;
   }
@@ -73,10 +64,6 @@ const MenuBar = ({ editor }) => {
         className={editor.isActive("codeBlock") ? "is-active" : ""}
       >
         <FontAwesomeIcon icon={faFileCode} />
-      </button>
-
-      <button onClick={addImage}>
-        <FontAwesomeIcon icon={faImage} />
       </button>
 
       <button
@@ -133,18 +120,14 @@ const Tiptap = ({ setState }) => {
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
       TextStyle.configure({ types: [ListItem.name] }),
-      // Dropcursor,
-      Image.configure({
-        inline: true,
-      }),
       StarterKit.configure({
         bulletList: {
           keepMarks: true,
-          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+          keepAttributes: false,
         },
         orderedList: {
           keepMarks: true,
-          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+          keepAttributes: false,
         },
       }),
       Link.configure({
@@ -158,10 +141,15 @@ const Tiptap = ({ setState }) => {
         setState("");
       } else {
         const html = editor.getHTML();
-        setState(html);
+        const cleanedHtml = DOMPurify.sanitize(html, configCleanedHtml);
+        setState(cleanedHtml);
       }
     },
   });
+
+  const configCleanedHtml = {
+    FORBID_ATTR: ["style"],
+  };
 
   return (
     <div className="text-editor">

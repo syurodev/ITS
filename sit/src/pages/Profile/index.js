@@ -24,6 +24,7 @@ function Profile() {
   const [userData, setUserData] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [changeAvatarModal, setChangeAvatarModal] = useState(false);
+  const [changeUserInfo, setChangeUserInfo] = useState(false);
   const [newAvatarName, setNewAvatarName] = useState("");
   const [newAvatarPreview, setNewAvatarPreview] = useState("");
   const editorRef = useRef(null);
@@ -78,6 +79,7 @@ function Profile() {
               <FontAwesomeIcon
                 className={cx("edit-profile-icon")}
                 icon={faEllipsis}
+                onClick={() => setChangeUserInfo(true)}
               />
             )}
             <div className={cx("avatar")}>
@@ -250,6 +252,12 @@ function Profile() {
                   </Button>
                 </div>
               </div>
+            </Modal>
+          )}
+
+          {changeUserInfo && (
+            <Modal closeModal={setChangeUserInfo}>
+              <h1>Change User Info</h1>
             </Modal>
           )}
         </div>

@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 import formatDate from "~/future/formatDate";
 import Button from "~/components/Button";
@@ -92,7 +93,14 @@ const Home = () => {
           const questionTime = formatDate(question.createdAt);
 
           return (
-            <div key={question._id} className={cx("item")}>
+            <motion.div
+              layout
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              key={question._id}
+              className={cx("item")}
+            >
               <div className={cx("header")}>
                 <Link
                   className={cx("user")}
@@ -144,7 +152,7 @@ const Home = () => {
                   </Button>
                 ))}
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
