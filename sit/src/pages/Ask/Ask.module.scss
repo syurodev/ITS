@@ -39,6 +39,7 @@
   border: 1px solid #ccc;
   margin-top: 15px;
   transition: all 0.1s linear;
+  border-radius: var(--box-border-radius);
 
   &:focus {
     box-shadow: var(--box-shadow-color);

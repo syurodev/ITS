@@ -1,7 +1,7 @@
-import React from "react";
 import classNames from "classnames/bind";
 import { TagsInput } from "react-tag-input-component";
-import { useState } from "react";
+import { WithContext as ReactTags } from "react-tag-input";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import style from "./Ask.module.scss";
 import Button from "~/components/Button";
 import routesConfig from "~/config/router";
 import * as questionServices from "~/services/questionServices";
+import CustomTagsInput from "~/components/TagsInput";
 
 const cx = classNames.bind(style);
 
@@ -31,11 +32,16 @@ const Ask = () => {
       expecting.trim() !== "" &&
       tags !== []
     ) {
+      const newTags = [];
+      tags.map((tag) => {
+        newTags.push(tag.text);
+      });
+
       const bodyJSON = {
         title: title,
         problem: problem,
         expecting: expecting,
-        tags: JSON.stringify(tags),
+        tags: JSON.stringify(newTags),
         user: currentUser._id,
       };
 
@@ -94,14 +100,7 @@ const Ask = () => {
 
             <div className={cx("question-option")}>
               <div className={cx("question-tags")}>
-                <TagsInput
-                  className={cx("input")}
-                  value={tags}
-                  onChange={setTags}
-                  onlyUnique
-                  addOnBlur
-                  addKeys={[9, 13, 32, 188]}
-                />
+                <CustomTagsInput tags={tags} setTags={setTags} />
               </div>
             </div>
           </div>

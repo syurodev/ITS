@@ -1,0 +1,60 @@
+.tagInputClass {
+  width: 100%;
+
+  .suggestionsClass {
+    ul {
+      margin-top: 5px;
+      li {
+        list-style: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: var(--box-border-radius);
+
+        &:hover {
+          background-color: var(--primary-color-light);
+        }
+
+        span {
+          mask {
+            background-color: var(--primary-color);
+          }
+        }
+      }
+    }
+  }
+}
+
+.tagInputFieldClass {
+  margin-top: 15px;
+  outline: none;
+  border: 1px solid transparent;
+  padding: 5px 10px;
+  width: 100%;
+  border-radius: var(--box-border-radius);
+  box-shadow: var(--box-shadow-color-hover);
+  background-color: var(--ultra-light-gray);
+}
+
+.tagInputFieldClass:focus {
+  border-color: var(--primary-color);
+}
+
+.selectedClass {
+  .tagClass {
+    background-color: var(--primary-color);
+    padding: 5px 10px;
+    border-radius: var(--box-border-radius);
+    color: white;
+
+    .removeClass {
+      background-color: transparent;
+      margin-left: 5px;
+      cursor: pointer;
+      color: white;
+    }
+  }
+
+  .tagClass + .tagClass {
+    margin-left: 10px;
+  }
+}
