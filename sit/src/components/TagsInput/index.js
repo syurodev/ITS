@@ -11,7 +11,7 @@ function CustomTagsInput({ tags, setTags, row = false }) {
     const fetchData = async () => {
       const result = await questionServices.getTags();
       setSuggestions(
-        result.tags.map((tag) => ({
+        result.result.map((tag) => ({
           id: tag.name,
           text: tag.name,
         }))
