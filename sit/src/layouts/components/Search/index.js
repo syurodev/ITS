@@ -40,6 +40,7 @@ function Search() {
       setSearchValue(e.target.value);
     }
   };
+
   const handleHideResult = () => {
     setShowResult(false);
   };

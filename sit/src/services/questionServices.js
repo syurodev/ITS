@@ -143,9 +143,13 @@ export const downvote = async (id, user) => {
 };
 
 //TAGS
-export const getTags = async () => {
+export const getTags = async (tag) => {
   try {
-    const res = await request.get("questions/tags");
+    const res = await request.get("questions/tags", {
+      params: {
+        ...(tag ? { tag } : {}),
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

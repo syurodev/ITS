@@ -6,17 +6,27 @@
     justify-content: space-between;
     align-items: center;
 
-    .search-tag {
-      height: 35px;
-      width: 40%;
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: var(--box-border-radius);
-      outline: none;
       border: 1.5px solid var(--gray);
-      padding: 0 10px;
       transition: all 0.1s linear;
+      height: 35px;
+      width: 30%;
 
-      &:focus {
+      &:focus-within {
         border: 1.5px solid var(--primary-color);
+      }
+
+      .tags-search {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        padding: 0 10px;
+        width: 100%;
       }
     }
   }

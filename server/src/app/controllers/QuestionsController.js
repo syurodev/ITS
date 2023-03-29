@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const questionSchema = require("../models/Question");
-const userSchema = require("../models/User");
 
 class QuestionsController {
   //[GET] /questions/new
@@ -50,6 +49,7 @@ class QuestionsController {
     if (user) {
       query.user = user;
     }
+
     questionSchema
       .find(query, "_id upvote downvote viewed title tags solved createdAt")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
@@ -257,9 +257,16 @@ class QuestionsController {
 
   //[GET] /questions/tags
   async getAllTags(req, res) {
+    const { tag } = req.query;
+    const query = {};
+
+    if (tag) {
+      query.tags = { $regex: tag };
+    }
+
     try {
       const tagCounts = {};
-      const posts = await questionSchema.find();
+      const posts = await questionSchema.find().select("tags");
       posts.forEach((post) => {
         JSON.parse(post.tags).forEach((tag) => {
           const tagString = String(tag);
@@ -270,7 +277,10 @@ class QuestionsController {
         name: tag,
         count: tagCounts[tag],
       }));
-      res.status(200).json({ tags });
+
+      const regex = new RegExp(tag, "i");
+      const result = await tags.filter((tag) => regex.test(tag.name));
+      res.status(200).json({ result });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
