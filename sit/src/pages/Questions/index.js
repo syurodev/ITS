@@ -11,35 +11,57 @@ import Button from "~/components/Button";
 import style from "./Questions.module.scss";
 import * as questionServices from "~/services/questionServices";
 import Image from "~/components/Image";
+import CustomTagsInput from "~/components/TagsInput";
 
 const cx = classNames.bind(style);
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [sortActive, setSortActive] = useState(true);
+  const [tags, setTags] = useState([]);
   const { tag = null } = useParams();
   const { user = null } = useParams();
 
   useEffect(() => {
+    const tagsPargams = [];
+    if (tags.length > 0) {
+      tags.forEach((tag) => {
+        tagsPargams.push(tag.text);
+      });
+    }
+    if (tag) {
+      tagsPargams.push(tag);
+    }
+
     const getQuestion = async () => {
       const result = await questionServices.getQuestionsSortNew(
         10,
         -1,
-        tag && tag,
+        tagsPargams.length > 0 && tagsPargams,
         user && user
       );
       setQuestions(result);
+      console.log("fetch");
     };
     getQuestion();
-  }, [window.location.href]);
+  }, [window.location.href, tags, user, tag]);
 
   const handleSortVote = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
+      const tagsPargams = [];
+      if (tags.length > 0) {
+        tags.forEach((tag) => {
+          tagsPargams.push(tag.text);
+        });
+      }
+      if (tag) {
+        tagsPargams.push(tag);
+      }
       const result = await questionServices.getQuestionsSortVote(
         10,
         -1,
-        tag && tag,
+        tagsPargams.length > 0 && tagsPargams,
         user && user
       );
       setQuestions(result);
@@ -50,10 +72,19 @@ const Home = () => {
   const handleSortNew = () => {
     setSortActive(!sortActive);
     const getQuestion = async () => {
+      const tagsPargams = [];
+      if (tags.length > 0) {
+        tags.forEach((tag) => {
+          tagsPargams.push(tag.text);
+        });
+      }
+      if (tag) {
+        tagsPargams.push(tag);
+      }
       const result = await questionServices.getQuestionsSortNew(
         10,
         -1,
-        tag && tag,
+        tagsPargams.length > 0 && tagsPargams,
         user && user
       );
       setQuestions(result);
@@ -66,6 +97,9 @@ const Home = () => {
       <div className={cx("top-nav")}>
         <h1>Top Questions</h1>
         <div className={cx("sort")}>
+          <div className={cx("tags-sort")}>
+            <CustomTagsInput tags={tags} setTags={setTags} />
+          </div>
           {sortActive ? (
             <Button primary small nmw>
               New

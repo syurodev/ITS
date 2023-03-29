@@ -4,10 +4,12 @@ import classNames from "classnames/bind";
 import * as questionServices from "~/services/questionServices";
 import style from "./Tags.module.scss";
 import { Link } from "react-router-dom";
+import CustomTagsInput from "~/components/TagsInput";
 
 function Tags() {
   const cx = classNames.bind(style);
   const [tags, setTags] = useState([]);
+  const [tagsSearch, setTagsSearch] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -21,7 +23,7 @@ function Tags() {
     <div className={cx("wrapper")}>
       <div className={cx("top-nav")}>
         <h1>Tags</h1>
-        <input className={cx("search-tag")} type="text" />
+        <CustomTagsInput tags={tagsSearch} setTags={setTagsSearch} />
       </div>
       <div className={cx("container")}>
         {tags.map((tag, index) => {

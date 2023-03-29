@@ -10,7 +10,9 @@ class QuestionsController {
     const query = {};
 
     if (tag) {
-      query.tags = { $regex: tag };
+      const tagsArray = Array.isArray(tag) ? tag : [tag];
+      const regexTagsArray = tagsArray.map((tag) => new RegExp(tag, "i"));
+      query.tags = { $in: regexTagsArray };
     }
 
     if (user) {
@@ -40,7 +42,9 @@ class QuestionsController {
     const query = {};
 
     if (tag) {
-      query.tags = { $regex: tag };
+      const tagsArray = Array.isArray(tag) ? tag : [tag];
+      const regexTagsArray = tagsArray.map((tag) => new RegExp(tag, "i"));
+      query.tags = { $in: regexTagsArray };
     }
 
     if (user) {

@@ -1,7 +1,5 @@
 import classNames from "classnames/bind";
-import { TagsInput } from "react-tag-input-component";
-import { WithContext as ReactTags } from "react-tag-input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";

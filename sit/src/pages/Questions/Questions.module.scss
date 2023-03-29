@@ -6,6 +6,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .sort {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .tags-sort {
+        margin-right: 10px;
+      }
+    }
   }
 }
 

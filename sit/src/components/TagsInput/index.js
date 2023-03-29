@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import * as questionServices from "~/services/questionServices";
 import "./TagsInput.scss";
 
-function CustomTagsInput({ tags, setTags }) {
+function CustomTagsInput({ tags, setTags, row = false }) {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
@@ -51,6 +51,7 @@ function CustomTagsInput({ tags, setTags }) {
           id: tag?.text,
           text: tag?.text,
         }))}
+        placeholder="Enter tag..."
         handleDelete={handleDelete}
         handleAddition={handleAddition}
         delimiters={[9, 13, 32, 188]}
