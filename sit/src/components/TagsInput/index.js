@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import * as questionServices from "~/services/questionServices";
 import "./TagsInput.scss";
 
-function CustomTagsInput({ tags, setTags, row = false }) {
+function CustomTagsInput({ tags, setTags }) {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {

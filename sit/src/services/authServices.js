@@ -31,6 +31,15 @@ export const getUserInfo = async (userId) => {
   }
 };
 
+export const changeUserInfo = async (data) => {
+  try {
+    const res = await request.put("user/info", data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const addBookmark = async (data = {}) => {
   try {
     const res = await request.post(`user/bookmark`, data);

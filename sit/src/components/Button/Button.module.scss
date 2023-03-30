@@ -76,6 +76,25 @@
   }
 }
 
+.successfully {
+  background-color: var(--green);
+  color: white;
+
+  &:hover {
+    background-color: var(--green-hover);
+    box-shadow: var(--box-shadow-color-hover);
+  }
+}
+
+.outlineSuccessfully {
+  border-color: var(--green);
+
+  // &:hover {
+  //   background-color: var(--red-hover);
+  //   box-shadow: var(--box-shadow-color-hover);
+  // }
+}
+
 .outline {
   border-color: var(--primary-color);
 

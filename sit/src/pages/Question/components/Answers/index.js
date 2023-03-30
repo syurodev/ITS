@@ -9,6 +9,7 @@ import Tiptap from "~/components/TiptapEditor";
 import Answer from "./Answer";
 import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
+import { motion } from "framer-motion";
 
 function Answers({ questionId, auth }) {
   const navigate = useNavigate();
@@ -18,7 +19,8 @@ function Answers({ questionId, auth }) {
   const [answers, setAnswers] = useState([]);
   const [error, setError] = useState("");
   const [noAnswer, setNoAnswer] = useState(false);
-  const [sortActive, setSortActive] = useState(true);
+  const [sortActive, setSortActive] = useState(2);
+  const [answerCount, setAnswerCount] = useState(0);
 
   const currentUser = useSelector((state) => {
     return state.user.userId;
@@ -41,7 +43,7 @@ function Answers({ questionId, auth }) {
       }
     };
     fetchApi();
-  }, [questionId]);
+  }, [questionId, answerCount]);
 
   const handleAddAnswer = () => {
     if (Object.keys(currentUser).length !== 0) {
@@ -58,10 +60,7 @@ function Answers({ questionId, auth }) {
         const fetchApi = async () => {
           const result = await AnswerServices.addAnswer(answerData);
           if (result.status) {
-            const newData = await AnswerServices.getAnswerDataSortNew(
-              questionId
-            );
-            setAnswers(newData);
+            setAnswerCount(answerCount + 1);
             setShowAnswerEditor(false);
           }
         };
@@ -74,7 +73,7 @@ function Answers({ questionId, auth }) {
 
   //handle
   const handleSortVote = () => {
-    setSortActive(!sortActive);
+    setSortActive(2);
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSortVote(questionId);
       if (result.length === 0) {
@@ -88,9 +87,23 @@ function Answers({ questionId, auth }) {
   };
 
   const handleSortNew = () => {
-    setSortActive(!sortActive);
+    setSortActive(1);
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSortNew(questionId);
+      if (result.length === 0) {
+        setNoAnswer(true);
+      } else {
+        setAnswers(result);
+        setNoAnswer(false);
+      }
+    };
+    fetchApi();
+  };
+
+  const handleSortSolved = () => {
+    setSortActive(0);
+    const fetchApi = async () => {
+      const result = await AnswerServices.getAnswerDataSolved(questionId);
       if (result.length === 0) {
         setNoAnswer(true);
       } else {
@@ -139,7 +152,21 @@ function Answers({ questionId, auth }) {
             </div>
             {!noAnswer ? (
               <div>
-                {sortActive ? (
+                {sortActive === 0 ? (
+                  <Button primary successfully small nmw>
+                    Solved
+                  </Button>
+                ) : (
+                  <Button
+                    outlineSuccessfully
+                    small
+                    nmw
+                    onClick={handleSortSolved}
+                  >
+                    Solved
+                  </Button>
+                )}
+                {sortActive === 1 ? (
                   <Button primary small nmw>
                     New
                   </Button>
@@ -148,12 +175,12 @@ function Answers({ questionId, auth }) {
                     New
                   </Button>
                 )}
-                {sortActive ? (
-                  <Button outline small nmw onClick={handleSortVote}>
+                {sortActive === 2 ? (
+                  <Button primary small nmw>
                     Vote
                   </Button>
                 ) : (
-                  <Button primary small nmw>
+                  <Button outline small nmw onClick={handleSortVote}>
                     Vote
                   </Button>
                 )}
@@ -176,12 +203,15 @@ function Answers({ questionId, auth }) {
         {!noAnswer ? (
           answers.map((answer) => {
             return (
-              <Answer
+              <motion.div
+                layout
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 key={answer._id}
-                data={answer}
-                auth={auth}
-                questionId={questionId}
-              />
+              >
+                <Answer data={answer} auth={auth} questionId={questionId} />
+              </motion.div>
             );
           })
         ) : (

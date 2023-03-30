@@ -253,3 +253,54 @@
     margin-top: 26px;
   }
 }
+
+//CHANGE INFO MODAL
+.change-info-modal {
+  .modal-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .error-message {
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .box-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-weight: 500;
+    }
+
+    .input {
+      outline: none;
+      border: 1px solid var(--gray);
+      padding: 5px 10px;
+      border-radius: var(--box-border-radius);
+      margin-left: 20px;
+      width: 30rem;
+      transition: all 0.1s linear;
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  .box-input + .box-input {
+    margin-top: 12px;
+  }
+
+  .btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

@@ -18,6 +18,9 @@ router.patch("/solved/", AnswersController.solved);
 //[GET] /answers/new
 router.get("/new/", AnswersController.answerSortNew);
 
+//[GET] /answers/solved
+router.get("/solved/", AnswersController.answerSolved);
+
 //[GET] /answers/vote
 router.get("/vote/", AnswersController.answerSortVote);
 

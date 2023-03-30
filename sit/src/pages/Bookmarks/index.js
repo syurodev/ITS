@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import style from "./Bookmarks.module.scss";
 import * as userServices from "~/services/authServices";
@@ -53,7 +54,14 @@ function Bookmarks() {
           let questionTime = formatDate(question.createdAt);
 
           return (
-            <div key={question._id} className={cx("item")}>
+            <motion.div
+              key={question._id}
+              className={cx("item")}
+              layout
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
               <div className={cx("header")}>
                 <Link
                   className={cx("user")}
@@ -105,7 +113,7 @@ function Bookmarks() {
                   </Button>
                 ))}
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>

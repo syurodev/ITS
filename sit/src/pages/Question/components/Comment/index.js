@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import parse from "html-react-parser";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import style from "./Comment.module.scss";
 import Button from "~/components/Button";
@@ -18,6 +19,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
   const [noCommennt, setNoCommennt] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -30,7 +32,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
       }
     };
     fetchApi();
-  }, []);
+  }, [commentCount]);
 
   useEffect(() => {
     if (newComment.trim() !== "") {
@@ -57,8 +59,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
               commentData
             );
             if (result.status) {
-              const newData = await commentServices.getComments(id);
-              setComments(newData);
+              setCommentCount(commentCount + 1);
               setShowCommentEditor(false);
               setNewComment("");
             }
@@ -91,7 +92,14 @@ function Comment({ id, currentUser = [], type = "question" }) {
         {!noCommennt ? (
           comments.map((comment) => {
             return (
-              <div className={cx("content")} key={comment._id}>
+              <motion.div
+                layout
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className={cx("content")}
+                key={comment._id}
+              >
                 <span className={cx("user-comment")}>
                   <span>{comment.user.username} </span>
                   <span className={cx("score")}>
@@ -102,7 +110,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
                 <span className={cx("comment-content")}>
                   {parse(comment.comment)}
                 </span>
-              </div>
+              </motion.div>
             );
           })
         ) : (

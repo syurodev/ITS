@@ -26,6 +26,25 @@ class AnswersController {
       });
   }
 
+  async answerSolved(req, res) {
+    await answerSchema
+      .find(
+        { question_id: mongoose.Types.ObjectId(req.query.id), solved: true },
+        "answer createdAt downvote question_id solved upvote _id"
+      )
+      .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .exec(function (error, result) {
+        if (error) {
+          res.status(400).send({
+            status: false,
+            message: "Error query question",
+          });
+        } else {
+          res.status(201).send(result);
+        }
+      });
+  }
+
   async answerSortVote(req, res) {
     await answerSchema
       .find(

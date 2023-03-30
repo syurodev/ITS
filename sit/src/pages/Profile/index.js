@@ -17,6 +17,7 @@ import Image from "~/components/Image";
 import formatDate from "~/future/formatDate";
 import Modal from "~/components/Modal";
 import Button from "~/components/Button";
+import ChangeUserInfo from "./ChangeUserInfo";
 
 function Profile() {
   const cx = classNames.bind(style);
@@ -31,16 +32,17 @@ function Profile() {
   const [zoom, setZoom] = useState(1);
   const [auth, setAuth] = useState(false);
 
-  useEffect(() => {
-    const fetchApi = async () => {
-      const result = await userServices.profile(userId);
-      setUserData(result);
-      setAvatar(result.user.avatar);
+  const fetchApi = async () => {
+    const result = await userServices.profile(userId);
+    setUserData(result);
+    setAvatar(result.user.avatar);
 
-      const storedUserId = localStorage.getItem("itsSession");
-      const currentUserId = JSON.parse(storedUserId);
-      setAuth(userId && userId === currentUserId?._id);
-    };
+    const storedUserId = localStorage.getItem("itsSession");
+    const currentUserId = JSON.parse(storedUserId);
+    setAuth(userId && userId === currentUserId?._id);
+  };
+
+  useEffect(() => {
     fetchApi();
   }, [userId]);
 
@@ -257,7 +259,11 @@ function Profile() {
 
           {changeUserInfo && (
             <Modal closeModal={setChangeUserInfo}>
-              <h1>Change User Info</h1>
+              <ChangeUserInfo
+                data={userData.user}
+                closeModal={setChangeUserInfo}
+                fetchApiData={fetchApi}
+              />
             </Modal>
           )}
         </div>

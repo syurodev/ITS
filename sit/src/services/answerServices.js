@@ -14,6 +14,20 @@ export const getAnswerDataSortNew = async (id, limit = 10) => {
   }
 };
 
+export const getAnswerDataSolved = async (id, limit = 10) => {
+  try {
+    const res = await request.get("answers/solved/", {
+      params: {
+        id,
+        limit,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getAnswerDataSortVote = async (id, limit = 10) => {
   try {
     const res = await request.get("answers/vote/", {

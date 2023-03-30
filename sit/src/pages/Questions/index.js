@@ -41,7 +41,6 @@ const Home = () => {
         user && user
       );
       setQuestions(result);
-      console.log("fetch");
     };
     getQuestion();
   }, [window.location.href, tags, user, tag]);

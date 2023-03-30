@@ -243,6 +243,51 @@ class UserController {
       res.status(500).json({ message: "Failed to change avatar" });
     }
   }
+
+  async changeUserInfo(req, res) {
+    const { id, username, job, phone, email } = req.body;
+
+    const existingUser = await userSchema.findOne({ username });
+    if (existingUser && existingUser._id.toString() !== id) {
+      return res.send({ status: false, message: "Username already exists" });
+    }
+
+    const existingPhone = await userSchema.findOne({ phone });
+    if (phone.trim() !== "") {
+      if (existingPhone && existingPhone._id.toString() !== id) {
+        return res.send({
+          status: false,
+          message: "Phone number already exists",
+        });
+      }
+    }
+
+    if (email.trim() !== "") {
+      const existingEmail = await userSchema.findOne({ email });
+      if (existingEmail && existingEmail._id.toString() !== id) {
+        return res.send({
+          status: false,
+          message: "Email address already exists",
+        });
+      }
+    }
+
+    try {
+      const updatedUser = await userSchema.findByIdAndUpdate(
+        id,
+        {
+          username,
+          job,
+          phone,
+          email,
+        },
+        { new: true }
+      );
+      res.status(200).send({ status: true });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new UserController();

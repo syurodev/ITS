@@ -22,6 +22,8 @@ function Button({
   start = false,
   end = false,
   danger = false,
+  successfully = false,
+  outlineSuccessfully = false,
   column = false,
   smallLeft = false,
   ntd = false,
@@ -57,6 +59,8 @@ function Button({
     className,
     disable,
     danger,
+    successfully,
+    outlineSuccessfully,
   });
 
   if (to) {
