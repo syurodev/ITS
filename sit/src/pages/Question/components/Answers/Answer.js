@@ -3,7 +3,7 @@ import parse from "html-react-parser";
 import Tippy from "@tippyjs/react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Prism from "~/future/prism";
 
 import Button from "~/components/Button";
@@ -12,7 +12,14 @@ import * as answerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 import Image from "~/components/Image";
 
-function Answer({ data, auth, questionId }) {
+function Answer({
+  data,
+  auth,
+  questionId,
+  answerSolved,
+  handleSortVote,
+  setShowAnswerSolved,
+}) {
   const currentUser = useSelector((state) => {
     return state.user.userId;
   });
@@ -23,7 +30,7 @@ function Answer({ data, auth, questionId }) {
   const [upvoteIconColor, setUpvoteIconColor] = useState("#030e12");
   const [downvoteIconColor, setDownvoteIconColor] = useState("#030e12");
   const [soldIconColor, setSoldIconColor] = useState("#030e12");
-  const [sold, setSold] = useState(data.solved);
+  const [sold, setSold] = useState(answerSolved === data._id);
   const [upvote, setUpvote] = useState(data.upvote);
   const [downvote, setDownvote] = useState(data.downvote);
   const [voteNumber, setVoteNumber] = useState(0);
@@ -43,15 +50,14 @@ function Answer({ data, auth, questionId }) {
         setDownvoteIconColor("#ed7966");
       }
     }
-
-    if (sold) {
+    if (answerSolved === data._id) {
       setSoldIconColor("#ed7966");
     } else {
       setSoldIconColor("#030e12");
     }
 
     Prism.highlightAll();
-  }, [upvote, downvote, currentUser._id, sold]);
+  }, [upvote, downvote, currentUser._id]);
 
   // UNVOTE
   const handleUnvote = async () => {
@@ -118,6 +124,9 @@ function Answer({ data, auth, questionId }) {
         };
 
         const result = await answerServices.solved(dataQuery);
+        if (result.status) {
+          setShowAnswerSolved(data._id);
+        }
       };
       fetchApi();
     } else {
@@ -132,6 +141,10 @@ function Answer({ data, auth, questionId }) {
         };
 
         const result = await answerServices.solved(dataQuery);
+        if (result.status) {
+          handleSortVote();
+          setShowAnswerSolved();
+        }
       };
       fetchApi();
     }
@@ -213,7 +226,7 @@ function Answer({ data, auth, questionId }) {
         </div>
 
         <div className={cx("content")}>
-          <div className={cx("respondent")}>
+          <Link to={`/profile/${data.user._id}`} className={cx("respondent")}>
             <Image
               src={data.user.avatar}
               alt={data.user.username}
@@ -223,7 +236,7 @@ function Answer({ data, auth, questionId }) {
             <span className={cx("reputationScore")}>
               {data.user.reputationScore}
             </span>
-          </div>
+          </Link>
           <div className={cx("answer-data")}>{parse(data.answer)}</div>
           {/* <Comment
             data={data.comments}

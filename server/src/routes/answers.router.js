@@ -12,7 +12,7 @@ router.patch("/downvote/:item", AnswersController.updateDownvote);
 //[PATCH] /answers/unvote:item
 router.patch("/unvote/:item", AnswersController.updateUnvote);
 
-//[PATCH] /answers/new
+//[PATCH] /answers/solved
 router.patch("/solved/", AnswersController.solved);
 
 //[GET] /answers/new

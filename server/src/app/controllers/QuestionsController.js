@@ -19,7 +19,10 @@ class QuestionsController {
     }
 
     questionSchema
-      .find(query, "_id upvote downvote viewed title tags solved createdAt")
+      .find(
+        query,
+        "_id upvote downvote viewed title tags solved createdAt solved_answer_id"
+      )
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .limit(limit)
       .sort({ createdAt: sort })
@@ -51,7 +54,10 @@ class QuestionsController {
     }
 
     questionSchema
-      .find(query, "_id upvote downvote viewed title tags solved createdAt")
+      .find(
+        query,
+        "_id upvote downvote viewed title tags solved createdAt solved_answer_id"
+      )
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .limit(limit)
       .sort({ upvote: sort })

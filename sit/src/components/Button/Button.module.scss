@@ -89,10 +89,10 @@
 .outlineSuccessfully {
   border-color: var(--green);
 
-  // &:hover {
-  //   background-color: var(--red-hover);
-  //   box-shadow: var(--box-shadow-color-hover);
-  // }
+  &:hover {
+    background-color: var(--green-light-hover);
+    box-shadow: var(--box-shadow-color-hover);
+  }
 }
 
 .outline {

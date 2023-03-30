@@ -46,6 +46,7 @@ const Question = () => {
   const [problem, setProblem] = useState("");
   const [expecting, setExpecting] = useState("");
   const [solved, setSolved] = useState(false);
+  const [answerSolved, setAnswerSolved] = useState("");
   const [user, setUser] = useState({});
   const [tags, setTags] = useState([]);
   const [userBookmarks, setUserBookmarks] = useState([]);
@@ -121,6 +122,7 @@ const Question = () => {
       setComments(result.comments);
       setUpvote(result.upvote);
       setDownvote(result.downvote);
+      setAnswerSolved(result.solved_answer_id);
 
       const storedUserId = localStorage.getItem("itsSession");
       const userId = JSON.parse(storedUserId);
@@ -256,7 +258,7 @@ const Question = () => {
               <span>Asked {questionTime}</span>
               <span>Modified {modifiedTime}</span>
               <span>Viewed {viewed} times</span>
-              {solved ? <span className={cx("solved")}>Solved</span> : <></>}
+              {solved && <span className={cx("solved")}>Solved</span>}
             </div>
           </div>
         </div>
@@ -325,7 +327,7 @@ const Question = () => {
               </div>
             </Tippy>
 
-            {auth ? (
+            {auth && (
               <Tippy content="Delete" placement="left">
                 <div>
                   <Button
@@ -344,8 +346,6 @@ const Question = () => {
                   ></Button>
                 </div>
               </Tippy>
-            ) : (
-              <></>
             )}
           </div>
           <div className={cx("content")}>
@@ -376,7 +376,11 @@ const Question = () => {
           </div>
         </div>
         {/* ANSWER */}
-        <Answers questionId={idQuestion} auth={auth} />
+        <Answers
+          questionId={idQuestion}
+          auth={auth}
+          answerSolved={answerSolved}
+        />
 
         {/* DELETE CONFIRM */}
         {deleteConfirm && (

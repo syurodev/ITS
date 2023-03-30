@@ -11,7 +11,7 @@ import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 import { motion } from "framer-motion";
 
-function Answers({ questionId, auth }) {
+function Answers({ questionId, auth, answerSolved }) {
   const navigate = useNavigate();
   const cx = classNames.bind(style);
   const [newAnswerContent, setNewAnswerContent] = useState("");
@@ -21,6 +21,7 @@ function Answers({ questionId, auth }) {
   const [noAnswer, setNoAnswer] = useState(false);
   const [sortActive, setSortActive] = useState(2);
   const [answerCount, setAnswerCount] = useState(0);
+  const [showAnswerSolved, setShowAnswerSolved] = useState(answerSolved);
 
   const currentUser = useSelector((state) => {
     return state.user.userId;
@@ -34,7 +35,7 @@ function Answers({ questionId, auth }) {
 
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await AnswerServices.getAnswerDataSortNew(questionId);
+      const result = await AnswerServices.getAnswerDataSortVote(questionId);
       if (result.length === 0) {
         setNoAnswer(true);
       } else {
@@ -103,7 +104,7 @@ function Answers({ questionId, auth }) {
   const handleSortSolved = () => {
     setSortActive(0);
     const fetchApi = async () => {
-      const result = await AnswerServices.getAnswerDataSolved(questionId);
+      const result = await AnswerServices.getAnswerDataSolved(showAnswerSolved);
       if (result.length === 0) {
         setNoAnswer(true);
       } else {
@@ -152,19 +153,23 @@ function Answers({ questionId, auth }) {
             </div>
             {!noAnswer ? (
               <div>
-                {sortActive === 0 ? (
-                  <Button primary successfully small nmw>
-                    Solved
-                  </Button>
+                {showAnswerSolved ? (
+                  sortActive === 0 ? (
+                    <Button primary successfully small nmw>
+                      Solved
+                    </Button>
+                  ) : (
+                    <Button
+                      outlineSuccessfully
+                      small
+                      nmw
+                      onClick={() => handleSortSolved(answerSolved)}
+                    >
+                      Solved
+                    </Button>
+                  )
                 ) : (
-                  <Button
-                    outlineSuccessfully
-                    small
-                    nmw
-                    onClick={handleSortSolved}
-                  >
-                    Solved
-                  </Button>
+                  <></>
                 )}
                 {sortActive === 1 ? (
                   <Button primary small nmw>
@@ -210,7 +215,14 @@ function Answers({ questionId, auth }) {
                 viewport={{ once: true }}
                 key={answer._id}
               >
-                <Answer data={answer} auth={auth} questionId={questionId} />
+                <Answer
+                  data={answer}
+                  auth={auth}
+                  questionId={questionId}
+                  answerSolved={answerSolved}
+                  handleSortVote={handleSortVote}
+                  setShowAnswerSolved={setShowAnswerSolved}
+                />
               </motion.div>
             );
           })

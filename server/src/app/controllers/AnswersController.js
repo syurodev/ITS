@@ -9,7 +9,7 @@ class AnswersController {
     await answerSchema
       .find(
         { question_id: mongoose.Types.ObjectId(req.query.id) },
-        "answer createdAt downvote question_id solved upvote _id"
+        "answer createdAt downvote question_id upvote _id"
       )
       .limit(req.query.limit)
       .sort({ createdAt: -1 })
@@ -27,11 +27,9 @@ class AnswersController {
   }
 
   async answerSolved(req, res) {
+    const id = req.query.id;
     await answerSchema
-      .find(
-        { question_id: mongoose.Types.ObjectId(req.query.id), solved: true },
-        "answer createdAt downvote question_id solved upvote _id"
-      )
+      .find({ _id: id }, "answer createdAt downvote question_id upvote _id")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
       .exec(function (error, result) {
         if (error) {
@@ -240,75 +238,110 @@ class AnswersController {
 
   //[PATCH] /answers/solved
   async solved(req, res) {
-    await answerSchema
-      .findOneAndUpdate(
-        {
-          _id: req.body.id,
-        },
-        {
-          solved: req.body.solved,
-        },
-        {
-          new: true,
-        }
-      )
-      .exec();
+    // Lấy thông tin question và answer cần update
+    const question = await questionSchema.findById(req.body.question);
+    const answer = await answerSchema.findById(req.body.id);
 
-    if (req.body.solved) {
-      await userSchema
-        .findOneAndUpdate(
-          {
-            _id: req.body.auth,
-          },
-          {
-            $inc: { reputationScore: 10 },
-          },
-          {
-            new: true,
-          }
-        )
-        .exec();
-    } else {
-      await userSchema
-        .findOneAndUpdate(
-          {
-            _id: req.body.auth,
-          },
-          {
-            $inc: { reputationScore: -10 },
-          },
-          {
-            new: true,
-          }
-        )
-        .exec();
+    const isAnswerSolved = answer.solved;
+
+    if (
+      isAnswerSolved &&
+      String(question.solved_answer_id) !== String(answer._id)
+    ) {
+      answer.solved = false;
+      await answer.save();
     }
 
-    await questionSchema
-      .findOneAndUpdate(
-        {
-          _id: req.body.question,
-        },
-        {
-          solved: req.body.solved,
-        },
-        {
-          new: true,
-        }
-      )
-      .exec((err, result) => {
-        if (err) {
-          return res.status(400).send({
-            status: false,
-            message: "Error unvote answer",
-          });
-        } else {
-          res.status(201).send({
-            status: true,
-          });
-        }
-      });
+    question.solved = req.body.solved;
+    question.solved_answer_id = req.body.solved ? req.body.id : null;
+    await question.save();
+
+    const user = await userSchema.findById(req.body.auth);
+    const point = req.body.solved ? 10 : -10;
+    user.reputationScore += point;
+    await user.save();
+
+    res.status(201).send({
+      status: true,
+    });
   }
+
+  // async solved(req, res) {
+  //   const { id, solved, auth, question } = req.body;
+  //   console.log("id", id);
+  //   console.log("solved", solved);
+  //   console.log("auth", auth);
+  //   console.log("question", question);
+  //   await answerSchema
+  //     .findOneAndUpdate(
+  //       {
+  //         _id: id,
+  //       },
+  //       {
+  //         solved: solved,
+  //       },
+  //       {
+  //         new: true,
+  //       }
+  //     )
+  //     .exec();
+
+  //   if (req.body.solved) {
+  //     await userSchema
+  //       .findOneAndUpdate(
+  //         {
+  //           _id: auth,
+  //         },
+  //         {
+  //           $inc: { reputationScore: 10 },
+  //         },
+  //         {
+  //           new: true,
+  //         }
+  //       )
+  //       .exec();
+  //   } else {
+  //     await userSchema
+  //       .findOneAndUpdate(
+  //         {
+  //           _id: auth,
+  //         },
+  //         {
+  //           $inc: { reputationScore: -10 },
+  //         },
+  //         {
+  //           new: true,
+  //         }
+  //       )
+  //       .exec();
+  //   }
+
+  //   await questionSchema
+  //     .findOneAndUpdate(
+  //       {
+  //         _id: question,
+  //       },
+  //       {
+  //         solved: solved,
+  //         solved_answer_id: id,
+  //       },
+  //       {
+  //         new: true,
+  //       }
+  //     )
+  //     .exec((err, result) => {
+  //       if (err) {
+  //         return res.status(400).send({
+  //           status: false,
+  //           message: "Error unvote answer",
+  //         });
+  //       } else {
+  //         res.status(201).send({
+  //           status: true,
+  //         });
+  //       }
+  //     });
+  // }
 }
 
 module.exports = new AnswersController();

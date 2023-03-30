@@ -7,7 +7,6 @@ const answerSchema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   upvote: { type: Array },
   downvote: { type: Array },
-  solved: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   editAt: { type: Date, default: Date.now },
 });
