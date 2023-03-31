@@ -11,6 +11,7 @@ import style from "./Answer.module.scss";
 import * as answerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 import Image from "~/components/Image";
+import Modal from "~/components/Modal";
 
 function Answer({
   data,
@@ -34,6 +35,9 @@ function Answer({
   const [upvote, setUpvote] = useState(data.upvote);
   const [downvote, setDownvote] = useState(data.downvote);
   const [voteNumber, setVoteNumber] = useState(0);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  const authAnswer = currentUser._id === data.user._id;
 
   useEffect(() => {
     setVoteNumber(upvote.length - downvote.length);
@@ -150,6 +154,14 @@ function Answer({
     }
   };
 
+  const handleDelete = () => {
+    const fetchApi = async () => {
+      const result = await answerServices.deleteAnswer(data._id);
+      console.log(result);
+    };
+    fetchApi();
+  };
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("answer-item")}>
@@ -223,6 +235,26 @@ function Answer({
           ) : (
             <></>
           )}
+          {authAnswer && (
+            <Tippy content="Delete" placement="left">
+              <div>
+                <Button
+                  text
+                  onlyicon
+                  leftIcon={
+                    <lord-icon
+                      src="https://cdn.lordicon.com/kfzfxczd.json"
+                      trigger="click"
+                      colors="primary:#030e12"
+                      state="hover-empty"
+                      style={{ width: "250", height: "250" }}
+                    ></lord-icon>
+                  }
+                  onClick={() => setDeleteConfirm(true)}
+                ></Button>
+              </div>
+            </Tippy>
+          )}
         </div>
 
         <div className={cx("content")}>
@@ -246,6 +278,23 @@ function Answer({
           /> */}
         </div>
       </div>
+      {/* DELETE CONFIRM */}
+      {deleteConfirm && (
+        <Modal closeModal={setDeleteConfirm}>
+          <p className={cx("delete-modal-title")}>
+            Bạn có chắc muốn xoá bài viết
+          </p>
+          {/* <p className={cx("post-title-delete")}>{title}</p> */}
+          <div className={cx("btns")}>
+            <Button danger small onClick={handleDelete}>
+              Xoá
+            </Button>
+            <Button outline small onClick={() => setDeleteConfirm(false)}>
+              Huỷ
+            </Button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

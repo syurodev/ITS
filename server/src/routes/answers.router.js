@@ -27,4 +27,7 @@ router.get("/vote/", AnswersController.answerSortVote);
 //[POST] /answers
 router.post("/", AnswersController.create);
 
+//[DELETE] /answers/delete
+router.delete("/delete", AnswersController.deleteAnswer);
+
 module.exports = router;

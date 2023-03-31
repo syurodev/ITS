@@ -51,6 +51,19 @@ export const addAnswer = async (answerData) => {
   }
 };
 
+export const deleteAnswer = async (id) => {
+  try {
+    const res = await request.destroy("answers/delete", {
+      params: {
+        id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const unvote = async (id, user) => {
   try {
     const res = await request.patch(`answers/unvote/${id}`, user);

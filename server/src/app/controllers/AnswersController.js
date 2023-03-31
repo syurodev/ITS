@@ -99,6 +99,40 @@ class AnswersController {
       });
   }
 
+  //[DELETE] /answers/delete
+  async deleteAnswer(req, res) {
+    try {
+      const { id } = req.query;
+
+      const answer = await answerSchema.findById(id);
+
+      if (!answer) {
+        return res.status(404).json({ message: "Không tìm thấy câu trả lời" });
+      }
+
+      const { question_id } = answer;
+
+      // Kiểm tra xem câu trả lời được xóa có phải là câu trả lời giải quyết câu hỏi hay không
+      const question = await questionSchema.findById(question_id);
+      if (
+        question &&
+        question.solved_answer_id &&
+        question.solved_answer_id.equals(answer._id)
+      ) {
+        question.solved = false;
+        question.solved_answer_id = undefined;
+        await question.save();
+      }
+
+      await answer.remove();
+
+      return res.status(200).json({ message: "Xóa câu trả lời thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Lỗi máy chủ" });
+    }
+  }
+
   //[PATCH] /answers/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;
