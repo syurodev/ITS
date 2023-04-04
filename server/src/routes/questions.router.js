@@ -19,10 +19,7 @@ router.post("/bookmarks", questionsController.getAllBookmark);
 router.get("/search", questionsController.questionSearch);
 
 //[GET] /questions/new
-router.get("/new", questionsController.questionSortNew);
-
-//[GET] /questions/vote
-router.get("/vote", questionsController.questionSortVote);
+router.get("/", questionsController.getQuestions);
 
 //[PATCH] /questions/upvote:item
 router.patch("/upvote/:item", questionsController.updateUpvote);

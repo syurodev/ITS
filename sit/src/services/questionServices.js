@@ -1,4 +1,5 @@
 import * as request from "~/utils/request";
+// import socket from "./socket";
 
 //ASK
 export const ask = async (data) => {
@@ -25,40 +26,21 @@ export const deleteQuestion = async (id) => {
 };
 
 //GET ALL QUESTIONS AND SORT
-export const getQuestionsSortNew = async (
+export const getQuestions = async (
   limit = 10,
-  sort = -1,
+  sort = "createdAt",
   tag = null,
-  user = null
+  user = null,
+  page = 1
 ) => {
   try {
-    const res = await request.get("questions/new", {
+    const res = await request.get("questions", {
       params: {
         limit,
         sort,
         ...(tag ? { tag } : {}),
         ...(user ? { user } : {}),
-      },
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getQuestionsSortVote = async (
-  limit = 10,
-  sort = -1,
-  tag = null,
-  user = null
-) => {
-  try {
-    const res = await request.get("questions/vote", {
-      params: {
-        limit,
-        sort,
-        ...(tag ? { tag } : {}),
-        ...(user ? { user } : {}),
+        page,
       },
     });
     return res;

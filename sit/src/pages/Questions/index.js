@@ -12,83 +12,85 @@ import style from "./Questions.module.scss";
 import * as questionServices from "~/services/questionServices";
 import Image from "~/components/Image";
 import CustomTagsInput from "~/components/TagsInput";
+import Pagination from "~/components/Pagination";
 
 const cx = classNames.bind(style);
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [sortActive, setSortActive] = useState(true);
+  const [totalPages, setTotalPages] = useState([]);
+  const [page, setPage] = useState(1);
+
   const [tags, setTags] = useState([]);
   const { tag = null } = useParams();
   const { user = null } = useParams();
 
+  const [filter, setFilter] = useState({
+    limit: 10,
+    sort: "createdAt",
+    page: 1,
+    user: user && user,
+    tags: [],
+  });
+
   useEffect(() => {
-    const tagsPargams = [];
+    const newTagsPargams = [];
     if (tags.length > 0) {
       tags.forEach((tag) => {
-        tagsPargams.push(tag.text);
+        newTagsPargams.push(tag.text);
       });
     }
     if (tag) {
-      tagsPargams.push(tag);
+      newTagsPargams.push(tag);
     }
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      tags: newTagsPargams,
+    }));
+  }, [tag, tags]);
 
+  useEffect(() => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      user: user && user,
+    }));
+  }, [user]);
+
+  useEffect(() => {
     const getQuestion = async () => {
-      const result = await questionServices.getQuestionsSortNew(
-        10,
-        -1,
-        tagsPargams.length > 0 && tagsPargams,
-        user && user
+      const result = await questionServices.getQuestions(
+        filter.limit,
+        filter.sort,
+        filter.tags,
+        filter.user,
+        filter.page
       );
-      setQuestions(result);
+      setQuestions(result.data);
+      setPage(result.page);
+      const pageArray = Array.from(
+        { length: result.totalPages },
+        (_, i) => i + 1
+      );
+      setTotalPages(pageArray);
     };
     getQuestion();
-  }, [window.location.href, tags, user, tag]);
+  }, [filter]);
 
   const handleSortVote = () => {
     setSortActive(!sortActive);
-    const getQuestion = async () => {
-      const tagsPargams = [];
-      if (tags.length > 0) {
-        tags.forEach((tag) => {
-          tagsPargams.push(tag.text);
-        });
-      }
-      if (tag) {
-        tagsPargams.push(tag);
-      }
-      const result = await questionServices.getQuestionsSortVote(
-        10,
-        -1,
-        tagsPargams.length > 0 && tagsPargams,
-        user && user
-      );
-      setQuestions(result);
-    };
-    getQuestion();
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      sort: "upvote",
+    }));
   };
 
   const handleSortNew = () => {
     setSortActive(!sortActive);
-    const getQuestion = async () => {
-      const tagsPargams = [];
-      if (tags.length > 0) {
-        tags.forEach((tag) => {
-          tagsPargams.push(tag.text);
-        });
-      }
-      if (tag) {
-        tagsPargams.push(tag);
-      }
-      const result = await questionServices.getQuestionsSortNew(
-        10,
-        -1,
-        tagsPargams.length > 0 && tagsPargams,
-        user && user
-      );
-      setQuestions(result);
-    };
-    getQuestion();
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      sort: "createdAt",
+    }));
   };
 
   return (
@@ -120,74 +122,84 @@ const Home = () => {
         </div>
       </div>
       <div className={cx("container")}>
-        {questions.map((question) => {
-          const tags = JSON.parse(question.tags[0]);
+        {questions &&
+          questions.map((question) => {
+            const tags = JSON.parse(question.tags[0]);
 
-          const questionTime = formatDate(question.createdAt);
+            const questionTime = formatDate(question.createdAt);
 
-          return (
-            <motion.div
-              layout
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              key={question._id}
-              className={cx("item")}
-            >
-              <div className={cx("header")}>
-                <Link
-                  className={cx("user")}
-                  to={`/profile/${question.user._id}`}
-                >
-                  <div className={cx("avata")}>
-                    <Image
-                      src={question.user.avatar}
-                      alt={question.user.username}
-                    />
-                  </div>
-                  <div className={cx("username")}>{question.user.username}</div>
-                  <Tippy content="Điểm hoạt động">
-                    <div className={cx("score")}>
-                      {question.user.reputationScore}
-                    </div>
-                  </Tippy>
-                </Link>
-
-                <div className={cx("info")}>
-                  <span>
-                    {question.upvote.length - question.downvote.length} vote
-                  </span>
-                  <span>0 answers</span>
-                  <span>{question.viewed} views</span>
-                  <span>asked {questionTime}</span>
-                  {question.solved ? (
-                    <span className={cx("solved")}>Solved</span>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-              <div className={cx("title")}>
-                <Link to={`/question/${question._id}`} className={cx("link")}>
-                  {question.title}
-                </Link>
-              </div>
-              <div className={cx("tags")}>
-                {tags.map((tag, index) => (
-                  <Button
-                    key={index}
-                    text
-                    small
-                    className={cx("tag")}
-                    to={`/${tag}`}
+            return (
+              <motion.div
+                layout
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                key={question._id}
+                className={cx("item")}
+              >
+                <div className={cx("header")}>
+                  <Link
+                    className={cx("user")}
+                    to={`/profile/${question.user._id}`}
                   >
-                    #{tag}
-                  </Button>
-                ))}
-              </div>
-            </motion.div>
-          );
-        })}
+                    <div className={cx("avata")}>
+                      <Image
+                        src={question.user.avatar}
+                        alt={question.user.username}
+                      />
+                    </div>
+                    <div className={cx("username")}>
+                      {question.user.username}
+                    </div>
+                    <Tippy content="Điểm hoạt động">
+                      <div className={cx("score")}>
+                        {question.user.reputationScore}
+                      </div>
+                    </Tippy>
+                  </Link>
+
+                  <div className={cx("info")}>
+                    <span>
+                      {question.upvote.length - question.downvote.length} vote
+                    </span>
+                    <span>0 answers</span>
+                    <span>{question.viewed} views</span>
+                    <span>asked {questionTime}</span>
+                    {question.solved ? (
+                      <span className={cx("solved")}>Solved</span>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+                <div className={cx("title")}>
+                  <Link to={`/question/${question._id}`} className={cx("link")}>
+                    {question.title}
+                  </Link>
+                </div>
+                <div className={cx("tags")}>
+                  {tags.map((tag, index) => (
+                    <Button
+                      key={index}
+                      text
+                      small
+                      className={cx("tag")}
+                      to={`/${tag}`}
+                    >
+                      #{tag}
+                    </Button>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
+        {totalPages && (
+          <Pagination
+            totalPages={totalPages}
+            setFilter={setFilter}
+            currentPage={page}
+          />
+        )}
       </div>
     </div>
   );
