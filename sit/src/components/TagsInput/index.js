@@ -9,9 +9,10 @@ function CustomTagsInput({ tags, setTags }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await questionServices.getTags();
+      const result = await questionServices.getTags("all");
+      console.log(result);
       setSuggestions(
-        result.result.map((tag) => ({
+        result.tags.map((tag) => ({
           id: tag.name,
           text: tag.name,
         }))

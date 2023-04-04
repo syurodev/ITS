@@ -42,8 +42,8 @@ function Tags() {
     setTagsSearchLoading(true);
     const fetchApi = async () => {
       const result = await questionServices.getTags(
-        filter.tags,
         filter.limit,
+        filter.tags,
         filter.page
       );
       setTags(result.tags);

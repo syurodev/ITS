@@ -280,9 +280,12 @@ class QuestionsController {
       const regex = new RegExp(tag, "i");
 
       const filteredTags = await tags.filter((tag) => regex.test(tag.name));
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const paginatedTags = filteredTags.slice(startIndex, endIndex);
+      let paginatedTags = filteredTags;
+      if (limit !== "all") {
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        paginatedTags = filteredTags.slice(startIndex, endIndex);
+      }
 
       const totalPages = Math.ceil(filteredTags.length / limit);
 
