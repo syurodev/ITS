@@ -254,7 +254,7 @@ class QuestionsController {
 
   //[GET] /questions/tags
   async getAllTags(req, res) {
-    const { tag } = req.query;
+    const { tag, limit = 20, page = 1 } = req.query;
     const query = {};
 
     if (tag) {
@@ -264,20 +264,29 @@ class QuestionsController {
     try {
       const tagCounts = {};
       const posts = await questionSchema.find().select("tags");
+
       posts.forEach((post) => {
         JSON.parse(post.tags).forEach((tag) => {
           const tagString = String(tag);
           tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
         });
       });
+
       const tags = Object.keys(tagCounts).map((tag) => ({
         name: tag,
         count: tagCounts[tag],
       }));
 
       const regex = new RegExp(tag, "i");
-      const result = await tags.filter((tag) => regex.test(tag.name));
-      res.status(200).json({ result });
+
+      const filteredTags = await tags.filter((tag) => regex.test(tag.name));
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const paginatedTags = filteredTags.slice(startIndex, endIndex);
+
+      const totalPages = Math.ceil(filteredTags.length / limit);
+
+      res.status(200).json({ tags: paginatedTags, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

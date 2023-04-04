@@ -6,6 +6,7 @@ import * as questionServices from "~/services/questionServices";
 import style from "./Tags.module.scss";
 import { Link } from "react-router-dom";
 import { useDebounce } from "~/hooks";
+import Pagination from "~/components/Pagination";
 
 function Tags() {
   const cx = classNames.bind(style);
@@ -13,7 +14,21 @@ function Tags() {
   const [tagsSearch, setTagsSearch] = useState([]);
   const [tagsSearchLoading, setTagsSearchLoading] = useState(false);
 
+  const [totalPages, setTotalPages] = useState([]);
+  const [filter, setFilter] = useState({
+    limit: 20,
+    page: 1,
+    tags: "",
+  });
+
   let debounced = useDebounce(tagsSearch, 500);
+
+  useEffect(() => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      tags: debounced,
+    }));
+  }, [debounced]);
 
   const handleChange = (e) => {
     if (e.target.value.startsWith(" ")) {
@@ -26,12 +41,21 @@ function Tags() {
   useEffect(() => {
     setTagsSearchLoading(true);
     const fetchApi = async () => {
-      const result = await questionServices.getTags(debounced);
-      setTags(result.result);
+      const result = await questionServices.getTags(
+        filter.tags,
+        filter.limit,
+        filter.page
+      );
+      setTags(result.tags);
+      const pageArray = Array.from(
+        { length: result.totalPages },
+        (_, i) => i + 1
+      );
+      setTotalPages(pageArray);
       setTagsSearchLoading(false);
     };
     fetchApi();
-  }, [debounced]);
+  }, [filter]);
 
   return (
     <div className={cx("wrapper")}>
@@ -74,6 +98,11 @@ function Tags() {
           );
         })}
       </div>
+      <Pagination
+        totalPages={totalPages}
+        setFilter={setFilter}
+        currentPage={filter.page}
+      />
     </div>
   );
 }

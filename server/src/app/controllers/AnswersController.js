@@ -65,11 +65,17 @@ class AnswersController {
   }
 
   async create(req, res) {
+    const { question_id, answer, user } = req.body;
+
+    const io = req.app.get("socketio");
+    io.emit("newAnswer", { question_id, answer, user });
+
     const answerData = new answerSchema({
-      question_id: req.body.question_id,
-      answer: req.body.answer,
-      user: req.body.user,
+      question_id,
+      answer,
+      user,
     });
+
     await userSchema
       .findOneAndUpdate(
         {
