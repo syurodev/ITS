@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import * as questionServices from "~/services/questionServices";
 import style from "./Tags.module.scss";
-import { Link } from "react-router-dom";
 import { useDebounce } from "~/hooks";
 import Pagination from "~/components/Pagination";
 

@@ -47,7 +47,7 @@ function Bookmarks() {
 
   return (
     <div className={cx("wrapper")}>
-      <h1>bookmarks page</h1>
+      <h1>Bookmarks</h1>
       <div className={cx("container")}>
         {questions.map((question) => {
           let tags = JSON.parse(question.tags[0]);

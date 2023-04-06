@@ -44,6 +44,7 @@ function Profile() {
 
   useEffect(() => {
     fetchApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const memberFor = userData.user?.dateCreate

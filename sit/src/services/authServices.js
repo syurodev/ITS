@@ -96,3 +96,18 @@ export const changeAvatar = async (data) => {
     console.log(error);
   }
 };
+
+export const getAllUsers = async (username = "", limit = 15, page = 1) => {
+  try {
+    const res = await request.get("user/all", {
+      params: {
+        username,
+        limit,
+        page,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

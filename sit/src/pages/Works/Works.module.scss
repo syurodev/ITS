@@ -1,0 +1,9 @@
+.wrapper {
+  padding: var(--wrapper-padding);
+
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

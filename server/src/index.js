@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
-const cookieParser = require("cookie-parser");
+const http = require("http");
+const { Server } = require("socket.io");
 
 const route = require("./routes");
 
@@ -15,8 +16,6 @@ app.use(
   })
 );
 
-app.use(cookieParser());
-
 const db = require("./config/db");
 
 //Connect DB
@@ -28,6 +27,32 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 // Routes
 route(app);
 
-app.listen(port, () => {
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("chat message", (msg) => {
+    console.log("message: " + msg);
+    io.emit("chat message", msg);
+  });
+
+  socket.on("newAnswer", (answerData) => {
+    console.log("New answer added: " + answerData);
+    io.emit("newAnswer", answerData);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

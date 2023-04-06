@@ -10,6 +10,7 @@ import Answer from "./Answer";
 import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 import { motion } from "framer-motion";
+import io from "socket.io-client";
 
 function Answers({ questionId, auth, answerSolved }) {
   const navigate = useNavigate();
@@ -22,6 +23,15 @@ function Answers({ questionId, auth, answerSolved }) {
   const [sortActive, setSortActive] = useState(2);
   const [answerCount, setAnswerCount] = useState(0);
   const [showAnswerSolved, setShowAnswerSolved] = useState(answerSolved);
+
+  const socket = io("http://localhost:4000");
+
+  useEffect(() => {
+    // listen to "chat message" event and update the answer count
+    socket.on("chat message", (msg) => {
+      setAnswerCount(msg);
+    });
+  }, [socket]);
 
   const currentUser = useSelector((state) => {
     return state.user.userId;
@@ -61,7 +71,9 @@ function Answers({ questionId, auth, answerSolved }) {
         const fetchApi = async () => {
           const result = await AnswerServices.addAnswer(answerData);
           if (result.status) {
+            socket.emit("chat message", answerCount + 1);
             setAnswerCount(answerCount + 1);
+            setNewAnswerContent("");
             setShowAnswerEditor(false);
           }
         };

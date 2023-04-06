@@ -115,7 +115,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const Tiptap = ({ setState }) => {
+const Tiptap = ({ setState, setError }) => {
   const editor = useEditor({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -144,6 +144,10 @@ const Tiptap = ({ setState }) => {
         const cleanedHtml = DOMPurify.sanitize(html, configCleanedHtml);
         setState(cleanedHtml);
       }
+    },
+
+    onFocus: ({ editor }) => {
+      setError && setError("");
     },
   });
 

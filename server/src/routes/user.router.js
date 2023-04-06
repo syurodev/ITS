@@ -21,6 +21,9 @@ router.post("/bookmark", UserController.bookmark);
 //[GET] /bookmark
 router.get("/bookmark", UserController.getBookmark);
 
+//[GET] /all
+router.get("/all", UserController.getAllUsers);
+
 //[POST] /avatar
 router.post("/avatar", UserController.changeAvatar);
 

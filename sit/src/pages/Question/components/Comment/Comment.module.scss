@@ -32,6 +32,15 @@
     color: var(--text-color);
     padding: 5px 0;
 
+    p {
+      code {
+        padding: 3px 6px;
+        border-radius: 5px;
+        background-color: var(--light-gray);
+        font-weight: 500;
+      }
+    }
+
     .user-comment {
       font-weight: 500;
       margin-right: 8px;

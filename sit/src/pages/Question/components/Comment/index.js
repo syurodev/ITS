@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import parse from "html-react-parser";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import style from "./Comment.module.scss";
@@ -100,13 +100,16 @@ function Comment({ id, currentUser = [], type = "question" }) {
                 className={cx("content")}
                 key={comment._id}
               >
-                <span className={cx("user-comment")}>
+                <Link
+                  className={cx("user-comment")}
+                  to={`/profile/${comment.user._id}`}
+                >
                   <span>{comment.user.username} </span>
                   <span className={cx("score")}>
                     {comment.user.reputationScore}{" "}
                   </span>
                   :
-                </span>
+                </Link>
                 <span className={cx("comment-content")}>
                   {parse(comment.comment)}
                 </span>

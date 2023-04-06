@@ -172,6 +172,82 @@ class UserController {
       .clone();
   }
 
+  async getAllUsers(req, res) {
+    const { username, page = 1, limit = 10 } = req.query;
+    const query = {};
+
+    if (username) {
+      query.username = { $regex: username };
+    }
+
+    try {
+      const count = await userSchema.countDocuments(query);
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      const result = await userSchema
+        .find(query, "_id username avatar reputationScore")
+        .skip(startIndex)
+        .limit(limit)
+        .exec();
+
+      const data = [];
+
+      for (const userdata of result) {
+        const questions = await questionSchema
+          .find({ user: userdata._id }, "tags")
+          .exec();
+
+        const tagCounts = {};
+        questions.forEach((question) => {
+          JSON.parse(question.tags).forEach((tag) => {
+            const tagString = String(tag);
+            tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
+          });
+        });
+        let tags = Object.keys(tagCounts)
+          .map((tag) => ({
+            name: tag,
+            count: tagCounts[tag],
+          }))
+          .sort((a, b) => b.count - a.count);
+        tags = tags.slice(0, 3);
+
+        data.push({
+          _id: userdata._id,
+          username: userdata.username,
+          avatar: userdata.avatar,
+          reputationScore: userdata.reputationScore,
+          tags: tags,
+        });
+      }
+
+      const pagination = {
+        total: count,
+        pages: Math.ceil(count / limit),
+      };
+
+      if (endIndex < count) {
+        pagination.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
+
+      if (startIndex > 0) {
+        pagination.prev = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+
+      res.json({ data, pagination });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving data" });
+    }
+  }
+
   async profile(req, res) {
     const id = req.query.id;
     await userSchema

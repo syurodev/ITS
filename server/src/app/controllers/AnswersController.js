@@ -68,7 +68,7 @@ class AnswersController {
     const { question_id, answer, user } = req.body;
 
     const io = req.app.get("socketio");
-    io.emit("newAnswer", { question_id, answer, user });
+    // io.emit("newAnswer", { question_id, answer, user });
 
     const answerData = new answerSchema({
       question_id,

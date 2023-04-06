@@ -21,6 +21,7 @@ const Ask = () => {
   const [problem, setProblem] = useState("");
   const [expecting, setExpecting] = useState("");
   const [tags, setTags] = useState([]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -28,7 +29,7 @@ const Ask = () => {
       title.trim() !== "" &&
       problem.trim() !== "" &&
       expecting.trim() !== "" &&
-      tags !== []
+      tags.length > 0
     ) {
       const newTags = [];
       tags.map((tag) => {
@@ -48,6 +49,8 @@ const Ask = () => {
         navigate(`/question/${result._id}`);
       };
       fetchApi();
+    } else {
+      setError("Hãy điền đầy đủ tất cả các trường");
     }
   };
 
@@ -71,6 +74,7 @@ const Ask = () => {
                     placeholder="Nhập tiêu đề câu hỏi"
                     id="title"
                     className={cx("input")}
+                    onFocus={() => setError("")}
                   />
                 </label>
               </div>
@@ -80,7 +84,7 @@ const Ask = () => {
               <div className={cx("question-problem")}>
                 <h2 className={cx("title")}>Chi tiết vấn đề của bạn là gì?</h2>
                 <small>Mô tả chi tiết những gì bạn đặt ở tiêu đề</small>
-                <Tiptap setState={setProblem} />
+                <Tiptap setState={setProblem} setError={setError} />
               </div>
             </div>
 
@@ -92,7 +96,7 @@ const Ask = () => {
                 <small>
                   Mô tả những gì bạn đã thử và những gì bạn mong đợi
                 </small>
-                <Tiptap setState={setExpecting} />
+                <Tiptap setState={setExpecting} setError={setError} />
               </div>
             </div>
 
@@ -101,6 +105,12 @@ const Ask = () => {
                 <CustomTagsInput tags={tags} setTags={setTags} />
               </div>
             </div>
+
+            {error && (
+              <div className={cx("error")}>
+                <span>{error}</span>
+              </div>
+            )}
           </div>
 
           <div className={cx("btns")}>

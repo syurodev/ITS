@@ -29,6 +29,11 @@
     &:first-child {
       border-top: 1px solid var(--light-gray);
     }
+
+    &:hover {
+      background-color: var(--light-theme-bg-hover);
+    }
+
     .header {
       display: flex;
       align-items: center;
