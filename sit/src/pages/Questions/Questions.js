@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { easeIn, motion } from "framer-motion";
 
 import formatDate from "~/future/formatDate";
 import Button from "~/components/Button";
@@ -98,7 +98,12 @@ const Home = () => {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2, ease: easeIn }}
+    >
       <div className={cx("top-nav")}>
         <h1>Top Questions</h1>
         <div className={cx("sort")}>
@@ -205,7 +210,7 @@ const Home = () => {
           />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

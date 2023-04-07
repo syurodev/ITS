@@ -10,6 +10,7 @@ import {
   faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
 import AvatarEditor from "react-avatar-editor";
+import { motion } from "framer-motion";
 
 import * as userServices from "~/services/authServices";
 import style from "./Profile.module.scss";
@@ -78,7 +79,12 @@ function Profile() {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       {userData.user && (
         <div className={cx("container")}>
           <div className={cx("info")}>
@@ -273,7 +279,7 @@ function Profile() {
           )}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

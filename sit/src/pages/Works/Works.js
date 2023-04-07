@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 import style from "./Works.module.scss";
 
@@ -11,11 +12,16 @@ function Works() {
   }, []);
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className={cx("top-nav")}>
         <h1>Works</h1>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import style from "./Ask.module.scss";
 import Button from "~/components/Button";
@@ -60,7 +61,12 @@ const Ask = () => {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className={cx("container")}>
         <div className={cx("head-title")}>
           <h1>Đặt câu hỏi</h1>
@@ -128,7 +134,7 @@ const Ask = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

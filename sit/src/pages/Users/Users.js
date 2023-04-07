@@ -62,7 +62,12 @@ function Users() {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className={cx("top-nav")}>
         <h1>Users</h1>
         <div className={cx("search-box")}>
@@ -137,7 +142,7 @@ function Users() {
           currentPage={filter.page}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 

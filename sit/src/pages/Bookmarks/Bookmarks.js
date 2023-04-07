@@ -50,7 +50,12 @@ function Bookmarks() {
   }, [bookmarks]);
 
   return (
-    <div className={cx("wrapper")}>
+    <motion.div
+      className={cx("wrapper")}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <h1>Bookmarks</h1>
       <div className={cx("container")}>
         {questions.map((question) => {
@@ -121,7 +126,7 @@ function Bookmarks() {
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

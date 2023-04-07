@@ -192,6 +192,7 @@ class UserController {
         .find(query, "_id username avatar reputationScore")
         .skip(startIndex)
         .limit(limit)
+        .sort({ reputationScore: -1 })
         .exec();
 
       const data = [];

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
@@ -245,7 +246,12 @@ const Question = () => {
 
   return (
     title && (
-      <div className={cx("wrapper")}>
+      <motion.div
+        className={cx("wrapper")}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
         <div className={cx("header")}>
           <h1 className={cx("title")}>{title}</h1>
           <div className={cx("info")}>
@@ -403,7 +409,7 @@ const Question = () => {
             </div>
           </Modal>
         )}
-      </div>
+      </motion.div>
     )
   );
 };
