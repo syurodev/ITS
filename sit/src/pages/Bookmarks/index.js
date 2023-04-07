@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useSelector } from "react-redux";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
@@ -14,10 +15,15 @@ import formatDate from "~/future/formatDate";
 
 function Bookmarks() {
   const cx = classNames.bind(style);
+  const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
   let currentUser = useSelector((state) => {
     return state.user.userId;
   });
+
+  useEffect(() => {
+    document.title = "ITSocial :: Bookmarks";
+  }, []);
 
   useEffect(() => {
     if (Object.keys(currentUser).length === 0) {
@@ -31,8 +37,6 @@ function Bookmarks() {
   let bookmarks = useSelector((state) => {
     return state.user.bookmark;
   });
-
-  const [questions, setQuestions] = useState([]);
 
   //GET USER BOOKMARKS DATA
   useEffect(() => {

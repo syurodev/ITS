@@ -30,6 +30,10 @@ const Question = () => {
 
   const [session, setSession] = useState(false);
 
+  useEffect(() => {
+    document.title = "ITSocial :: Question";
+  }, []);
+
   const currentUser = useSelector((state) => {
     return state.user.userId;
   });

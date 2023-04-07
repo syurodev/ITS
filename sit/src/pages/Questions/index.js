@@ -26,6 +26,10 @@ const Home = () => {
   const { tag = null } = useParams();
   const { user = null } = useParams();
 
+  useEffect(() => {
+    document.title = "ITSocial :: Questions";
+  }, []);
+
   const [filter, setFilter] = useState({
     limit: 10,
     sort: "createdAt",

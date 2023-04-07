@@ -24,6 +24,10 @@ function Users() {
   let debounced = useDebounce(usersSearch, 500);
 
   useEffect(() => {
+    document.title = "ITSocial :: Users";
+  }, []);
+
+  useEffect(() => {
     setUsersSearchLoading(true);
     const fetchApi = async () => {
       const result = await userServices.getAllUsers(

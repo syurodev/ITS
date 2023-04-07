@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { signInWithPopup } from "firebase/auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, provider } from "~/firebase";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,10 @@ function Auth() {
     }
     return true;
   };
+
+  useEffect(() => {
+    document.title = "ITSocial :: Login/Register";
+  }, []);
 
   const [registered, setRegistered] = useState(router);
   const [email, setEmail] = useState("");

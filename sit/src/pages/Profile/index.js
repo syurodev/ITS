@@ -32,6 +32,10 @@ function Profile() {
   const [zoom, setZoom] = useState(1);
   const [auth, setAuth] = useState(false);
 
+  useEffect(() => {
+    document.title = "ITSocial :: Profile";
+  }, []);
+
   const fetchApi = async () => {
     const result = await userServices.profile(userId);
     setUserData(result);

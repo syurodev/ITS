@@ -21,6 +21,10 @@ function Tags() {
     tags: "",
   });
 
+  useEffect(() => {
+    document.title = "ITSocial :: Tags";
+  }, []);
+
   let debounced = useDebounce(tagsSearch, 500);
 
   useEffect(() => {

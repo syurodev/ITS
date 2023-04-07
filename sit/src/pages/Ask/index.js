@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,10 @@ const Ask = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = "ITSocial :: Ask";
+  }, []);
+
   const handleSubmit = async () => {
     if (
       title.trim() !== "" &&
@@ -32,6 +36,7 @@ const Ask = () => {
       tags.length > 0
     ) {
       const newTags = [];
+      // eslint-disable-next-line array-callback-return
       tags.map((tag) => {
         newTags.push(tag.text);
       });
