@@ -26,7 +26,6 @@
     "dompurify": "^3.0.1",
     "firebase": "^9.17.1",
     "framer-motion": "^10.9.1",
-    "highlight.js": "^11.7.0",
     "html-react-parser": "^3.0.10",
     "lord-icon-element": "^4.0.3",
     "lottie-web": "^5.10.2",
@@ -39,7 +38,6 @@
     "react-scripts": "5.0.1",
     "react-tag-input": "^6.8.1",
     "redux": "^4.2.1",
-    "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

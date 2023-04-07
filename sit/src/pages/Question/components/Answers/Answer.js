@@ -61,7 +61,7 @@ function Answer({
     }
 
     Prism.highlightAll();
-  }, [upvote, downvote, currentUser._id]);
+  }, [upvote, downvote, currentUser._id, answerSolved, data._id]);
 
   // UNVOTE
   const handleUnvote = async () => {

@@ -52,14 +52,21 @@
     }
   }
 
-  .btn {
+  .btns {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-top: 8px;
 
     .cancel-btn {
       margin-right: 8px;
+    }
+
+    .error {
+      font-size: 15px;
+      color: var(--red);
+      margin-right: 10px;
     }
   }
 }

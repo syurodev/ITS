@@ -32,7 +32,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
       }
     };
     fetchApi();
-  }, [commentCount]);
+  }, [commentCount, id]);
 
   useEffect(() => {
     if (newComment.trim() !== "") {
@@ -122,7 +122,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
           </div>
         )}
 
-        <div className={cx("btn")}>
+        <div className={cx("btns")}>
           <span
             className={cx("error", "hide", {
               show: showCommentEditor,
