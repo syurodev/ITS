@@ -10,7 +10,7 @@ router.get("/profile", UserController.profile);
 router.get("/login/info", UserController.getUserInfo);
 
 //[POST] /login
-router.post("/login", UserController.login);
+router.get("/login", UserController.login);
 
 //[POST] /create
 router.post("/create", UserController.create);

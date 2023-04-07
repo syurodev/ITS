@@ -4,31 +4,34 @@ const questionSchema = require("../models/Question");
 class UserController {
   //[GET] /login
   login(req, res) {
-    userSchema.find(
-      {
-        $or: [{ username: req.body.username }, { email: req.body.username }],
-        password: req.body.password,
-      },
-      function (err, user) {
-        if (!err) {
-          if (user.length === 0) {
-            res.status(201).send({
-              status: false,
-              message: "Tài khoản hoặc mật khẩu không đúng",
-            });
-          } else {
-            res.status(201).send({
-              status: true,
-              data: {
-                _id: user[0]._id,
-              },
-            });
-          }
+    const { username, password, type } = req.query;
+
+    const query = {};
+    if (type === "google") {
+      query.$or = [{ username: username }, { email: username }];
+    } else {
+      query.$or = [{ username: username }, { email: username }];
+      query.password = password;
+    }
+    userSchema.find(query, function (err, user) {
+      if (!err) {
+        if (user.length === 0) {
+          res.status(201).send({
+            status: false,
+            message: "Tài khoản hoặc mật khẩu không đúng",
+          });
         } else {
-          res.status(400).send({ error: "ERROR!!" });
+          res.status(201).send({
+            status: true,
+            data: {
+              _id: user[0]._id,
+            },
+          });
         }
+      } else {
+        res.status(400).send({ error: "ERROR!!" });
       }
-    );
+    });
   }
 
   //[POST] /user

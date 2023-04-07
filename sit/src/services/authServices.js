@@ -9,9 +9,15 @@ export const register = async (userData) => {
   }
 };
 
-export const login = async (userData) => {
+export const login = async (username = "", password = "", type = "") => {
   try {
-    const res = await request.post("user/login", userData);
+    const res = await request.get("user/login", {
+      params: {
+        username,
+        password,
+        type,
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

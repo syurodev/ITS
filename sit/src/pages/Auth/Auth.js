@@ -46,13 +46,29 @@ function Auth() {
   const dispatch = useDispatch();
 
   const handleSignWithGoogle = async () => {
-    signInWithPopup(auth, provider).then((res) => {
-      return (
-        setAvatar(res.user.photoURL),
-        setPhone(res.user.phoneNumber),
-        setEmail(res.user.email)
-      );
-    });
+    const result = await signInWithPopup(auth, provider);
+    setAvatar(result.user.photoURL);
+    setPhone(result.user.phoneNumber);
+    setEmail(result.user.email);
+    console.log(result);
+  };
+
+  const handleLoginWithGoogle = async () => {
+    const result = await signInWithPopup(auth, provider);
+
+    const loginResult = await userServices.login(
+      result.user.email,
+      "",
+      "google"
+    );
+    if (loginResult.status) {
+      localStorage.setItem("itsSession", JSON.stringify(loginResult.data));
+      dispatch(login(loginResult.data));
+      navigate(routesConfig.home);
+    } else {
+      setError(loginResult.message);
+      setDisableButton(true);
+    }
   };
 
   const validateEmail = () => {
@@ -136,13 +152,8 @@ function Auth() {
   };
 
   const handleLogin = () => {
-    const userData = {
-      username: username,
-      password: password,
-    };
-
     const userLogin = async () => {
-      const result = await userServices.login(userData);
+      const result = await userServices.login(username, password);
       if (result.status) {
         localStorage.setItem("itsSession", JSON.stringify(result.data));
         dispatch(login(result.data));
@@ -165,6 +176,7 @@ function Auth() {
               <Button
                 column
                 leftIcon={<img src={images.google} alt="Google" width={25} />}
+                onClick={handleLoginWithGoogle}
               >
                 Đăng nhập với Google
               </Button>
