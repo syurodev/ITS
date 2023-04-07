@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import classNames from "classnames/bind";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
@@ -33,31 +33,26 @@ function Header() {
   const [currentUserId, setCurrentUserId] = useState({});
 
   const currentUser = useSelector((state) => state.user.userId);
+
+  //GET USER ID IF LOG IN AND SET SESSION
   useEffect(() => {
     if (Object.keys(currentUser).length === 0) {
       const userSession = localStorage.getItem("itsSession");
       if (userSession) {
         setCurrentUserId(JSON.parse(userSession));
         dispatch(login(JSON.parse(userSession)));
+        setUserSession(true);
+      } else {
+        setUserSession(false);
       }
     } else {
       setCurrentUserId(currentUser);
+      setUserSession(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
-  useEffect(() => {
-    const session = () => {
-      if (Object.keys(currentUser).length === 0) {
-        setUserSession(false);
-      } else {
-        setUserSession(true);
-      }
-    };
-    session();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserId]);
-
+  //GET USERDATA
   useEffect(() => {
     const sessionData = localStorage.getItem("userData");
     if (sessionData) {
@@ -72,7 +67,7 @@ function Header() {
           sessionStorage.setItem("userData", JSON.stringify(result[0]));
           setUserData(result[0]);
           dispatch(getData(result[0]));
-          dispatch(bookmark(result[0].bookmark));
+          dispatch(bookmark(result[0]?.bookmark));
         }
       };
       fetchApi();
@@ -80,10 +75,11 @@ function Header() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserId]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     dispatch(logout());
     navigate(routesConfig.login);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <header className={cx("wrapper")}>
