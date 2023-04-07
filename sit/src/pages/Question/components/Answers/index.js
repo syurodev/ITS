@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -74,7 +74,7 @@ function Answers({ questionId, auth, answerSolved }) {
   };
 
   //handle
-  const handleSortVote = () => {
+  const handleSortVote = useCallback(() => {
     setSortActive(2);
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSortVote(questionId);
@@ -86,9 +86,9 @@ function Answers({ questionId, auth, answerSolved }) {
       }
     };
     fetchApi();
-  };
+  }, [questionId]);
 
-  const handleSortNew = () => {
+  const handleSortNew = useCallback(() => {
     setSortActive(1);
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSortNew(questionId);
@@ -100,9 +100,9 @@ function Answers({ questionId, auth, answerSolved }) {
       }
     };
     fetchApi();
-  };
+  }, [questionId]);
 
-  const handleSortSolved = () => {
+  const handleSortSolved = useCallback(() => {
     setSortActive(0);
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSolved(showAnswerSolved);
@@ -114,7 +114,7 @@ function Answers({ questionId, auth, answerSolved }) {
       }
     };
     fetchApi();
-  };
+  }, [showAnswerSolved]);
 
   return (
     <div className={cx("wrapper")}>
@@ -237,4 +237,4 @@ function Answers({ questionId, auth, answerSolved }) {
   );
 }
 
-export default Answers;
+export default memo(Answers);

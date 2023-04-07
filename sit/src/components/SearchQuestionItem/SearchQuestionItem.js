@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
@@ -41,4 +42,4 @@ function SearchQuestionItem({ data }) {
   );
 }
 
-export default SearchQuestionItem;
+export default memo(SearchQuestionItem);

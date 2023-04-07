@@ -1,3 +1,4 @@
+import { memo } from "react";
 import classNames from "classnames/bind";
 import { motion } from "framer-motion";
 
@@ -148,4 +149,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default memo(Sidebar);

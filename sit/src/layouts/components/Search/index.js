@@ -1,6 +1,6 @@
 import TippyHeadless from "@tippyjs/react/headless";
 import classNames from "classnames/bind";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 
 import { Wrapper as PopperWrapper } from "~/components/Popper";
 import SearchQuestionItem from "~/components/SearchQuestionItem";
@@ -31,7 +31,7 @@ function Search() {
       setSearching(false);
     };
     fetchApi();
-  }, [debounced]);
+  }, [debounced, searchValue]);
 
   const handleChange = (e) => {
     if (e.target.value.startsWith(" ")) {
@@ -111,4 +111,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default memo(Search);

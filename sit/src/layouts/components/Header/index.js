@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import classNames from "classnames/bind";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
@@ -43,6 +43,7 @@ function Header() {
     } else {
       setCurrentUserId(currentUser);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ function Header() {
       }
     };
     session();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserId]);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ function Header() {
       };
       fetchApi();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserId]);
 
   const handleLogout = () => {
@@ -187,4 +190,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

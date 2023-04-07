@@ -1,4 +1,6 @@
 import classNames from "classnames/bind";
+import { memo } from "react";
+
 import style from "./Footer.module.scss";
 
 const cx = classNames.bind(style);
@@ -11,4 +13,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default memo(Footer);

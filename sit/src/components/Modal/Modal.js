@@ -1,8 +1,9 @@
 import classNames from "classnames/bind";
+import { motion } from "framer-motion";
+import { memo } from "react";
 
 import style from "./Modal.module.scss";
 import Button from "../Button";
-import { motion } from "framer-motion";
 
 function Modal({ closeModal, children }) {
   const cx = classNames.bind(style);
@@ -38,4 +39,4 @@ function Modal({ closeModal, children }) {
   );
 }
 
-export default Modal;
+export default memo(Modal);

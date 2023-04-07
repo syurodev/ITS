@@ -5,7 +5,7 @@ import Link from "@tiptap/extension-link";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import { memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBold,
@@ -163,4 +163,4 @@ const Tiptap = ({ setState, setError }) => {
   );
 };
 
-export default Tiptap;
+export default memo(Tiptap);

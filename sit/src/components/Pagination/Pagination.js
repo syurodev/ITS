@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 
 import style from "./Pagination.module.scss";
 
@@ -80,4 +80,4 @@ function Pagination({ totalPages = [], setFilter, currentPage }) {
   );
 }
 
-export default Pagination;
+export default memo(Pagination);

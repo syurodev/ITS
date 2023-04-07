@@ -1,5 +1,5 @@
 import { WithContext as ReactTags } from "react-tag-input";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 import * as questionServices from "~/services/questionServices";
 import "./TagsInput.scss";
@@ -63,4 +63,4 @@ function CustomTagsInput({ tags, setTags }) {
   );
 }
 
-export default CustomTagsInput;
+export default memo(CustomTagsInput);

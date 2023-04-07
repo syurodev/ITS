@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import parse from "html-react-parser";
 import Tippy from "@tippyjs/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Prism from "~/future/prism";
@@ -299,4 +299,4 @@ function Answer({
   );
 }
 
-export default Answer;
+export default memo(Answer);

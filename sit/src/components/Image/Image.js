@@ -1,4 +1,4 @@
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, memo } from "react";
 import images from "~/assets/images";
 import classNames from "classnames";
 
@@ -22,4 +22,4 @@ const Image = forwardRef(({ src, alt, className, ...props }, ref) => {
   );
 });
 
-export default Image;
+export default memo(Image);
