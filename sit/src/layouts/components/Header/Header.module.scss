@@ -10,7 +10,7 @@
 }
 
 .topbar-container {
-  width: var(--page-fwidth);
+  max-width: var(--page-fwidth-pc);
   height: 100%;
   display: flex;
   justify-content: space-between;
@@ -28,6 +28,7 @@
     font-weight: 600;
     margin-left: 5px;
   }
+
   .logo-image {
     width: 50px;
     object-fit: cover;
@@ -55,5 +56,61 @@
   & .items {
     display: flex;
     margin-right: 8px;
+
+    .search-btn {
+      display: none;
+    }
+  }
+}
+
+.searchModalBg {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 60px;
+  left: 0;
+  background-color: var(--gray);
+  z-index: 98;
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+/* Tablet (portrait and landscape) ----------- */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .topbar-container {
+    max-width: var(--page-fwidth-tablet);
+
+    .logo {
+      .logo-text {
+        font-size: 18px;
+      }
+    }
+
+    .actions {
+      margin-right: 30px;
+    }
+  }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-width: 768px) {
+  .logo {
+    margin-left: 47px;
+
+    .logo-text {
+      font-size: 18px;
+    }
+  }
+  .actions {
+    margin-right: 20px;
+
+    & .items {
+      .search-btn {
+        display: block;
+      }
+    }
   }
 }

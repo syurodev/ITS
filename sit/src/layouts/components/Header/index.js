@@ -31,8 +31,23 @@ function Header() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]);
   const [currentUserId, setCurrentUserId] = useState({});
+  const [openSearch, setOpenSearch] = useState(false);
 
   const currentUser = useSelector((state) => state.user.userId);
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 768) {
+        setOpenSearch(false);
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   //GET USER ID IF LOG IN AND SET SESSION
   useEffect(() => {
@@ -96,11 +111,27 @@ function Header() {
         </Button>
 
         {/* Search Box */}
-        <Search />
+        <Search openSearchModal={openSearch} />
 
         {userSession ? (
           <div className={cx("actions")}>
             <div className={cx("items")}>
+              <Tippy content="Tìm kiếm">
+                <div className={cx("search-btn")}>
+                  <Button
+                    text
+                    onClick={() => setOpenSearch(!openSearch)}
+                    leftIcon={
+                      <lord-icon
+                        src="https://cdn.lordicon.com/xfftupfv.json"
+                        trigger="click"
+                        colors="primary:#030e12"
+                        style={{ width: "30px", height: "30px" }}
+                      ></lord-icon>
+                    }
+                  ></Button>
+                </div>
+              </Tippy>
               <Tippy content="Thông báo">
                 <div>
                   <Button
@@ -182,6 +213,12 @@ function Header() {
           </div>
         )}
       </div>
+      <div
+        className={cx("searchModalBg", {
+          show: openSearch,
+        })}
+        onClick={() => setOpenSearch(false)}
+      ></div>
     </header>
   );
 }

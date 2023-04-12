@@ -12,7 +12,7 @@ import Button from "~/components/Button";
 
 const cx = classNames.bind(style);
 
-function Search() {
+function Search({ openSearchModal }) {
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
@@ -71,7 +71,11 @@ function Search() {
       )}
       onClickOutside={handleHideResult}
     >
-      <div className={cx("search-box")}>
+      <div
+        className={cx("search-box", {
+          searchModal: openSearchModal,
+        })}
+      >
         <input
           spellCheck="false"
           value={searchValue}

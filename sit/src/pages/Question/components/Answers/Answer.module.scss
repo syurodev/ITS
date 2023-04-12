@@ -1,5 +1,7 @@
 //ANSWER
 .answer {
+  width: 100%;
+
   .title {
     font-size: 25px;
     font-weight: 500;
@@ -13,6 +15,9 @@
   }
 
   .content {
+    width: 100%;
+    overflow: auto;
+
     .respondent {
       display: flex;
       align-items: center;

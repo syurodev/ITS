@@ -3,5 +3,13 @@
   background-color: var(--main-bg);
   border-radius: 12px;
   box-shadow: var(--bold-box-shadow-color);
-  overflow: hidden;
+  overflow: overlay;
+  max-height: 85vh;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    max-height: 75vh;
+  }
 }

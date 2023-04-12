@@ -82,6 +82,7 @@
   //QUESTION
   & .question {
     display: flex;
+    width: 100%;
 
     & .action {
       margin-right: 20px;
@@ -167,4 +168,28 @@
 .post-title-delete {
   font-size: 18px;
   text-align: center;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-width: 768px) {
+  .header {
+    .info {
+      flex-direction: column;
+
+      .reputation-score {
+        &::before {
+          content: "";
+          background-color: transparent !important;
+        }
+      }
+
+      .question-info {
+        margin-top: 8px;
+
+        span {
+          font-size: 13px !important;
+        }
+      }
+    }
+  }
 }

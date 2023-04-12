@@ -1,6 +1,6 @@
 .wrapper {
   margin: 0 auto;
-  width: var(--page-fwidth);
+  width: var(--page-fwidth-pc);
   display: flex;
   padding: 60px 0 0 0;
 }
@@ -8,4 +8,29 @@
 .content {
   flex: 1;
   padding: 0 0 100px 200px;
+  width: calc(100% - 200px);
+}
+
+/* Tablet (portrait and landscape) ----------- */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .wrapper {
+    width: var(--page-fwidth-tablet);
+  }
+
+  .content {
+    padding: 0 0 100px 200px;
+    width: calc(100% - 200px);
+  }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    width: 100vw;
+  }
+
+  .content {
+    padding: 0 0 100px 0px;
+    width: 100%;
+  }
 }

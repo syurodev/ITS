@@ -211,11 +211,12 @@ function Profile() {
                     <AvatarEditor
                       ref={editorRef}
                       image={newAvatarPreview}
-                      width={350}
-                      height={350}
+                      width={300}
+                      height={300}
                       border={50}
                       color={[255, 255, 255, 0.6]}
                       scale={zoom}
+                      className="avatar-editor"
                     />
                   ) : (
                     <Image src={avatar} alt={userData.user.username} />
