@@ -148,23 +148,44 @@ function Header() {
                   ></Button>
                 </div>
               </Tippy>
-              <Tippy content="Tạo câu hỏi">
-                <div>
-                  <Button
-                    to={routesConfig.ask}
-                    text
-                    leftIcon={
-                      <lord-icon
-                        src="https://cdn.lordicon.com/wfadduyp.json"
-                        trigger="hover"
-                        colors="primary:#030e12"
-                        state="hover-2"
-                        style={{ width: "250", height: "250" }}
-                      ></lord-icon>
-                    }
-                  ></Button>
-                </div>
-              </Tippy>
+              {userData.role === 1 && (
+                <Tippy content="Tạo câu hỏi">
+                  <div>
+                    <Button
+                      to={routesConfig.ask}
+                      text
+                      leftIcon={
+                        <lord-icon
+                          src="https://cdn.lordicon.com/wfadduyp.json"
+                          trigger="hover"
+                          colors="primary:#030e12"
+                          state="hover-2"
+                          style={{ width: "250", height: "250" }}
+                        ></lord-icon>
+                      }
+                    ></Button>
+                  </div>
+                </Tippy>
+              )}
+              {userData.role === 2 && (
+                <Tippy content="Tạo công việc">
+                  <div>
+                    <Button
+                      to={routesConfig.newwork}
+                      text
+                      leftIcon={
+                        <lord-icon
+                          src="https://cdn.lordicon.com/wfadduyp.json"
+                          trigger="hover"
+                          colors="primary:#030e12"
+                          state="hover-2"
+                          style={{ width: "250", height: "250" }}
+                        ></lord-icon>
+                      }
+                    ></Button>
+                  </div>
+                </Tippy>
+              )}
             </div>
             <TippyHeadless
               interactive

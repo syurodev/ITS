@@ -7,6 +7,7 @@ const routes = {
   users: "/users",
   profile: "/profile/:userId",
   bookmarks: "/bookmarks",
+  newwork: "/new-work",
   works: "/works",
   ask: "/ask",
   register: "/auth/register",

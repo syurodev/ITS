@@ -7,6 +7,7 @@ import { NoSidebar } from "~/layouts";
 import Questions from "~/pages/Questions";
 import Question from "~/pages/Question";
 import Ask from "~/pages/Ask";
+import NewWork from "~/pages/NewWork";
 import Tags from "~/pages/Tags";
 import Works from "~/pages/Works";
 import Users from "~/pages/Users";
@@ -27,6 +28,7 @@ const publicRoutes = [
   { path: routesConfig.register, component: Auth, layout: null },
   { path: routesConfig.login, component: Auth, layout: null },
   { path: routesConfig.ask, component: Ask, layout: NoSidebar },
+  { path: routesConfig.newwork, component: NewWork, layout: NoSidebar },
   { path: routesConfig.works, component: Works },
 ];
 
