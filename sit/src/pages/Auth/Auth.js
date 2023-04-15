@@ -30,6 +30,7 @@ function Auth() {
   const [registered, setRegistered] = useState(router);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
+  const [role, setRole] = useState("");
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
@@ -50,7 +51,6 @@ function Auth() {
     setAvatar(result.user.photoURL);
     setPhone(result.user.phoneNumber);
     setEmail(result.user.email);
-    console.log(result);
   };
 
   const handleLoginWithGoogle = async () => {
@@ -130,6 +130,7 @@ function Auth() {
     userData.password = password;
     userData.avatar = avatar;
     userData.phone = phone;
+    userData.role = role;
 
     if (password.trim() === "" || username.trim() === "") {
       setDisableButton(true);
@@ -287,6 +288,25 @@ function Auth() {
                   id="repassword"
                   placeholder="Vui lòng nhập lại password"
                 />
+              </label>
+            </div>
+          )}
+          {registered ? (
+            <></>
+          ) : (
+            <div className={cx("input")}>
+              <label htmlFor="role">
+                <span>Loại tài khoản:</span>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  id="role"
+                >
+                  <option value={1} selected>
+                    Lập trình viên
+                  </option>
+                  <option value={2}>Nhà tuyển dụng</option>
+                </select>
               </label>
             </div>
           )}

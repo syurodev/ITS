@@ -40,7 +40,8 @@
       margin-right: 5px;
     }
 
-    & input {
+    & input,
+    select {
       background-color: var(--light-gray);
       width: 300px;
       border: none;
