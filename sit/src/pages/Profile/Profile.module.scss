@@ -119,19 +119,34 @@
       margin-top: 20px;
 
       .top-posts,
-      .top-tags {
+      .top-tags,
+      .company-description,
+      .works {
         border: 1px solid var(--light-gray);
         border-radius: var(--box-border-radius);
-        padding: 20px;
         margin-top: 15px;
 
-        .title {
-          margin-bottom: 20px;
+        .big-title {
+          padding: 20px 0 20px 20px;
+        }
+
+        .content {
+          padding: 0 20px 20px;
+
+          .title {
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.1s linear;
+
+            &:hover {
+              color: var(--primary-color);
+            }
+          }
         }
       }
 
       .top-tags {
-        .tag-list {
+        .content {
           display: flex;
           flex-direction: column;
 
@@ -164,10 +179,6 @@
             display: flex;
             justify-content: space-between;
 
-            .title {
-              font-size: 18px;
-            }
-
             .date-post {
               font-size: 14px;
               color: var(--dark-gray);
@@ -176,9 +187,10 @@
               margin-left: 8px;
             }
           }
+
           .detail {
             display: flex;
-            padding: 5px 0 0;
+            padding: 0 0 0 20px;
 
             .detail-item {
               span {
@@ -188,6 +200,59 @@
 
             .detail-item + .detail-item {
               margin-left: 20px;
+            }
+          }
+        }
+      }
+
+      .works {
+        .work-list {
+          .content {
+            border-top: 1px solid var(--light-gray);
+
+            &:hover {
+              background-color: var(--light-gray);
+            }
+
+            .work {
+              display: flex;
+              justify-content: space-between;
+              padding-top: 20px;
+
+              .detail {
+                display: flex;
+                flex-direction: column;
+                max-width: 85%;
+
+                .title {
+                  font-weight: 500;
+                  font-size: 20px;
+                  margin-bottom: 5px;
+                }
+
+                .more {
+                  display: flex;
+                  margin-top: 5px;
+
+                  .salary {
+                    margin-left: 20px;
+                  }
+
+                  .text {
+                    margin-left: 8px;
+                    font-weight: 500;
+                  }
+
+                  .tags {
+                    margin-left: 10px;
+
+                    .tag-name {
+                      color: var(--primary-color);
+                      margin-left: 10px;
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -269,6 +334,19 @@
     margin-bottom: 10px;
   }
 
+  .description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 18px 0;
+    width: 100%;
+
+    div {
+      width: 100%;
+    }
+  }
+
   .box-input {
     display: flex;
     align-items: center;
@@ -278,7 +356,8 @@
       font-weight: 500;
     }
 
-    .input {
+    .input,
+    .input-textarea {
       outline: none;
       border: 1px solid var(--gray);
       padding: 5px 10px;

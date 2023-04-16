@@ -8,9 +8,12 @@ import {
   faAngleUp,
   faEye,
   faEllipsis,
+  faCrosshairs,
+  faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
 import AvatarEditor from "react-avatar-editor";
 import { motion } from "framer-motion";
+import parse from "html-react-parser";
 
 import * as userServices from "~/services/authServices";
 import style from "./Profile.module.scss";
@@ -19,6 +22,9 @@ import formatDate from "~/future/formatDate";
 import Modal from "~/components/Modal";
 import Button from "~/components/Button";
 import ChangeUserInfo from "./ChangeUserInfo";
+import Prism from "~/future/prism";
+import "~/future/prism-laserwave.css";
+import WorkDetail from "~/components/WorkDetail";
 
 function Profile() {
   const cx = classNames.bind(style);
@@ -32,6 +38,8 @@ function Profile() {
   const editorRef = useRef(null);
   const [zoom, setZoom] = useState(1);
   const [auth, setAuth] = useState(false);
+  const [openWorkDetail, setOpenWorkDetail] = useState(false);
+  const [workData, setWorkData] = useState([]);
 
   useEffect(() => {
     document.title = "ITSocial :: Profile";
@@ -46,6 +54,10 @@ function Profile() {
     const currentUserId = JSON.parse(storedUserId);
     setAuth(userId && userId === currentUserId?._id);
   };
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [userData]);
 
   useEffect(() => {
     fetchApi();
@@ -76,6 +88,11 @@ function Profile() {
       }
     };
     fetchApi();
+  };
+
+  const handelOpenWorkDetail = (work) => {
+    setOpenWorkDetail(true);
+    setWorkData(work);
   };
 
   return (
@@ -111,9 +128,15 @@ function Profile() {
             </div>
             <div className={cx("details")}>
               <div>
-                <p className={cx("user-name")}>{userData.user.username}</p>
+                <p className={cx("user-name")}>
+                  {userData.user.role === 1
+                    ? userData.user.username || "unspecified work"
+                    : userData.user.company}
+                </p>
                 <p className={cx("job")}>
-                  {userData.user.job || "unspecified work"}
+                  {userData.user.role === 1
+                    ? userData.user.job || "unspecified work"
+                    : userData.user.username}
                 </p>
               </div>
               <div className={cx("content")}>
@@ -129,79 +152,157 @@ function Profile() {
                   <p className={cx("title")}>Member for</p>
                   <p>{memberFor}</p>
                 </div>
-                <div>
-                  <p className={cx("title")}>Reputation Score</p>
-                  <p className={cx("reputation-score")}>
-                    {userData.user.reputationScore}
-                  </p>
-                </div>
+                {userData.user.role === 1 ? (
+                  <div>
+                    <p className={cx("title")}>Reputation Score</p>
+                    <p className={cx("reputation-score")}>
+                      {userData.user.reputationScore}
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className={cx("title")}>Address</p>
+                    <p>{userData.user.address}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className={cx("activate")}>
-            <div className={cx("top-tags")}>
-              <h2 className={cx("title")}>Top tags</h2>
-              <div className={cx("tag-list")}>
-                {userData.tags && userData.tags.length > 0 ? (
-                  userData.tags.map((tag, index) => {
-                    return (
-                      <div key={index} className={cx("tag")}>
-                        <Link to={`/${tag.name}/${userId}`}>
-                          <span className={cx("tag-name")}>#{tag.name}</span>
-                        </Link>
-                        <span className={cx("count")}>
-                          {tag.count}
-                          <span className={cx("count-title")}> posts</span>
-                        </span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <span> No tag</span>
-                )}
-              </div>
-            </div>
-            <div className={cx("top-posts")}>
-              <h2 className={cx("title")}>Top posts</h2>
-              <div className={cx("post-list")}>
-                {userData.questions && userData.questions.length > 0 ? (
-                  userData.questions.map((question, index) => {
-                    const date = formatDate(question.createdAt);
-
-                    return (
-                      <div key={index} className={cx("post")}>
-                        <div className={cx("content")}>
-                          <Link to={`/question/${question._id}`}>
-                            <span className={cx("title")}>
-                              {question.title}
-                            </span>
+            {userData.user.role === 1 && (
+              <div className={cx("top-tags")}>
+                <h2 className={cx("big-title")}>Top tags</h2>
+                <div className={cx("content")}>
+                  {userData.tags && userData.tags.length > 0 ? (
+                    userData.tags.map((tag, index) => {
+                      return (
+                        <div key={index} className={cx("tag")}>
+                          <Link to={`/${tag.name}/${userId}`}>
+                            <span className={cx("tag-name")}>#{tag.name}</span>
                           </Link>
-
-                          <span className={cx("date-post")}>{date}</span>
+                          <span className={cx("count")}>
+                            {tag.count}
+                            <span className={cx("count-title")}> posts</span>
+                          </span>
                         </div>
-                        <div className={cx("detail")}>
-                          <div className={cx("detail-item")}>
-                            <FontAwesomeIcon icon={faAngleUp} />
-                            <span>{question.upvote.length}</span>
-                          </div>
-                          <div className={cx("detail-item")}>
-                            <FontAwesomeIcon icon={faAngleDown} />{" "}
-                            <samp>{question.downvote.length}</samp>
-                          </div>
-                          <div className={cx("detail-item")}>
-                            <FontAwesomeIcon icon={faEye} />
-                            <span>{question.viewed}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <span> No post</span>
-                )}
+                      );
+                    })
+                  ) : (
+                    <span> No tag</span>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
+
+            {userData.user.role === 1 && (
+              <div className={cx("top-posts")}>
+                <h2 className={cx("big-title")}>Top posts</h2>
+                <div className={cx("content")}>
+                  {userData.questions && userData.questions.length > 0 ? (
+                    userData.questions.map((question, index) => {
+                      const date = formatDate(question.createdAt);
+
+                      return (
+                        <div key={index} className={cx("post")}>
+                          <div className={cx("content")}>
+                            <Link to={`/question/${question._id}`}>
+                              <span className={cx("title")}>
+                                {question.title}
+                              </span>
+                            </Link>
+
+                            <span className={cx("date-post")}>{date}</span>
+                          </div>
+                          <div className={cx("detail")}>
+                            <div className={cx("detail-item")}>
+                              <FontAwesomeIcon icon={faAngleUp} />
+                              <span>{question.upvote.length}</span>
+                            </div>
+                            <div className={cx("detail-item")}>
+                              <FontAwesomeIcon icon={faAngleDown} />{" "}
+                              <samp>{question.downvote.length}</samp>
+                            </div>
+                            <div className={cx("detail-item")}>
+                              <FontAwesomeIcon icon={faEye} />
+                              <span>{question.viewed}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <span> No post</span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {userData.user.role === 2 && (
+              <div className={cx("company-description")}>
+                <h2 className={cx("big-title")}>Description</h2>
+                <div className={cx("content")}>
+                  {parse(userData.user.description)}
+                </div>
+              </div>
+            )}
+
+            {userData.user.role === 2 && (
+              <div className={cx("works")}>
+                <h2 className={cx("big-title")}>Works</h2>
+                <div className={cx("work-list")}>
+                  {userData.works && userData.works.length > 0 ? (
+                    userData.works.map((work) => {
+                      const date = formatDate(work.createdAt);
+
+                      return (
+                        <div key={work._id} className={cx("content")}>
+                          <div className={cx("work")}>
+                            <div className={cx("detail")}>
+                              <span
+                                className={cx("title")}
+                                onClick={() => handelOpenWorkDetail(work)}
+                              >
+                                {work.title}
+                              </span>
+
+                              <div className={cx("more")}>
+                                <div className={cx("position")}>
+                                  <FontAwesomeIcon icon={faCrosshairs} />
+                                  <span className={cx("text")}>
+                                    {work.position}
+                                  </span>
+                                </div>
+                                <div className={cx("salary")}>
+                                  <FontAwesomeIcon icon={faMoneyBill} />
+                                  <span className={cx("text")}>
+                                    {work.salary}
+                                  </span>
+                                </div>
+                                <div className={cx("tags")}>
+                                  {JSON.parse(work.tags).map((tag, index) => (
+                                    <Link key={index} to={`/works/${tag}`}>
+                                      <span className={cx("tag-name")}>
+                                        #{tag}
+                                      </span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            <span className={cx("date-post")}>{date}</span>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <span> No tag</span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
+
           {changeAvatarModal && (
             <Modal closeModal={setChangeAvatarModal}>
               <div className={cx("change-avatar-modal")}>
@@ -275,6 +376,15 @@ function Profile() {
                 data={userData.user}
                 closeModal={setChangeUserInfo}
                 fetchApiData={fetchApi}
+              />
+            </Modal>
+          )}
+          {openWorkDetail && (
+            <Modal closeModal={setOpenWorkDetail}>
+              <WorkDetail
+                data={workData}
+                auth={auth}
+                closeModal={setOpenWorkDetail}
               />
             </Modal>
           )}

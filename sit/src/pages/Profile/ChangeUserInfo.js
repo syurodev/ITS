@@ -4,11 +4,15 @@ import classNames from "classnames/bind";
 import style from "./Profile.module.scss";
 import Button from "~/components/Button";
 import * as userServices from "~/services/authServices";
+import Tiptap from "~/components/TiptapEditor";
 
 function ChangeUserInfo({ data, closeModal, fetchApiData }) {
   const cx = classNames.bind(style);
   const [username, setUsername] = useState(data.username);
   const [job, setJob] = useState(data.job || "");
+  const [company, setCompany] = useState(data.company || "");
+  const [address, setAddress] = useState(data.address || "");
+  const [description, setDescription] = useState(data.description || "");
   const [phone, setPhone] = useState(data.phone || "");
   const [email, setEmail] = useState(data.email || "");
   const [error, setError] = useState("");
@@ -33,6 +37,9 @@ function ChangeUserInfo({ data, closeModal, fetchApiData }) {
       job,
       phone,
       email,
+      company,
+      address,
+      description,
     };
 
     const fetchApi = async () => {
@@ -62,17 +69,67 @@ function ChangeUserInfo({ data, closeModal, fetchApiData }) {
           onChange={(e) => setUsername(e.target.value)}
         />
       </label>
-      <label className={cx("box-input")}>
-        <span className={cx("title")}>Công việc: </span>
-        <input
-          spellCheck="false"
-          className={cx("input")}
-          type="text"
-          value={job}
-          onFocus={() => setError("")}
-          onChange={(e) => setJob(e.target.value)}
-        />
-      </label>
+
+      {data.role === 1 && (
+        <label className={cx("box-input")}>
+          <span className={cx("title")}>Công việc: </span>
+          <input
+            spellCheck="false"
+            className={cx("input")}
+            type="text"
+            value={job}
+            onFocus={() => setError("")}
+            onChange={(e) => setJob(e.target.value)}
+          />
+        </label>
+      )}
+
+      {data.role === 2 && (
+        <label className={cx("box-input")}>
+          <span className={cx("title")}>Tên doanh nghiệp: </span>
+          <input
+            spellCheck="false"
+            className={cx("input")}
+            type="text"
+            value={company}
+            onFocus={() => setError("")}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+        </label>
+      )}
+
+      {data.role === 2 && (
+        <label className={cx("description")}>
+          <span className={cx("title")}>Mô tả doanh nghiệp: </span>
+          <Tiptap setState={setDescription} setError={setError} />
+
+          {/* <textarea
+            rows="4"
+            cols="50"
+            spellCheck="false"
+            className={cx("input-textarea")}
+            type="text"
+            value={description}
+            onFocus={() => setError("")}
+            onChange={(e) => setDescription(e.target.value)}
+          /> */}
+        </label>
+      )}
+
+      {data.role === 2 && (
+        <label className={cx("box-input")}>
+          <span className={cx("title")}>Địa chỉ doanh nghiệp: </span>
+          <input
+            spellCheck="false"
+            className={cx("input")}
+            type="text"
+            value={address}
+            onFocus={() => setError("")}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </label>
+      )}
+
       <label className={cx("box-input")}>
         <span className={cx("title")}>Phone: </span>
         <input
