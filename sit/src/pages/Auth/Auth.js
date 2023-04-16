@@ -311,9 +311,7 @@ function Auth() {
                   onChange={(e) => setRole(e.target.value)}
                   id="role"
                 >
-                  <option value={1} selected>
-                    Lập trình viên
-                  </option>
+                  <option value={1}>Lập trình viên</option>
                   <option value={2}>Nhà tuyển dụng</option>
                 </select>
               </label>
