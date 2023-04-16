@@ -1,86 +1,89 @@
 .wrapper {
   display: flex;
   justify-content: center;
-}
-.container {
-  width: var(--page-fwidth-pc);
-  padding: 10px 15px;
-}
+  padding: var(--wrapper-padding);
+  margin-top: 60px;
 
-.head-title {
-  margin: 10px 0;
-}
-
-.add-work-container {
-  padding: 20px 15px;
-}
-
-.work-option {
-  box-shadow: var(--box-shadow-color);
-  padding: 25px;
-  border-radius: var(--box-border-radius);
-
-  + .work-option {
-    margin-top: 15px;
+  .container {
+    width: var(--page-fwidth-pc);
+    padding: 10px 15px;
   }
-}
 
-.work-title,
-.work-upto,
-.work-detail,
-.work-position {
-  & label {
-    display: flex;
-    flex-direction: column;
+  .head-title {
+    margin: 10px 0;
   }
-}
 
-.work-upto {
-  .upto-input {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .add-work-container {
+    padding: 20px 15px;
+  }
 
-    .input {
-      flex: 1;
-      margin-right: 10px;
+  .work-option {
+    box-shadow: var(--box-shadow-color);
+    padding: 25px;
+    border-radius: var(--box-border-radius);
+
+    + .work-option {
+      margin-top: 15px;
     }
   }
-}
 
-//input title, tags & text editor
-.input,
-.currency {
-  outline: none;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  margin-top: 15px;
-  transition: all 0.1s linear;
-  border-radius: var(--box-border-radius);
-
-  &:focus {
-    box-shadow: var(--box-shadow-color);
+  .work-title,
+  .work-upto,
+  .work-detail,
+  .work-position {
+    & label {
+      display: flex;
+      flex-direction: column;
+    }
   }
-}
 
-.text-editor {
-  transition: all 0.1s linear;
-  margin-top: 15px;
+  .work-upto {
+    .upto-input {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-  &:focus-within {
-    box-shadow: var(--box-shadow-color);
+      .input {
+        flex: 1;
+        margin-right: 10px;
+      }
+    }
   }
-}
 
-.btns {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 30px;
-}
+  //input title, tags & text editor
+  .input,
+  .currency {
+    outline: none;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+    transition: all 0.1s linear;
+    border-radius: var(--box-border-radius);
 
-.error {
-  color: var(--red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    &:focus {
+      box-shadow: var(--box-shadow-color);
+    }
+  }
+
+  .text-editor {
+    transition: all 0.1s linear;
+    margin-top: 15px;
+
+    &:focus-within {
+      box-shadow: var(--box-shadow-color);
+    }
+  }
+
+  .btns {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+
+  .error {
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

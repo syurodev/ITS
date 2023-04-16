@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -9,10 +9,15 @@ import CustomTagsInput from "~/components/TagsInput";
 import routesConfig from "~/config/router";
 import Button from "~/components/Button/Button";
 import * as workServices from "~/services/workServices";
+import Tiptap from "~/components/TiptapEditor";
 
 function NewWork() {
   const cx = classNames.bind(style);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "ITSocial :: Create Work";
+  }, []);
 
   const currentUser = useSelector((state) => {
     return state.user.userId;
@@ -21,9 +26,9 @@ function NewWork() {
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
   const [position, setPosition] = useState("");
-  const [detail, setDetail] = useState("");
   const [upto, setUpto] = useState("");
   const [currency, setCurrency] = useState("USD");
+  const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
 
   const combineValues = () => {
@@ -46,12 +51,7 @@ function NewWork() {
 
   const handleSubmit = async () => {
     const salary = await combineValues();
-    if (
-      title.trim() !== "" &&
-      detail.trim() !== "" &&
-      position.trim() !== "" &&
-      tags.length > 0
-    ) {
+    if (title.trim() !== "" && position.trim() !== "" && tags.length > 0) {
       if (salary.trim() !== "") {
         const newTags = [];
         // eslint-disable-next-line array-callback-return
@@ -62,10 +62,10 @@ function NewWork() {
         const bodyJSON = {
           title: title,
           position: position,
-          detail: detail,
           salary: salary,
           tags: JSON.stringify(newTags),
           user: currentUser._id,
+          description: description,
         };
 
         const fetchApi = async () => {
@@ -136,26 +136,6 @@ function NewWork() {
             </div>
 
             <div className={cx("work-option")}>
-              <div className={cx("work-detail")}>
-                <label htmlFor="detail">
-                  <h2 className={cx("title")}>
-                    Chi tiết công việc của bạn là gì?
-                  </h2>
-                  <small>Mô tả chi tiết những gì bạn yêu cầu</small>
-                  <input
-                    value={detail}
-                    onChange={(e) => setDetail(e.target.value)}
-                    type="text"
-                    placeholder="e.g thông thạo react..."
-                    id="detail"
-                    className={cx("input")}
-                    onFocus={() => setError("")}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className={cx("work-option")}>
               <div className={cx("work-upto")}>
                 <label htmlFor="upto">
                   <h2 className={cx("title")}>Mức lương</h2>
@@ -181,6 +161,16 @@ function NewWork() {
                       <option value="USD">USD</option>
                     </select>
                   </div>
+                </label>
+              </div>
+            </div>
+
+            <div className={cx("work-option")}>
+              <div className={cx("work-description")}>
+                <label htmlFor="description">
+                  <h2 className={cx("title")}>Mô tả công việc</h2>
+                  <small>Mô tả chi tiết công việc của bạn</small>
+                  <Tiptap setState={setDescription} setError={setError} />
                 </label>
               </div>
             </div>
