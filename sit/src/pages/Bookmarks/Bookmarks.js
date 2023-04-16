@@ -17,7 +17,7 @@ function Bookmarks() {
   const cx = classNames.bind(style);
   const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
-  let currentUser = useSelector((state) => {
+  const currentUser = useSelector((state) => {
     return state.user.userId;
   });
 
@@ -58,73 +58,79 @@ function Bookmarks() {
     >
       <h1>Bookmarks</h1>
       <div className={cx("container")}>
-        {questions.map((question) => {
-          let tags = JSON.parse(question.tags[0]);
-          let questionTime = formatDate(question.createdAt);
+        {questions && questions.length > 0 ? (
+          questions.map((question) => {
+            let tags = JSON.parse(question.tags[0]);
+            let questionTime = formatDate(question.createdAt);
 
-          return (
-            <motion.div
-              key={question._id}
-              className={cx("item")}
-              layout
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <div className={cx("header")}>
-                <Link
-                  className={cx("user")}
-                  to={`/profile/${question.user._id}`}
-                >
-                  <div className={cx("avata")}>
-                    <img
-                      src={question.user.avatar}
-                      alt={question.user.username}
-                    />
-                  </div>
-                  <div className={cx("username")}>{question.user.username}</div>
-                  <Tippy content="Điểm hoạt động">
-                    <div className={cx("score")}>
-                      {question.user.reputationScore}
-                    </div>
-                  </Tippy>
-                </Link>
-
-                <div className={cx("info")}>
-                  <span>
-                    {question.upvote.length - question.downvote.length} vote
-                  </span>
-                  <span>0 answers</span>
-                  <span>{question.viewed} views</span>
-                  <span>asked {questionTime}</span>
-                  {question.solved ? (
-                    <span className={cx("solved")}>Solved</span>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-              <div className={cx("title")}>
-                <Link to={`/question/${question._id}`} className={cx("link")}>
-                  {question.title}
-                </Link>
-              </div>
-              <div className={cx("tags")}>
-                {tags.map((tag, index) => (
-                  <Button
-                    key={index}
-                    text
-                    small
-                    className={cx("tag")}
-                    to={`/${tag}`}
+            return (
+              <motion.div
+                key={question._id}
+                className={cx("item")}
+                layout
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+              >
+                <div className={cx("header")}>
+                  <Link
+                    className={cx("user")}
+                    to={`/profile/${question.user._id}`}
                   >
-                    #{tag}
-                  </Button>
-                ))}
-              </div>
-            </motion.div>
-          );
-        })}
+                    <div className={cx("avata")}>
+                      <img
+                        src={question.user.avatar}
+                        alt={question.user.username}
+                      />
+                    </div>
+                    <div className={cx("username")}>
+                      {question.user.username}
+                    </div>
+                    <Tippy content="Điểm hoạt động">
+                      <div className={cx("score")}>
+                        {question.user.reputationScore}
+                      </div>
+                    </Tippy>
+                  </Link>
+
+                  <div className={cx("info")}>
+                    <span>
+                      {question.upvote.length - question.downvote.length} vote
+                    </span>
+                    <span>0 answers</span>
+                    <span>{question.viewed} views</span>
+                    <span>asked {questionTime}</span>
+                    {question.solved ? (
+                      <span className={cx("solved")}>Solved</span>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+                <div className={cx("title")}>
+                  <Link to={`/question/${question._id}`} className={cx("link")}>
+                    {question.title}
+                  </Link>
+                </div>
+                <div className={cx("tags")}>
+                  {tags.map((tag, index) => (
+                    <Button
+                      key={index}
+                      text
+                      small
+                      className={cx("tag")}
+                      to={`/${tag}`}
+                    >
+                      #{tag}
+                    </Button>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })
+        ) : (
+          <span>Không có Bookmark</span>
+        )}
       </div>
     </motion.div>
   );

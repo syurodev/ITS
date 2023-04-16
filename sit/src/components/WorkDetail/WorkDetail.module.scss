@@ -1,0 +1,68 @@
+.wrapper {
+  .title,
+  .break {
+    text-align: center;
+  }
+
+  .title {
+    .company {
+      font-weight: 500;
+      color: var(--primary-color);
+      font-size: 18px;
+    }
+  }
+
+  .break {
+    user-select: none;
+    color: var(--dark-gray);
+  }
+
+  .more,
+  .btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .more {
+    .salary,
+    .position {
+      font-weight: 500;
+
+      span {
+        margin-left: 6px;
+      }
+    }
+
+    .salary {
+      margin-left: 18px;
+    }
+  }
+
+  .btns {
+    margin-top: 25px;
+  }
+
+  .description {
+    margin-top: 20px;
+
+    a[href] {
+      color: var(--primary-color);
+    }
+    .no-description {
+      text-align: center;
+      color: var(--dark-gray);
+      user-select: none;
+    }
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    span {
+      margin-bottom: 10px;
+    }
+  }
+}

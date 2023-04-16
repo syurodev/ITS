@@ -1,12 +1,12 @@
 import classNames from "classnames/bind";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import Tiptap from "~/components/TiptapEditor";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import style from "./Ask.module.scss";
 import Button from "~/components/Button";
+import Tiptap from "~/components/TiptapEditor";
 import routesConfig from "~/config/router";
 import * as questionServices from "~/services/questionServices";
 import CustomTagsInput from "~/components/TagsInput";

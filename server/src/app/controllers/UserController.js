@@ -1,5 +1,6 @@
 const userSchema = require("../models/User");
 const questionSchema = require("../models/Question");
+const workSchema = require("../models/Work");
 
 class UserController {
   //[GET] /login
@@ -177,7 +178,7 @@ class UserController {
 
   async getAllUsers(req, res) {
     const { username, page = 1, limit = 10 } = req.query;
-    const query = {};
+    const query = { role: 1 };
 
     if (username) {
       query.username = { $regex: username };
@@ -257,45 +258,60 @@ class UserController {
     await userSchema
       .findById(
         id,
-        "username avatar dateCreate email phone reputationScore role job"
+        "username avatar dateCreate email phone reputationScore role job company address description"
       )
       .exec((err, user) => {
         if (err) {
           res.status(500).json({ error: "Error retrieving user" });
         } else {
-          questionSchema
-            .find(
-              { user: id },
-              "_id title tags upvote downvote viewed createdAt"
-            )
-            .limit(10)
-            .exec((err, questions) => {
+          if (user.role === 2) {
+            workSchema.find({ user: id }).exec((err, works) => {
               if (err) {
-                res.status(500).json({ error: "Error retrieving questions" });
+                res.status(500).json({ error: "Error retrieving works" });
               } else {
-                const tagCounts = {};
-
-                questions.forEach((question) => {
-                  JSON.parse(question.tags).forEach((tag) => {
-                    const tagString = String(tag);
-                    tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
-                  });
-                });
-                let tags = Object.keys(tagCounts)
-                  .map((tag) => ({
-                    name: tag,
-                    count: tagCounts[tag],
-                  }))
-                  .sort((a, b) => b.count - a.count);
-                tags = tags.slice(0, 5);
                 const userData = {
                   user: user,
-                  questions: questions,
-                  tags: tags,
+                  works: works,
                 };
                 res.json(userData);
               }
             });
+          } else {
+            questionSchema
+              .find(
+                { user: id },
+                "_id title tags upvote downvote viewed createdAt"
+              )
+              .limit(10)
+              .sort({ upvote: -1 })
+              .exec((err, questions) => {
+                if (err) {
+                  res.status(500).json({ error: "Error retrieving questions" });
+                } else {
+                  const tagCounts = {};
+
+                  questions.forEach((question) => {
+                    JSON.parse(question.tags).forEach((tag) => {
+                      const tagString = String(tag);
+                      tagCounts[tagString] = (tagCounts[tagString] || 0) + 1;
+                    });
+                  });
+                  let tags = Object.keys(tagCounts)
+                    .map((tag) => ({
+                      name: tag,
+                      count: tagCounts[tag],
+                    }))
+                    .sort((a, b) => b.count - a.count);
+                  tags = tags.slice(0, 5);
+                  const userData = {
+                    user: user,
+                    questions: questions,
+                    tags: tags,
+                  };
+                  res.json(userData);
+                }
+              });
+          }
         }
       });
   }
@@ -325,7 +341,8 @@ class UserController {
   }
 
   async changeUserInfo(req, res) {
-    const { id, username, job, phone, email } = req.body;
+    const { id, username, job, phone, email, company, address, description } =
+      req.body;
 
     const existingUser = await userSchema.findOne({ username });
     if (existingUser && existingUser._id.toString() !== id) {
@@ -360,6 +377,9 @@ class UserController {
           job,
           phone,
           email,
+          company,
+          address,
+          description,
         },
         { new: true }
       );

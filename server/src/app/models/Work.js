@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 const workSchema = new Schema({
   workid: { type: mongoose.Schema.Types.ObjectId },
   title: { type: String },
-  position: { type: String },
-  detail: { type: String },
-  salary: { type: String },
-  tags: { type: Array },
+  position: { type: String, default: null },
+  salary: { type: String, default: 0 },
+  description: { type: String },
+  tags: { type: Array, default: [] },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now },
 });

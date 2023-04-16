@@ -16,25 +16,9 @@ function Modal({ closeModal, children }) {
       className={cx("wrapper")}
     >
       <div className={cx("container")}>
-        <div className={cx("close-btn")}>
-          <Button
-            text
-            onlyicon
-            nmw
-            onClick={() => closeModal(false)}
-            leftIcon={
-              <lord-icon
-                src="https://cdn.lordicon.com/nhfyhmlt.json"
-                trigger="hover"
-                colors="primary:#030e12"
-                state="hover-3"
-                style={{ width: "250", height: "250" }}
-              ></lord-icon>
-            }
-          />
-        </div>
         <div className={cx("content")}>{children}</div>
       </div>
+      <div className={cx("overlay")} onClick={() => closeModal(false)}></div>
     </motion.div>
   );
 }

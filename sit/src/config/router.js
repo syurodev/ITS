@@ -9,6 +9,7 @@ const routes = {
   bookmarks: "/bookmarks",
   newwork: "/new-work",
   works: "/works",
+  worksTag: "/works/:tag",
   ask: "/ask",
   register: "/auth/register",
   login: "/auth/login",

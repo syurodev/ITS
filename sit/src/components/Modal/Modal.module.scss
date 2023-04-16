@@ -4,7 +4,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: var(--gray);
+  // background-color: var(--gray);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,14 +20,15 @@
     max-height: 80%;
     border-radius: var(--box-border-radius);
     box-shadow: var(--bold-box-shadow-color);
+    z-index: 302;
+    overflow: auto;
+  }
 
-    .close-btn {
-      position: absolute;
-      top: -15px;
-      right: -15px;
-      background-color: var(--main-bg);
-      border-radius: 100rem;
-      box-shadow: rgba(149, 157, 165, 0.4) 0px 8px 24px;
-    }
+  .overlay {
+    z-index: 301;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--gray);
+    position: absolute;
   }
 }

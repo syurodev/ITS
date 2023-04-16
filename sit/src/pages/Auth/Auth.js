@@ -30,7 +30,7 @@ function Auth() {
   const [registered, setRegistered] = useState(router);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState(1);
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
@@ -39,6 +39,7 @@ function Auth() {
   const [repasswordError, setRepasswordError] = useState(false);
   const [avatar, setAvatar] = useState("");
   const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState("");
   const [error, setError] = useState("");
   const [disableButton, setDisableButton] = useState(false);
 
@@ -131,6 +132,14 @@ function Auth() {
     userData.avatar = avatar;
     userData.phone = phone;
     userData.role = role;
+    userData.company = company;
+
+    if (role === "2") {
+      if (company.trim() === "") {
+        setError("Vui lòng nhập đầy đủ thông tin");
+        return;
+      }
+    }
 
     if (password.trim() === "" || username.trim() === "") {
       setDisableButton(true);
@@ -309,6 +318,25 @@ function Auth() {
                 </select>
               </label>
             </div>
+          )}
+          {registered ? (
+            <></>
+          ) : (
+            role === "2" && (
+              <div layout className={cx("input")}>
+                <label htmlFor="name">
+                  <span>Tên doanh nghiệp:</span>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="Vui lòng nhập tên doanh nghiệp"
+                  />
+                </label>
+              </div>
+            )
           )}
           <div className={cx("btn")}>
             {registered ? (

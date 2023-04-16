@@ -156,8 +156,8 @@ function Answer({
 
   const handleDelete = () => {
     const fetchApi = async () => {
+      // eslint-disable-next-line no-unused-vars
       const result = await answerServices.deleteAnswer(data._id);
-      console.log(result);
     };
     fetchApi();
   };

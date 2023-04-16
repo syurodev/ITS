@@ -29,6 +29,7 @@ const publicRoutes = [
   { path: routesConfig.login, component: Auth, layout: null },
   { path: routesConfig.ask, component: Ask, layout: NoSidebar },
   { path: routesConfig.newwork, component: NewWork, layout: NoSidebar },
+  { path: routesConfig.worksTag, component: Works },
   { path: routesConfig.works, component: Works },
 ];
 

@@ -151,7 +151,7 @@ const Home = () => {
                     className={cx("user")}
                     to={`/profile/${question.user._id}`}
                   >
-                    <div className={cx("avata")}>
+                    <div className={cx("avatar")}>
                       <Image
                         src={question.user.avatar}
                         alt={question.user.username}
