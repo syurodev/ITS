@@ -13,10 +13,6 @@ const questionSchema = new Schema({
   solved: { type: Boolean, default: false },
   solved_answer_id: { type: mongoose.Schema.Types.ObjectId, ref: "Answer" },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  comment_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Comments",
-  },
   createdAt: { type: Date, default: Date.now },
   editAt: { type: Date, default: Date.now },
 });

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { memo } from "react";
 
 import style from "./Modal.module.scss";
-import Button from "../Button";
 
 function Modal({ closeModal, children }) {
   const cx = classNames.bind(style);
