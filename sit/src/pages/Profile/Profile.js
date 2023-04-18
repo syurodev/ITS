@@ -12,7 +12,7 @@ import {
   faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
 import AvatarEditor from "react-avatar-editor";
-import { motion } from "framer-motion";
+import { easeIn, motion } from "framer-motion";
 import parse from "html-react-parser";
 
 import * as userServices from "~/services/authServices";
@@ -40,12 +40,14 @@ function Profile() {
   const [auth, setAuth] = useState(false);
   const [openWorkDetail, setOpenWorkDetail] = useState(false);
   const [workData, setWorkData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     document.title = "ITSocial :: Profile";
   }, []);
 
   const fetchApi = async () => {
+    setIsLoading(true);
     const result = await userServices.profile(userId);
     setUserData(result);
     setAvatar(result.user.avatar);
@@ -53,6 +55,7 @@ function Profile() {
     const storedUserId = localStorage.getItem("itsSession");
     const currentUserId = JSON.parse(storedUserId);
     setAuth(userId && userId === currentUserId?._id);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -95,301 +98,313 @@ function Profile() {
     setWorkData(work);
   };
 
-  console.log(userData.user?.description);
   return (
     <motion.div
       className={cx("wrapper")}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.2, ease: easeIn }}
     >
-      {userData.user && (
-        <div className={cx("container")}>
-          <div className={cx("info")}>
-            {auth && (
-              <FontAwesomeIcon
-                className={cx("edit-profile-icon")}
-                icon={faEllipsis}
-                onClick={() => setChangeUserInfo(true)}
-              />
-            )}
-            <div className={cx("avatar")}>
+      {isLoading ? (
+        <div className={cx("is-loading")}>
+          <lord-icon
+            src="https://cdn.lordicon.com/ymrqtsej.json"
+            trigger="loop"
+            delay="0"
+            style={{ width: "250", height: "250" }}
+          ></lord-icon>
+        </div>
+      ) : (
+        userData.user && (
+          <div className={cx("container")}>
+            <div className={cx("info")}>
               {auth && (
+                <FontAwesomeIcon
+                  className={cx("edit-profile-icon")}
+                  icon={faEllipsis}
+                  onClick={() => setChangeUserInfo(true)}
+                />
+              )}
+              <div className={cx("avatar")}>
+                {auth && (
+                  <div>
+                    <span
+                      className={cx("edit-icon")}
+                      onClick={() => setChangeAvatarModal(true)}
+                    >
+                      <FontAwesomeIcon icon={faPencil} />
+                    </span>
+                    <span className={cx("edit-icon-bg")}></span>
+                  </div>
+                )}
+                <Image src={avatar} alt={userData.user.username} />
+              </div>
+              <div className={cx("details")}>
                 <div>
-                  <span
-                    className={cx("edit-icon")}
-                    onClick={() => setChangeAvatarModal(true)}
-                  >
-                    <FontAwesomeIcon icon={faPencil} />
-                  </span>
-                  <span className={cx("edit-icon-bg")}></span>
+                  <p className={cx("user-name")}>
+                    {userData.user.role === 1
+                      ? userData.user.username || "unspecified work"
+                      : userData.user.company}
+                  </p>
+                  <p className={cx("job")}>
+                    {userData.user.role === 1
+                      ? userData.user.job || "unspecified work"
+                      : userData.user.username}
+                  </p>
+                </div>
+                <div className={cx("content")}>
+                  <div>
+                    <p className={cx("title")}>Email</p>
+                    <p>{userData.user.email}</p>
+                  </div>
+                  <div>
+                    <p className={cx("title")}>Phone Number</p>
+                    <p>{userData.user.phone || "null"}</p>
+                  </div>
+                  <div>
+                    <p className={cx("title")}>Member for</p>
+                    <p>{memberFor}</p>
+                  </div>
+                  {userData.user.role === 1 ? (
+                    <div>
+                      <p className={cx("title")}>Reputation Score</p>
+                      <p className={cx("reputation-score")}>
+                        {userData.user.reputationScore}
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className={cx("title")}>Address</p>
+                      <p>{userData.user.address}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className={cx("activate")}>
+              {userData.user?.description && (
+                <div className={cx("company-description")}>
+                  <h2 className={cx("big-title")}>About</h2>
+                  <div className={cx("content")}>
+                    {parse(userData.user.description)}
+                  </div>
                 </div>
               )}
-              <Image src={avatar} alt={userData.user.username} />
-            </div>
-            <div className={cx("details")}>
-              <div>
-                <p className={cx("user-name")}>
-                  {userData.user.role === 1
-                    ? userData.user.username || "unspecified work"
-                    : userData.user.company}
-                </p>
-                <p className={cx("job")}>
-                  {userData.user.role === 1
-                    ? userData.user.job || "unspecified work"
-                    : userData.user.username}
-                </p>
-              </div>
-              <div className={cx("content")}>
-                <div>
-                  <p className={cx("title")}>Email</p>
-                  <p>{userData.user.email}</p>
-                </div>
-                <div>
-                  <p className={cx("title")}>Phone Number</p>
-                  <p>{userData.user.phone || "null"}</p>
-                </div>
-                <div>
-                  <p className={cx("title")}>Member for</p>
-                  <p>{memberFor}</p>
-                </div>
-                {userData.user.role === 1 ? (
-                  <div>
-                    <p className={cx("title")}>Reputation Score</p>
-                    <p className={cx("reputation-score")}>
-                      {userData.user.reputationScore}
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    <p className={cx("title")}>Address</p>
-                    <p>{userData.user.address}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className={cx("activate")}>
-            {userData.user?.description && (
-              <div className={cx("company-description")}>
-                <h2 className={cx("big-title")}>About</h2>
-                <div className={cx("content")}>
-                  {parse(userData.user.description)}
-                </div>
-              </div>
-            )}
 
-            {userData.user.role === 1 && (
-              <div className={cx("top-tags")}>
-                <h2 className={cx("big-title")}>Top tags</h2>
-                <div className={cx("content")}>
-                  {userData.tags && userData.tags.length > 0 ? (
-                    userData.tags.map((tag, index) => {
-                      return (
-                        <div key={index} className={cx("tag")}>
-                          <Link to={`/${tag.name}/${userId}`}>
-                            <span className={cx("tag-name")}>#{tag.name}</span>
-                          </Link>
-                          <span className={cx("count")}>
-                            {tag.count}
-                            <span className={cx("count-title")}> posts</span>
-                          </span>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <span> No tag</span>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {userData.user.role === 1 && (
-              <div className={cx("top-posts")}>
-                <h2 className={cx("big-title")}>Top posts</h2>
-                <div className={cx("content")}>
-                  {userData.questions && userData.questions.length > 0 ? (
-                    userData.questions.map((question, index) => {
-                      const date = formatDate(question.createdAt);
-
-                      return (
-                        <div key={index} className={cx("post")}>
-                          <div className={cx("content")}>
-                            <Link to={`/question/${question._id}`}>
-                              <span className={cx("title")}>
-                                {question.title}
+              {userData.user.role === 1 && (
+                <div className={cx("top-tags")}>
+                  <h2 className={cx("big-title")}>Top tags</h2>
+                  <div className={cx("content")}>
+                    {userData.tags && userData.tags.length > 0 ? (
+                      userData.tags.map((tag, index) => {
+                        return (
+                          <div key={index} className={cx("tag")}>
+                            <Link to={`/${tag.name}/${userId}`}>
+                              <span className={cx("tag-name")}>
+                                #{tag.name}
                               </span>
                             </Link>
-
-                            <span className={cx("date-post")}>{date}</span>
+                            <span className={cx("count")}>
+                              {tag.count}
+                              <span className={cx("count-title")}> posts</span>
+                            </span>
                           </div>
-                          <div className={cx("detail")}>
-                            <div className={cx("detail-item")}>
-                              <FontAwesomeIcon icon={faAngleUp} />
-                              <span>{question.upvote.length}</span>
-                            </div>
-                            <div className={cx("detail-item")}>
-                              <FontAwesomeIcon icon={faAngleDown} />{" "}
-                              <samp>{question.downvote.length}</samp>
-                            </div>
-                            <div className={cx("detail-item")}>
-                              <FontAwesomeIcon icon={faEye} />
-                              <span>{question.viewed}</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <span> No post</span>
-                  )}
+                        );
+                      })
+                    ) : (
+                      <span> No tag</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {userData.user.role === 2 && (
-              <div className={cx("works")}>
-                <h2 className={cx("big-title")}>Works</h2>
-                <div className={cx("work-list")}>
-                  {userData.works && userData.works.length > 0 ? (
-                    userData.works.map((work) => {
-                      const date = formatDate(work.createdAt);
+              {userData.user.role === 1 && (
+                <div className={cx("top-posts")}>
+                  <h2 className={cx("big-title")}>Top posts</h2>
+                  <div className={cx("content")}>
+                    {userData.questions && userData.questions.length > 0 ? (
+                      userData.questions.map((question, index) => {
+                        const date = formatDate(question.createdAt);
 
-                      return (
-                        <div key={work._id} className={cx("content")}>
-                          <div className={cx("work")}>
+                        return (
+                          <div key={index} className={cx("post")}>
+                            <div className={cx("content")}>
+                              <Link to={`/question/${question._id}`}>
+                                <span className={cx("title")}>
+                                  {question.title}
+                                </span>
+                              </Link>
+
+                              <span className={cx("date-post")}>{date}</span>
+                            </div>
                             <div className={cx("detail")}>
-                              <span
-                                className={cx("title")}
-                                onClick={() => handelOpenWorkDetail(work)}
-                              >
-                                {work.title}
-                              </span>
-
-                              <div className={cx("more")}>
-                                <div className={cx("position")}>
-                                  <FontAwesomeIcon icon={faCrosshairs} />
-                                  <span className={cx("text")}>
-                                    {work.position}
-                                  </span>
-                                </div>
-                                <div className={cx("salary")}>
-                                  <FontAwesomeIcon icon={faMoneyBill} />
-                                  <span className={cx("text")}>
-                                    {work.salary}
-                                  </span>
-                                </div>
-                                <div className={cx("tags")}>
-                                  {JSON.parse(work.tags).map((tag, index) => (
-                                    <Link key={index} to={`/works/${tag}`}>
-                                      <span className={cx("tag-name")}>
-                                        #{tag}
-                                      </span>
-                                    </Link>
-                                  ))}
-                                </div>
+                              <div className={cx("detail-item")}>
+                                <FontAwesomeIcon icon={faAngleUp} />
+                                <span>{question.upvote.length}</span>
+                              </div>
+                              <div className={cx("detail-item")}>
+                                <FontAwesomeIcon icon={faAngleDown} />{" "}
+                                <samp>{question.downvote.length}</samp>
+                              </div>
+                              <div className={cx("detail-item")}>
+                                <FontAwesomeIcon icon={faEye} />
+                                <span>{question.viewed}</span>
                               </div>
                             </div>
-
-                            <span className={cx("date-post")}>{date}</span>
                           </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <span> No tag</span>
-                  )}
+                        );
+                      })
+                    ) : (
+                      <span> No post</span>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {userData.user.role === 2 && (
+                <div className={cx("works")}>
+                  <h2 className={cx("big-title")}>Works</h2>
+                  <div className={cx("work-list")}>
+                    {userData.works && userData.works.length > 0 ? (
+                      userData.works.map((work) => {
+                        const date = formatDate(work.createdAt);
+
+                        return (
+                          <div key={work._id} className={cx("content")}>
+                            <div className={cx("work")}>
+                              <div className={cx("detail")}>
+                                <span
+                                  className={cx("title")}
+                                  onClick={() => handelOpenWorkDetail(work)}
+                                >
+                                  {work.title}
+                                </span>
+
+                                <div className={cx("more")}>
+                                  <div className={cx("position")}>
+                                    <FontAwesomeIcon icon={faCrosshairs} />
+                                    <span className={cx("text")}>
+                                      {work.position}
+                                    </span>
+                                  </div>
+                                  <div className={cx("salary")}>
+                                    <FontAwesomeIcon icon={faMoneyBill} />
+                                    <span className={cx("text")}>
+                                      {work.salary}
+                                    </span>
+                                  </div>
+                                  <div className={cx("tags")}>
+                                    {JSON.parse(work.tags).map((tag, index) => (
+                                      <Link key={index} to={`/works/${tag}`}>
+                                        <span className={cx("tag-name")}>
+                                          #{tag}
+                                        </span>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <span className={cx("date-post")}>{date}</span>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <span> No tag</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {changeAvatarModal && (
+              <Modal closeModal={setChangeAvatarModal}>
+                <div className={cx("change-avatar-modal")}>
+                  <p className={cx("change-avatar-title")}>Change Avatar</p>
+                  <div className={cx("avatar-preview")}>
+                    {newAvatarPreview ? (
+                      <AvatarEditor
+                        ref={editorRef}
+                        image={newAvatarPreview}
+                        width={300}
+                        height={300}
+                        border={50}
+                        color={[255, 255, 255, 0.6]}
+                        scale={zoom}
+                        className="avatar-editor"
+                      />
+                    ) : (
+                      <Image src={avatar} alt={userData.user.username} />
+                    )}
+                  </div>
+
+                  {newAvatarPreview && (
+                    <input
+                      type="range"
+                      min="1"
+                      max="3"
+                      step="0.01"
+                      value={zoom}
+                      onChange={(e) => setZoom(parseFloat(e.target.value))}
+                    />
+                  )}
+
+                  <label
+                    className={cx("choose-file-btn", {
+                      choosed: !!newAvatarPreview,
+                    })}
+                  >
+                    <span className={cx("btn-title")}>Choose new avatar</span>
+                    <span className={cx("btn-sub-title")}>
+                      {!!newAvatarName ? newAvatarName : "click to select file"}
+                    </span>
+                    <input
+                      type="file"
+                      onChange={handleChooseAvatar}
+                      accept="image/png, image/jpeg"
+                    />
+                  </label>
+
+                  <div className={cx("btns")}>
+                    <Button primary small onClick={handleChangeAvatar}>
+                      Đổi
+                    </Button>
+                    <Button
+                      outline
+                      small
+                      onClick={() => {
+                        setChangeAvatarModal(false);
+                        setNewAvatarName("");
+                      }}
+                    >
+                      Huỷ
+                    </Button>
+                  </div>
+                </div>
+              </Modal>
+            )}
+
+            {changeUserInfo && (
+              <Modal closeModal={setChangeUserInfo}>
+                <ChangeUserInfo
+                  data={userData.user}
+                  closeModal={setChangeUserInfo}
+                  fetchApiData={fetchApi}
+                />
+              </Modal>
+            )}
+            {openWorkDetail && (
+              <Modal closeModal={setOpenWorkDetail}>
+                <WorkDetail
+                  data={workData}
+                  auth={auth}
+                  closeModal={setOpenWorkDetail}
+                />
+              </Modal>
             )}
           </div>
-
-          {changeAvatarModal && (
-            <Modal closeModal={setChangeAvatarModal}>
-              <div className={cx("change-avatar-modal")}>
-                <p className={cx("change-avatar-title")}>Change Avatar</p>
-                <div className={cx("avatar-preview")}>
-                  {newAvatarPreview ? (
-                    <AvatarEditor
-                      ref={editorRef}
-                      image={newAvatarPreview}
-                      width={300}
-                      height={300}
-                      border={50}
-                      color={[255, 255, 255, 0.6]}
-                      scale={zoom}
-                      className="avatar-editor"
-                    />
-                  ) : (
-                    <Image src={avatar} alt={userData.user.username} />
-                  )}
-                </div>
-
-                {newAvatarPreview && (
-                  <input
-                    type="range"
-                    min="1"
-                    max="3"
-                    step="0.01"
-                    value={zoom}
-                    onChange={(e) => setZoom(parseFloat(e.target.value))}
-                  />
-                )}
-
-                <label
-                  className={cx("choose-file-btn", {
-                    choosed: !!newAvatarPreview,
-                  })}
-                >
-                  <span className={cx("btn-title")}>Choose new avatar</span>
-                  <span className={cx("btn-sub-title")}>
-                    {!!newAvatarName ? newAvatarName : "click to select file"}
-                  </span>
-                  <input
-                    type="file"
-                    onChange={handleChooseAvatar}
-                    accept="image/png, image/jpeg"
-                  />
-                </label>
-
-                <div className={cx("btns")}>
-                  <Button primary small onClick={handleChangeAvatar}>
-                    Đổi
-                  </Button>
-                  <Button
-                    outline
-                    small
-                    onClick={() => {
-                      setChangeAvatarModal(false);
-                      setNewAvatarName("");
-                    }}
-                  >
-                    Huỷ
-                  </Button>
-                </div>
-              </div>
-            </Modal>
-          )}
-
-          {changeUserInfo && (
-            <Modal closeModal={setChangeUserInfo}>
-              <ChangeUserInfo
-                data={userData.user}
-                closeModal={setChangeUserInfo}
-                fetchApiData={fetchApi}
-              />
-            </Modal>
-          )}
-          {openWorkDetail && (
-            <Modal closeModal={setOpenWorkDetail}>
-              <WorkDetail
-                data={workData}
-                auth={auth}
-                closeModal={setOpenWorkDetail}
-              />
-            </Modal>
-          )}
-        </div>
+        )
       )}
     </motion.div>
   );

@@ -28,6 +28,7 @@ function Works() {
   const [works, setWorks] = useState([]);
   const [workModalOpen, setWorkModalOpen] = useState(false);
   const [workData, setWorkData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     document.title = "ITSocial :: Works";
@@ -80,6 +81,7 @@ function Works() {
 
   // FetchAPI
   const getWorks = async () => {
+    setIsLoading(true);
     const result = await workServices.getWorks(
       filter.limit,
       filter.sort,
@@ -94,6 +96,7 @@ function Works() {
       (_, i) => i + 1
     );
     setTotalPages(pageArray);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -122,7 +125,16 @@ function Works() {
         </div>
       </div>
 
-      {works?.length === 0 ? (
+      {isLoading ? (
+        <div className={cx("is-loading")}>
+          <lord-icon
+            src="https://cdn.lordicon.com/ymrqtsej.json"
+            trigger="loop"
+            delay="0"
+            style={{ width: "250", height: "250" }}
+          ></lord-icon>
+        </div>
+      ) : works?.length === 0 ? (
         <span>Không có công việc nào</span>
       ) : (
         <div className={cx("container")}>

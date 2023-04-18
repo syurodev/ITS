@@ -18,6 +18,7 @@ const cx = classNames.bind(style);
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [sortActive, setSortActive] = useState(true);
   const [totalPages, setTotalPages] = useState([]);
   const [page, setPage] = useState(1);
@@ -62,6 +63,7 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
+    setIsLoading(true);
     const getQuestion = async () => {
       const result = await questionServices.getQuestions(
         filter.limit,
@@ -77,6 +79,7 @@ const Home = () => {
         (_, i) => i + 1
       );
       setTotalPages(pageArray);
+      setIsLoading(false);
     };
     getQuestion();
   }, [filter]);
@@ -97,7 +100,7 @@ const Home = () => {
     }));
   };
 
-  return questions.length > 0 ? (
+  return (
     <motion.div
       className={cx("wrapper")}
       initial={{ opacity: 0 }}
@@ -130,9 +133,18 @@ const Home = () => {
           )}
         </div>
       </div>
-      <div className={cx("container")}>
-        {questions &&
-          questions.map((question) => {
+      {isLoading ? (
+        <div className={cx("is-loading")}>
+          <lord-icon
+            src="https://cdn.lordicon.com/ymrqtsej.json"
+            trigger="loop"
+            delay="0"
+            style={{ width: "250", height: "250" }}
+          ></lord-icon>
+        </div>
+      ) : questions.length > 0 ? (
+        <div className={cx("container")}>
+          {questions.map((question) => {
             const tags = JSON.parse(question?.tags[0]);
 
             const questionTime = formatDate(question?.createdAt);
@@ -205,17 +217,18 @@ const Home = () => {
               </motion.div>
             );
           })}
-        {totalPages && (
-          <Pagination
-            totalPages={totalPages}
-            setFilter={setFilter}
-            currentPage={page}
-          />
-        )}
-      </div>
+          {totalPages && (
+            <Pagination
+              totalPages={totalPages}
+              setFilter={setFilter}
+              currentPage={page}
+            />
+          )}
+        </div>
+      ) : (
+        <span>Không có câu hỏi nào</span>
+      )}
     </motion.div>
-  ) : (
-    <span>Không có câu hỏi nào</span>
   );
 };
 

@@ -1,5 +1,11 @@
 .wrapper {
   padding: var(--wrapper-padding);
+
+  .is-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .container {
