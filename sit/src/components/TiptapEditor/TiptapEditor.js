@@ -115,7 +115,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const Tiptap = ({ setState, setError, content }) => {
+const Tiptap = ({ setState, setError, content = "" }) => {
   const editor = useEditor({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),

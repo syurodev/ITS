@@ -1,32 +1,29 @@
+import { useState } from "react";
 import classNames from "classnames/bind";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
-import style from "./Ask.module.scss";
+import * as questionServices from "~/services/questionServices";
+import Modal from "~/components/Modal";
+import CustomTagsInput from "~/components/TagsInput";
+import style from "./EditQuestion.module.scss";
 import Button from "~/components/Button";
 import Tiptap from "~/components/TiptapEditor";
-import routesConfig from "~/config/router";
-import * as questionServices from "~/services/questionServices";
-import CustomTagsInput from "~/components/TagsInput";
 
-const Ask = () => {
+function EditQuestion({
+  closeModal,
+  questionTitle = "",
+  questionProblem = "",
+  questionExpecting = "",
+  questionTags = [],
+  questionId,
+}) {
+  const outputArray = questionTags.map((item) => ({ id: item, text: item }));
+
   const cx = classNames.bind(style);
-  const currentUser = useSelector((state) => {
-    return state.user.userId;
-  });
-
-  const [title, setTitle] = useState("");
-  const [problem, setProblem] = useState("");
-  const [expecting, setExpecting] = useState("");
-  const [tags, setTags] = useState([]);
+  const [title, setTitle] = useState(questionTitle);
+  const [problem, setProblem] = useState(questionProblem);
+  const [expecting, setExpecting] = useState(questionExpecting);
+  const [tags, setTags] = useState(outputArray);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    document.title = "ITSocial :: Ask";
-  }, []);
 
   const handleSubmit = async () => {
     if (
@@ -42,16 +39,16 @@ const Ask = () => {
       });
 
       const bodyJSON = {
+        id: questionId,
         title: title,
         problem: problem,
         expecting: expecting,
         tags: JSON.stringify(newTags),
-        user: currentUser._id,
       };
 
       const fetchApi = async () => {
-        const result = await questionServices.ask(bodyJSON);
-        navigate(`/question/${result._id}`);
+        // eslint-disable-next-line no-unused-vars
+        const result = await questionServices.editQuestion(bodyJSON);
       };
       fetchApi();
     } else {
@@ -60,15 +57,10 @@ const Ask = () => {
   };
 
   return (
-    <motion.div
-      className={cx("wrapper")}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
-    >
+    <Modal closeModal={closeModal}>
       <div className={cx("container")}>
         <div className={cx("head-title")}>
-          <h1>Đặt câu hỏi</h1>
+          <h1>Sửa câu hỏi</h1>
         </div>
         <div className={cx("add-question-container")}>
           <div className={cx("question-options")}>
@@ -94,7 +86,11 @@ const Ask = () => {
               <div className={cx("question-problem")}>
                 <h2 className={cx("title")}>Chi tiết vấn đề của bạn là gì?</h2>
                 <small>Mô tả chi tiết những gì bạn đặt ở tiêu đề</small>
-                <Tiptap setState={setProblem} setError={setError} />
+                <Tiptap
+                  setState={setProblem}
+                  setError={setError}
+                  content={problem}
+                />
               </div>
             </div>
 
@@ -106,7 +102,11 @@ const Ask = () => {
                 <small>
                   Mô tả những gì bạn đã thử và những gì bạn mong đợi
                 </small>
-                <Tiptap setState={setExpecting} setError={setError} />
+                <Tiptap
+                  setState={setExpecting}
+                  setError={setError}
+                  content={expecting}
+                />
               </div>
             </div>
 
@@ -124,17 +124,17 @@ const Ask = () => {
           </div>
 
           <div className={cx("btns")}>
-            <Button outline to={routesConfig.home}>
+            <Button outline onClick={() => closeModal(false)}>
               Huỷ
             </Button>
             <Button primary onClick={handleSubmit}>
-              Tạo câu hỏi
+              Sửa
             </Button>
           </div>
         </div>
       </div>
-    </motion.div>
+    </Modal>
   );
-};
+}
 
-export default Ask;
+export default EditQuestion;

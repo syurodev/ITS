@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 import * as userServices from "~/services/authServices";
 import routesConfig from "~/config/router";
@@ -22,6 +24,7 @@ import * as authServices from "~/services/authServices";
 import { bookmark } from "~/pages/Auth/authSlice";
 import Image from "~/components/Image";
 import Modal from "~/components/Modal";
+import EditQuestion from "./components/Edit";
 
 const Question = () => {
   const cx = classNames.bind(style);
@@ -69,6 +72,7 @@ const Question = () => {
 
   const [auth, setAuth] = useState(false);
   // const [loading, setLoading] = useState(false);
+  const [editQuestionOpen, setEditQuestionOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   //CHECK SESSION
@@ -132,6 +136,8 @@ const Question = () => {
       const storedUserId = localStorage.getItem("itsSession");
       const userId = JSON.parse(storedUserId);
       setAuth(result.user._id && result.user._id === userId?._id);
+      console.log(result.editAt);
+      console.log(result.createdAt);
 
       // setLoading(false);
     };
@@ -338,19 +344,32 @@ const Question = () => {
             </Tippy>
 
             {auth && (
+              <div>
+                <Button
+                  text
+                  onlyicon
+                  onClick={() => setEditQuestionOpen(true)}
+                  leftIcon={
+                    <FontAwesomeIcon
+                      className={cx("edit-btn")}
+                      icon={faPenToSquare}
+                    />
+                  }
+                ></Button>
+              </div>
+            )}
+
+            {auth && (
               <Tippy content="Delete" placement="left">
                 <div>
                   <Button
                     text
                     onlyicon
                     leftIcon={
-                      <lord-icon
-                        src="https://cdn.lordicon.com/kfzfxczd.json"
-                        trigger="click"
-                        colors="primary:#030e12"
-                        state="hover-empty"
-                        style={{ width: "250", height: "250" }}
-                      ></lord-icon>
+                      <FontAwesomeIcon
+                        className={cx("edit-btn")}
+                        icon={faTrashCan}
+                      />
                     }
                     onClick={() => setDeleteConfirm(true)}
                   ></Button>
@@ -408,6 +427,18 @@ const Question = () => {
               </Button>
             </div>
           </Modal>
+        )}
+
+        {/* EDIT QUESTION */}
+        {editQuestionOpen && (
+          <EditQuestion
+            closeModal={setEditQuestionOpen}
+            questionTitle={title}
+            questionProblem={problem}
+            questionExpecting={expecting}
+            questionTags={tags}
+            questionId={idQuestion}
+          />
         )}
       </motion.div>
     )

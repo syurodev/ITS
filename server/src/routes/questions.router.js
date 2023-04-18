@@ -30,6 +30,9 @@ router.patch("/downvote/:item", questionsController.updateDownvote);
 //[PATCH] /questions/unvote:item
 router.patch("/unvote/:item", questionsController.updateUnvote);
 
+//[PUT] /questions/edit
+router.put("/edit", questionsController.edit);
+
 //[POST] /questions/ask
 router.post("/ask", questionsController.upload);
 

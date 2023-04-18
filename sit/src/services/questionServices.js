@@ -11,6 +11,16 @@ export const ask = async (data) => {
   }
 };
 
+//EDIT QUESTION
+export const editQuestion = async (data) => {
+  try {
+    const res = await request.put("questions/edit", data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //DELETE QUESTION
 export const deleteQuestion = async (id) => {
   try {

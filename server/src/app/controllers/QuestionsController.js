@@ -108,6 +108,29 @@ class QuestionsController {
       });
   }
 
+  //[PUT] /questions/edit
+  async edit(req, res) {
+    const { id, title, problem, expecting, tags } = req.body;
+    const editAt = new Date();
+
+    try {
+      const updatedQuestion = await questionSchema.findByIdAndUpdate(
+        id,
+        {
+          title,
+          problem,
+          expecting,
+          tags,
+          editAt,
+        },
+        { new: true }
+      );
+      res.status(200).send({ status: true });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   //[PATCH] /questions/upvote:item
   async updateUpvote(req, res) {
     const userUpvote = req.body.user;

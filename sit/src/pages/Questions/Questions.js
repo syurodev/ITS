@@ -97,7 +97,9 @@ const Home = () => {
     }));
   };
 
-  return (
+  console.log(questions);
+
+  return questions.length > 0 ? (
     <motion.div
       className={cx("wrapper")}
       initial={{ opacity: 0 }}
@@ -133,9 +135,9 @@ const Home = () => {
       <div className={cx("container")}>
         {questions &&
           questions.map((question) => {
-            const tags = JSON.parse(question.tags[0]);
+            const tags = JSON.parse(question?.tags[0]);
 
-            const questionTime = formatDate(question.createdAt);
+            const questionTime = formatDate(question?.createdAt);
 
             return (
               <motion.div
@@ -143,38 +145,38 @@ const Home = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                key={question._id}
+                key={question?._id}
                 className={cx("item")}
               >
                 <div className={cx("header")}>
                   <Link
                     className={cx("user")}
-                    to={`/profile/${question.user._id}`}
+                    to={`/profile/${question?.user?._id}`}
                   >
                     <div className={cx("avatar")}>
                       <Image
-                        src={question.user.avatar}
-                        alt={question.user.username}
+                        src={question?.user?.avatar}
+                        alt={question?.user?.username}
                       />
                     </div>
                     <div className={cx("username")}>
-                      {question.user.username}
+                      {question?.user?.username}
                     </div>
                     <Tippy content="Điểm hoạt động">
                       <div className={cx("score")}>
-                        {question.user.reputationScore}
+                        {question?.user?.reputationScore}
                       </div>
                     </Tippy>
                   </Link>
 
                   <div className={cx("info")}>
                     <span>
-                      {question.upvote.length - question.downvote.length} vote
+                      {question?.upvote.length - question?.downvote.length} vote
                     </span>
                     <span>0 answers</span>
-                    <span>{question.viewed} views</span>
+                    <span>{question?.viewed} views</span>
                     <span>asked {questionTime}</span>
-                    {question.solved ? (
+                    {question?.solved ? (
                       <span className={cx("solved")}>Solved</span>
                     ) : (
                       <></>
@@ -182,8 +184,11 @@ const Home = () => {
                   </div>
                 </div>
                 <div className={cx("title")}>
-                  <Link to={`/question/${question._id}`} className={cx("link")}>
-                    {question.title}
+                  <Link
+                    to={`/question/${question?._id}`}
+                    className={cx("link")}
+                  >
+                    {question?.title}
                   </Link>
                 </div>
                 <div className={cx("tags")}>
@@ -211,6 +216,8 @@ const Home = () => {
         )}
       </div>
     </motion.div>
+  ) : (
+    <span>Không có câu hỏi nào</span>
   );
 };
 
