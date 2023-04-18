@@ -15,6 +15,7 @@ function EditQuestion({
   questionExpecting = "",
   questionTags = [],
   questionId,
+  fetchApi,
 }) {
   const outputArray = questionTags.map((item) => ({ id: item, text: item }));
 
@@ -49,6 +50,8 @@ function EditQuestion({
       const fetchApi = async () => {
         // eslint-disable-next-line no-unused-vars
         const result = await questionServices.editQuestion(bodyJSON);
+        fetchApi();
+        closeModal(false);
       };
       fetchApi();
     } else {

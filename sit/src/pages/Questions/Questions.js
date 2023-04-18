@@ -97,8 +97,6 @@ const Home = () => {
     }));
   };
 
-  console.log(questions);
-
   return questions.length > 0 ? (
     <motion.div
       className={cx("wrapper")}

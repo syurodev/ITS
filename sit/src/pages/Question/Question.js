@@ -115,7 +115,6 @@ const Question = () => {
 
   //FETCH API GET QUESTION DETAIL
   useEffect(() => {
-    // setLoading(true);
     const getQuestionDetail = async () => {
       const result = await questionServices.questionDetail(idQuestion);
 
@@ -136,8 +135,6 @@ const Question = () => {
       const storedUserId = localStorage.getItem("itsSession");
       const userId = JSON.parse(storedUserId);
       setAuth(result.user._id && result.user._id === userId?._id);
-      console.log(result.editAt);
-      console.log(result.createdAt);
 
       // setLoading(false);
     };
