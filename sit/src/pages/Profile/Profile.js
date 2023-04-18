@@ -95,6 +95,7 @@ function Profile() {
     setWorkData(work);
   };
 
+  console.log(userData.user?.description);
   return (
     <motion.div
       className={cx("wrapper")}
@@ -169,6 +170,15 @@ function Profile() {
             </div>
           </div>
           <div className={cx("activate")}>
+            {userData.user?.description && (
+              <div className={cx("company-description")}>
+                <h2 className={cx("big-title")}>About</h2>
+                <div className={cx("content")}>
+                  {parse(userData.user.description)}
+                </div>
+              </div>
+            )}
+
             {userData.user.role === 1 && (
               <div className={cx("top-tags")}>
                 <h2 className={cx("big-title")}>Top tags</h2>
@@ -233,15 +243,6 @@ function Profile() {
                   ) : (
                     <span> No post</span>
                   )}
-                </div>
-              </div>
-            )}
-
-            {userData.user.role === 2 && (
-              <div className={cx("company-description")}>
-                <h2 className={cx("big-title")}>Description</h2>
-                <div className={cx("content")}>
-                  {parse(userData.user.description)}
                 </div>
               </div>
             )}

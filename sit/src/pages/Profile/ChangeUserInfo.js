@@ -98,27 +98,18 @@ function ChangeUserInfo({ data, closeModal, fetchApiData }) {
         </label>
       )}
 
-      {data.role === 2 && (
-        <label className={cx("description")}>
-          <span className={cx("title")}>Mô tả doanh nghiệp: </span>
-          <Tiptap
-            setState={setDescription}
-            setError={setError}
-            content={description}
-          />
-
-          {/* <textarea
-            rows="4"
-            cols="50"
-            spellCheck="false"
-            className={cx("input-textarea")}
-            type="text"
-            value={description}
-            onFocus={() => setError("")}
-            onChange={(e) => setDescription(e.target.value)}
-          /> */}
-        </label>
-      )}
+      <label className={cx("description")}>
+        {data.role === 2 ? (
+          <span className={cx("title")}>Về doanh nghiệp: </span>
+        ) : (
+          <span className={cx("title")}>Về bản thân: </span>
+        )}
+        <Tiptap
+          setState={setDescription}
+          setError={setError}
+          content={description}
+        />
+      </label>
 
       {data.role === 2 && (
         <label className={cx("box-input")}>
