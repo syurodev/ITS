@@ -115,7 +115,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const Tiptap = ({ setState, setError }) => {
+const Tiptap = ({ setState, setError, content }) => {
   const editor = useEditor({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -135,6 +135,7 @@ const Tiptap = ({ setState, setError }) => {
       }),
     ],
     content: `
+    ${content}
     `,
     onUpdate: ({ editor }) => {
       if (editor.state.doc.textContent.trim() === "") {

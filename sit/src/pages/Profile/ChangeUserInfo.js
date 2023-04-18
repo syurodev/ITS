@@ -101,7 +101,11 @@ function ChangeUserInfo({ data, closeModal, fetchApiData }) {
       {data.role === 2 && (
         <label className={cx("description")}>
           <span className={cx("title")}>Mô tả doanh nghiệp: </span>
-          <Tiptap setState={setDescription} setError={setError} />
+          <Tiptap
+            setState={setDescription}
+            setError={setError}
+            content={description}
+          />
 
           {/* <textarea
             rows="4"
