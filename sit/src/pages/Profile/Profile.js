@@ -232,7 +232,15 @@ function Profile() {
 
               {userData.user.role === 1 && (
                 <div className={cx("top-posts")}>
-                  <h2 className={cx("big-title")}>Top posts</h2>
+                  <div className={cx("header")}>
+                    <h2 className={cx("big-title")}>Top posts</h2>
+                    <Link
+                      to={`/questions/user/${userId}`}
+                      className={cx("see-more")}
+                    >
+                      See more
+                    </Link>
+                  </div>
                   <div className={cx("content")}>
                     {userData.questions && userData.questions.length > 0 ? (
                       userData.questions.map((question, index) => {
@@ -275,7 +283,15 @@ function Profile() {
 
               {userData.user.role === 2 && (
                 <div className={cx("works")}>
-                  <h2 className={cx("big-title")}>Works</h2>
+                  <div className={cx("header")}>
+                    <h2 className={cx("big-title")}>Works</h2>
+                    <Link
+                      to={`/works/user/${userId}`}
+                      className={cx("see-more")}
+                    >
+                      See more
+                    </Link>
+                  </div>
                   <div className={cx("work-list")}>
                     {userData.works && userData.works.length > 0 ? (
                       userData.works.map((work) => {
@@ -323,7 +339,9 @@ function Profile() {
                         );
                       })
                     ) : (
-                      <span> No tag</span>
+                      <div className={cx("no-work")}>
+                        <span>Không có công việc</span>
+                      </div>
                     )}
                   </div>
                 </div>

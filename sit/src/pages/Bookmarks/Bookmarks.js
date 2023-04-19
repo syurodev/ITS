@@ -210,7 +210,9 @@ function Bookmarks() {
             );
           })
         ) : (
-          <span>Không có Bookmark</span>
+          <div className={cx("no-bookmark")}>
+            <span>Không có Bookmark</span>
+          </div>
         )}
       </div>
       {totalPages && (

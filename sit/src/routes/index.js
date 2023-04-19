@@ -17,6 +17,7 @@ import Bookmarks from "~/pages/Bookmarks";
 
 //Public Routes
 const publicRoutes = [
+  { path: routesConfig.userQuestions, component: Questions },
   { path: routesConfig.tagUser, component: Questions },
   { path: routesConfig.tag, component: Questions },
   { path: routesConfig.home, component: Questions },
@@ -30,6 +31,7 @@ const publicRoutes = [
   { path: routesConfig.ask, component: Ask, layout: NoSidebar },
   { path: routesConfig.newwork, component: NewWork, layout: NoSidebar },
   { path: routesConfig.worksTag, component: Works },
+  { path: routesConfig.userWorks, component: Works },
   { path: routesConfig.works, component: Works },
 ];
 

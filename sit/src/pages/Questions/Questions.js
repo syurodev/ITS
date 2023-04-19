@@ -38,6 +38,9 @@ const Home = () => {
     tags: [],
   });
 
+  console.log(filter.tags);
+  console.log(tag);
+
   //enter tag to sort
   useEffect(() => {
     const newTagsPargams = [];
@@ -217,7 +220,9 @@ const Home = () => {
           )}
         </div>
       ) : (
-        <span>Không có câu hỏi nào</span>
+        <div className={cx("no-question")}>
+          <span>Không có câu hỏi nào</span>
+        </div>
       )}
     </motion.div>
   );

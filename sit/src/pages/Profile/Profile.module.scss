@@ -177,6 +177,17 @@
       }
 
       .top-posts {
+        .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 20px 0 0;
+
+          .see-more {
+            color: var(--primary-color);
+          }
+        }
+
         .post {
           padding: 15px 0;
           border-top: 1px solid var(--light-gray);
@@ -212,7 +223,24 @@
       }
 
       .works {
+        .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 20px 0 0;
+
+          .see-more {
+            color: var(--primary-color);
+          }
+        }
         .work-list {
+          .no-work {
+            text-align: center;
+            font-weight: 500;
+            color: var(--dark-gray);
+            user-select: none;
+            margin-bottom: 10px;
+          }
           .content {
             border-top: 1px solid var(--light-gray);
 
