@@ -12,9 +12,9 @@ import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 import style from "./Header.module.scss";
 import Button from "~/components/Button";
+import routesConfig from "~/config/router";
 import images from "~/assets/images";
 import Search from "../Search";
-import routesConfig from "~/config/router";
 import { Wrapper as PopperWrapper } from "~/components/Popper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";

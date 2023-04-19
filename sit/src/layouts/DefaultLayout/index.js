@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 
 import Header from "~/layouts/components/Header";
-import Footer from "~/layouts/components/Footer";
+// import Footer from "~/layouts/components/Footer";
 import Sidebar from "./Sidebar";
 import style from "./DefaultLayout.module.scss";
 

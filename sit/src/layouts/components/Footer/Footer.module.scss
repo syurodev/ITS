@@ -6,8 +6,48 @@
   z-index: 200;
   position: relative;
   bottom: 0;
-}
+  display: flex;
+  justify-content: center;
 
-.footer-container {
-  width: var(--page-fwidth-pc);
+  .footer-container {
+    width: var(--page-fwidth-pc);
+    display: flex;
+    justify-content: space-between;
+    color: white;
+
+    .left {
+      .logo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .logo-image {
+          width: 70px;
+          height: 70px;
+          -webkit-filter: drop-shadow(0px 0px 5px #313131a8);
+          filter: drop-shadow(0px 0px 5px #313131a8);
+        }
+      }
+    }
+
+    .center {
+      .its {
+        .title {
+          font-weight: 500;
+          font-size: 20px;
+          border-bottom: 1px solid #fff;
+        }
+
+        .content {
+          display: flex;
+          flex-direction: column;
+          margin-top: 8px;
+
+          a[href] {
+            color: white;
+          }
+        }
+      }
+    }
+  }
 }
