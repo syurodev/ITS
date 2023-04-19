@@ -20,6 +20,7 @@ export const userSlice = createSlice({
       state.userId = {};
       state.userData = {};
       localStorage.removeItem("itsSession");
+      sessionStorage.removeItem("userData");
     },
     bookmark: (state, action) => {
       state.bookmark = action.payload;
