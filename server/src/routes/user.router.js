@@ -27,7 +27,10 @@ router.get("/all", UserController.getAllUsers);
 //[POST] /avatar
 router.post("/avatar", UserController.changeAvatar);
 
-//[PUT] /avatar
+//[PUT] /info
 router.put("/info", UserController.changeUserInfo);
+
+//[PUT] /change-password
+router.put("/change-password", UserController.changePassword);
 
 module.exports = router;

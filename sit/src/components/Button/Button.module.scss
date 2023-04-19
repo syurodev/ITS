@@ -71,7 +71,17 @@
   color: white;
 
   &:hover {
-    background-color: var(--red-hover);
+    background-color: var(--gray);
+    box-shadow: var(--box-shadow-color-hover);
+  }
+}
+
+.lightgray {
+  background-color: var(--light-gray);
+  color: black;
+
+  &:hover {
+    background-color: var(--gray);
     box-shadow: var(--box-shadow-color-hover);
   }
 }

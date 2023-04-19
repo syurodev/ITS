@@ -21,7 +21,7 @@
         position: absolute;
         padding: 8px;
         top: 0px;
-        right: 8px;
+        right: -12px;
         cursor: pointer;
       }
 
@@ -387,6 +387,52 @@
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+  }
+}
+
+//Change password modal
+.change-password-modal {
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+
+    .title {
+      font-weight: 500;
+    }
+
+    input {
+      outline: none;
+      border: 1px solid transparent;
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: var(--light-gray);
+      border-radius: var(--box-border-radius);
+      transition: all 0.1s linear;
+
+      &:focus {
+        background-color: white;
+        border-color: var(--primary-color);
+      }
+    }
+
+    .error {
+      border-color: var(--red);
+    }
+  }
+
+  .error-mesg {
+    color: var(--red);
+    text-align: center;
   }
 }
 

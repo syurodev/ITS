@@ -7,7 +7,6 @@ import {
   faAngleDown,
   faAngleUp,
   faEye,
-  faEllipsis,
   faCrosshairs,
   faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
@@ -120,11 +119,23 @@ function Profile() {
           <div className={cx("container")}>
             <div className={cx("info")}>
               {auth && (
-                <FontAwesomeIcon
-                  className={cx("edit-profile-icon")}
-                  icon={faEllipsis}
-                  onClick={() => setChangeUserInfo(true)}
-                />
+                <div className={cx("edit-profile-icon")}>
+                  <Button
+                    onClick={() => setChangeUserInfo(true)}
+                    text
+                    small
+                    nmw
+                    leftIcon={
+                      <lord-icon
+                        src="https://cdn.lordicon.com/hwuyodym.json"
+                        trigger="hover"
+                        colors="primary:#030e12"
+                        state="hover-1"
+                        style={{ width: "30", height: "30" }}
+                      ></lord-icon>
+                    }
+                  ></Button>
+                </div>
               )}
               <div className={cx("avatar")}>
                 {auth && (

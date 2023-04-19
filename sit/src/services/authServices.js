@@ -117,6 +117,19 @@ export const changeAvatar = async (data) => {
   }
 };
 
+export const changePassword = async (data) => {
+  try {
+    const res = await request.put("user/change-password", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getAllUsers = async (username = "", limit = 15, page = 1) => {
   try {
     const res = await request.get("user/all", {

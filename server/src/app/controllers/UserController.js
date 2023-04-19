@@ -388,6 +388,31 @@ class UserController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  async changePassword(req, res) {
+    const { id, oldPass, newPass } = req.body;
+    try {
+      const user = await userSchema.findById(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "Not found" });
+      }
+
+      if (user.password !== oldPass) {
+        return res.status(201).json({
+          status: false,
+          error: "Mật khẩu cũ bạn nhập không trùng khớp",
+        });
+      }
+
+      user.password = newPass;
+      await user.save();
+
+      return res.status(200).json({ status: true });
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 module.exports = new UserController();

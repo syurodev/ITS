@@ -29,6 +29,7 @@ function Button({
   smallLeft = false,
   ntd = false,
   nmw = false,
+  lightgray = false,
   className,
   leftIcon,
   rightIcon,
@@ -60,6 +61,7 @@ function Button({
     className,
     disable,
     danger,
+    lightgray,
     successfully,
     outlineSuccessfully,
   });
