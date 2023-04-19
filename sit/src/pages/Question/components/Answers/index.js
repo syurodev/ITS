@@ -11,7 +11,7 @@ import * as AnswerServices from "~/services/answerServices";
 import routesConfig from "~/config/router";
 import { motion } from "framer-motion";
 
-function Answers({ questionId, auth, answerSolved }) {
+function Answers({ questionId, auth, answerSolved, userRole = 1 }) {
   const navigate = useNavigate();
   const cx = classNames.bind(style);
   const [newAnswerContent, setNewAnswerContent] = useState("");
@@ -126,9 +126,12 @@ function Answers({ questionId, auth, answerSolved }) {
           </div>
           <div className={cx("btns")}>
             <div className={cx("left")}>
-              <Button primary onClick={handleAddAnswer}>
-                {showAnswerEditor ? "Add" : "Your Answer"}
-              </Button>
+              {userRole !== 2 && (
+                <Button primary onClick={handleAddAnswer}>
+                  {showAnswerEditor ? "Add" : "Your Answer"}
+                </Button>
+              )}
+
               <div
                 className={cx("cancel-btn", "hide", {
                   show: showAnswerEditor,

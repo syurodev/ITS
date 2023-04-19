@@ -38,9 +38,6 @@ const Home = () => {
     tags: [],
   });
 
-  console.log(filter.tags);
-  console.log(tag);
-
   //enter tag to sort
   useEffect(() => {
     const newTagsPargams = [];

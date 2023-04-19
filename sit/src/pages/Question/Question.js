@@ -76,6 +76,8 @@ const Question = () => {
   const [editQuestionOpen, setEditQuestionOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+
   //CHECK SESSION
   useEffect(() => {
     if (Object.keys(currentUser).length === 0) {
@@ -414,6 +416,7 @@ const Question = () => {
                   data={comments}
                   id={idQuestion}
                   currentUser={currentUser}
+                  userRole={userData?.role ? userData?.role : 1}
                 />
               </div>
             </div>
@@ -422,6 +425,7 @@ const Question = () => {
               questionId={idQuestion}
               auth={auth}
               answerSolved={answerSolved}
+              userRole={userData?.role ? userData?.role : 1}
             />
           </>
         )

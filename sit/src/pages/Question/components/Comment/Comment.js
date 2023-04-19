@@ -10,7 +10,7 @@ import Tiptap from "~/components/TiptapEditor";
 import * as commentServices from "~/services/commentServices";
 import routesConfig from "~/config/router";
 
-function Comment({ id, currentUser = [], type = "question" }) {
+function Comment({ id, currentUser = [], type = "question", userRole = 1 }) {
   const cx = classNames.bind(style);
   const navigate = useNavigate();
 
@@ -140,9 +140,11 @@ function Comment({ id, currentUser = [], type = "question" }) {
               Cancel
             </Button>
           </div>
-          <Button small primary onClick={handleAddComment}>
-            {showCommentEditor ? "Add" : "Add a comment"}
-          </Button>
+          {userRole !== 2 && (
+            <Button small primary onClick={handleAddComment}>
+              {showCommentEditor ? "Add" : "Add a comment"}
+            </Button>
+          )}
         </div>
 
         <div
