@@ -3,7 +3,7 @@ const unidecode = require("unidecode");
 const questionSchema = require("../models/Question");
 
 class QuestionsController {
-  //[GET] /questions/new
+  //[GET] /questions
   async getQuestions(req, res) {
     const { user, tag, limit = 10, sort = "createdAt", page = 1 } = req.query;
     const query = {};
@@ -227,14 +227,46 @@ class QuestionsController {
   }
 
   async getAllBookmark(req, res) {
+    const {
+      bookmarks,
+      tags,
+      limit = 10,
+      sort = "createdAt",
+      page = 1,
+    } = req.query;
+
+    const query = { _id: { $in: bookmarks } };
+
+    if (tags) {
+      const tagsArray = Array.isArray(tags) ? tags : [tags];
+      const regexTagsArray = tagsArray.map(
+        (tag) => new RegExp(unidecode(tag), "iu")
+      );
+      query.tags = { $in: regexTagsArray };
+    }
+
+    const count = await questionSchema.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+    const skip = (page - 1) * limit;
+
+    let currentPage = page ? parseInt(page) : 1;
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    const sortObj = {};
+    if (sort === "createdAt") {
+      sortObj.createdAt = -1;
+    } else if (sort === "upvote") {
+      sortObj.upvote = 1;
+    }
+
     await questionSchema
-      .find(
-        {
-          _id: { $in: req.body },
-        },
-        "_id upvote downvote viewed title tags solved createdAt"
-      )
+      .find(query, "_id upvote downvote viewed title tags solved createdAt")
       .populate("user", { username: 1, avatar: 1, reputationScore: 1, _id: 1 })
+      .skip(skip)
+      .limit(limit)
+      .sort(sortObj)
       .exec(function (error, result) {
         if (error) {
           res.status(400).send({
@@ -242,7 +274,13 @@ class QuestionsController {
             message: "Error query question",
           });
         } else {
-          res.status(201).send(result);
+          const response = {
+            total: count,
+            page,
+            totalPages,
+            data: result,
+          };
+          res.status(201).send(response);
         }
       });
   }

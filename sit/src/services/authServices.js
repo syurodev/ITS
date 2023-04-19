@@ -68,9 +68,23 @@ export const getBookmark = async (user) => {
   }
 };
 
-export const getAllBookmark = async (data) => {
+export const getAllBookmark = async (
+  bookmarks = null,
+  tags = null,
+  page = 1,
+  limit = 10,
+  sort = "createdAt"
+) => {
   try {
-    const res = await request.post("questions/bookmarks", data);
+    const res = await request.get("questions/bookmarks", {
+      params: {
+        ...(bookmarks ? { bookmarks } : {}),
+        ...(tags ? { tags } : {}),
+        page,
+        limit,
+        sort,
+      },
+    });
     return res;
   } catch (error) {
     console.log(error);

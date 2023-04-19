@@ -18,7 +18,6 @@ const cx = classNames.bind(style);
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [sortActive, setSortActive] = useState(true);
   const [totalPages, setTotalPages] = useState([]);
   const [page, setPage] = useState(1);
@@ -63,7 +62,6 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    setIsLoading(true);
     const getQuestion = async () => {
       const result = await questionServices.getQuestions(
         filter.limit,
@@ -79,7 +77,6 @@ const Home = () => {
         (_, i) => i + 1
       );
       setTotalPages(pageArray);
-      setIsLoading(false);
     };
     getQuestion();
   }, [filter]);
@@ -133,16 +130,7 @@ const Home = () => {
           )}
         </div>
       </div>
-      {isLoading ? (
-        <div className={cx("is-loading")}>
-          <lord-icon
-            src="https://cdn.lordicon.com/ymrqtsej.json"
-            trigger="loop"
-            delay="0"
-            style={{ width: "250", height: "250" }}
-          ></lord-icon>
-        </div>
-      ) : questions.length > 0 ? (
+      {questions.length > 0 ? (
         <div className={cx("container")}>
           {questions.map((question) => {
             const tags = JSON.parse(question?.tags[0]);
