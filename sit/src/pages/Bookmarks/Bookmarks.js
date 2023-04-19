@@ -38,6 +38,7 @@ function Bookmarks() {
     document.title = "ITSocial :: Bookmarks";
   }, []);
 
+  //enter tag sort
   useEffect(() => {
     const newTagsPargams = [];
     if (tags.length > 0) {
@@ -51,6 +52,7 @@ function Bookmarks() {
     }));
   }, [tags]);
 
+  //Check session
   useEffect(() => {
     if (Object.keys(currentUser).length === 0) {
       const userSession = localStorage.getItem("itsSession");

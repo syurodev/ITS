@@ -21,6 +21,7 @@ function Comment({ id, currentUser = [], type = "question" }) {
   const [noCommennt, setNoCommennt] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
 
+  //fetch api
   useEffect(() => {
     const fetchApi = async () => {
       const result = await commentServices.getComments(id);

@@ -38,6 +38,7 @@ const Home = () => {
     tags: [],
   });
 
+  //enter tag to sort
   useEffect(() => {
     const newTagsPargams = [];
     if (tags.length > 0) {
@@ -54,6 +55,7 @@ const Home = () => {
     }));
   }, [tag, tags]);
 
+  //sort by user
   useEffect(() => {
     setFilter((prevFilter) => ({
       ...prevFilter,
@@ -61,6 +63,7 @@ const Home = () => {
     }));
   }, [user]);
 
+  //fetch api
   useEffect(() => {
     const getQuestion = async () => {
       const result = await questionServices.getQuestions(

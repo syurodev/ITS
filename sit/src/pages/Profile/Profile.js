@@ -46,6 +46,7 @@ function Profile() {
     document.title = "ITSocial :: Profile";
   }, []);
 
+  ///get profile
   const fetchApi = async () => {
     setIsLoading(true);
     const result = await userServices.profile(userId);

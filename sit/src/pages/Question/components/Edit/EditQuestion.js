@@ -15,7 +15,6 @@ function EditQuestion({
   questionExpecting = "",
   questionTags = [],
   questionId,
-  fetchApi,
 }) {
   const outputArray = questionTags.map((item) => ({ id: item, text: item }));
 

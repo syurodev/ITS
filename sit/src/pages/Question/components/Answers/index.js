@@ -33,6 +33,7 @@ function Answers({ questionId, auth, answerSolved }) {
     }
   }, [newAnswerContent]);
 
+  //Fetch api
   useEffect(() => {
     const fetchApi = async () => {
       const result = await AnswerServices.getAnswerDataSortVote(questionId);
