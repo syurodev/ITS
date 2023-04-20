@@ -194,19 +194,20 @@ function ChangeUserInfo({ data, closeModal, fetchApiData }) {
           style={{
             width: "fit-content",
             whiteSpace: "nowrap",
-            marginRight: "25px",
           }}
         >
           <span className={cx("title")}>Mật khẩu: </span>
         </div>
-        <Button
-          small
-          lightgray
-          fwidth
-          onClick={() => setChangePasswordModal(true)}
-        >
-          Đổi mật khẩu
-        </Button>
+        <div style={{ width: "30rem" }}>
+          <Button
+            small
+            lightgray
+            fwidth
+            onClick={() => setChangePasswordModal(true)}
+          >
+            Đổi mật khẩu
+          </Button>
+        </div>
       </label>
 
       <div className={cx("btns")}>

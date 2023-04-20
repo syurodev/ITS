@@ -6,7 +6,8 @@ const workSchema = require("../models/Work");
 class WorkController {
   //[POST] /create
   async create(req, res) {
-    const { title, position, tags, user, salary, description } = req.body;
+    const { title, position, tags, user, salary, description, currency } =
+      req.body;
     const workData = new workSchema({
       title,
       position,
@@ -14,6 +15,7 @@ class WorkController {
       tags,
       user,
       salary,
+      currency,
     });
 
     await workData
@@ -106,6 +108,33 @@ class WorkController {
       } else {
         res.status(404).json({ message: "Work not found" });
       }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  //[PUT] /edit
+  async edit(req, res) {
+    const { id, title, position, tags, salary, description, currency } =
+      req.body;
+    const editAt = new Date();
+
+    try {
+      await workSchema.findByIdAndUpdate(
+        id,
+        {
+          title,
+          position,
+          salary,
+          description,
+          currency,
+          tags,
+          editAt,
+        },
+        { new: true }
+      );
+
+      res.status(200).send({ status: true });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

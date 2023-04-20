@@ -9,5 +9,7 @@ router.get("/works", WorkController.works);
 router.post("/create", WorkController.create);
 //[DELETE] /delete
 router.delete("/delete", WorkController.delete);
+//[PUT] /edit
+router.put("/edit", WorkController.edit);
 
 module.exports = router;

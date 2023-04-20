@@ -159,7 +159,9 @@ function Works() {
                     </div>
                     <div className={cx("salary")}>
                       <FontAwesomeIcon icon={faMoneyBill} />
-                      <span className={cx("money")}>{work.salary}</span>
+                      <span className={cx("money")}>
+                        {`${work?.salary} ${work?.currency}`}
+                      </span>
                     </div>
                   </div>
 

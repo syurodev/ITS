@@ -11,6 +11,16 @@ export const create = async (data) => {
   }
 };
 
+//Edit
+export const editWork = async (data) => {
+  try {
+    const res = await request.put("work/edit", data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //get all works
 export const getWorks = async (
   limit = 10,
