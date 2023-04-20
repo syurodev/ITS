@@ -62,6 +62,7 @@
 
     &:focus {
       box-shadow: var(--box-shadow-color);
+      border-color: var(--primary-color);
     }
   }
 

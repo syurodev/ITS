@@ -41,10 +41,10 @@ function NewWork() {
         high.trim() > 0 &&
         low.trim() < high.trim()
       ) {
-        return `${low.trim()} ${currency} - ${high.trim()} ${currency}`;
+        return upto;
       }
     } else if (!isNaN(upto) && upto > 0) {
-      return `${upto.trim()} ${currency}`;
+      return upto;
     }
     return "";
   };
@@ -63,6 +63,7 @@ function NewWork() {
           title: title,
           position: position,
           salary: salary,
+          currency: currency,
           tags: JSON.stringify(newTags),
           user: currentUser._id,
           description: description,
