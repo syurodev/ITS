@@ -248,7 +248,6 @@ class UserController {
 
       res.json({ data, pagination });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ error: "Error retrieving data" });
     }
   }
@@ -335,7 +334,6 @@ class UserController {
         .status(201)
         .json({ status: true, message: "Change avatar successfully" });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Failed to change avatar" });
     }
   }
