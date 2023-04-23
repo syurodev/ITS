@@ -201,7 +201,7 @@ function WorkDetail({ data, auth, closeModal, getWorks }) {
         <Modal closeModal={setEditWork}>
           <div className={cx("edit-work")}>
             <div className={cx("head-title")}>
-              <h1>Tạo công việc</h1>
+              <h1>Chỉnh sửa công việc</h1>
             </div>
             <div className={cx("add-work-container")}>
               <div className={cx("work-options")}>

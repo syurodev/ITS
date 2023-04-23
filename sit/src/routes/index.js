@@ -24,6 +24,7 @@ const publicRoutes = [
   { path: routesConfig.question, component: Question },
   { path: routesConfig.tags, component: Tags },
   { path: routesConfig.users, component: Users },
+  { path: routesConfig.profileChangeinfo, component: Profile },
   { path: routesConfig.profile, component: Profile },
   { path: routesConfig.bookmarks, component: Bookmarks },
   { path: routesConfig.register, component: Auth, layout: null },

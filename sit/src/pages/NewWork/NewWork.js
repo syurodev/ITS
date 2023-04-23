@@ -10,6 +10,7 @@ import routesConfig from "~/config/router";
 import Button from "~/components/Button/Button";
 import * as workServices from "~/services/workServices";
 import Tiptap from "~/components/TiptapEditor";
+import Modal from "~/components/Modal";
 
 function NewWork() {
   const cx = classNames.bind(style);
@@ -30,6 +31,8 @@ function NewWork() {
   const [currency, setCurrency] = useState("USD");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
+  const [requireUpdateUserInfo, setRequireUpdateUserInfo] = useState(false);
+  const currentUserData = JSON.parse(sessionStorage.getItem("userData"));
 
   const combineValues = () => {
     if (upto.includes("-")) {
@@ -50,6 +53,16 @@ function NewWork() {
   };
 
   const handleSubmit = async () => {
+    if (
+      currentUserData.phone === null ||
+      currentUserData.email === null ||
+      currentUserData.avatar === "" ||
+      currentUserData.company === null
+    ) {
+      setRequireUpdateUserInfo(true);
+      return;
+    }
+
     const salary = await combineValues();
     if (title.trim() !== "" && position.trim() !== "" && tags.length > 0) {
       if (salary.trim() !== "") {
@@ -199,6 +212,33 @@ function NewWork() {
           </div>
         </div>
       </div>
+
+      {requireUpdateUserInfo && (
+        <Modal closeModal={setRequireUpdateUserInfo}>
+          <div className={cx("require-update-user-info")}>
+            <div className={cx("mess")}>
+              <h3>
+                Vui lòng cập nhật đầy đủ thông tin người dùng trước khi đăng
+                công việc
+              </h3>
+              <span>e.g ảnh đại diện, số điện thoại, địa chỉ, ...</span>
+            </div>
+
+            <div className={cx("btns")}>
+              <Button
+                small
+                outline
+                onClick={() => setRequireUpdateUserInfo(false)}
+              >
+                Huỷ
+              </Button>
+              <Button small primary to={`/profile/${currentUser._id}/true`}>
+                Cập nhật thông tin
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </motion.div>
   );
 }

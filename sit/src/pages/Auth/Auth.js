@@ -321,7 +321,7 @@ function Auth() {
             <></>
           ) : (
             role === "2" && (
-              <div layout className={cx("input")}>
+              <div className={cx("input")}>
                 <label htmlFor="name">
                   <span>Tên doanh nghiệp:</span>
                   <input

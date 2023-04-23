@@ -45,6 +45,7 @@ class UserController {
       password: req.body.password,
       role: req.body.role,
       reputationScore: req.body.reputationScore,
+      company: req.body.company,
     });
 
     userSchema.find(
@@ -85,7 +86,7 @@ class UserController {
     await userSchema
       .find(
         { _id: req.query.id },
-        "username avatar email phone role reputationScore bookmark dateCreate"
+        "username avatar email phone role reputationScore bookmark dateCreate company"
       )
       .exec(function (error, result) {
         if (error) {

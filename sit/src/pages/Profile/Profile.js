@@ -28,6 +28,7 @@ import WorkDetail from "~/components/WorkDetail";
 function Profile() {
   const cx = classNames.bind(style);
   const { userId } = useParams();
+  const { changeinfo } = useParams();
   const [userData, setUserData] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [changeAvatarModal, setChangeAvatarModal] = useState(false);
@@ -44,6 +45,12 @@ function Profile() {
   useEffect(() => {
     document.title = "ITSocial :: Profile";
   }, []);
+
+  useEffect(() => {
+    if (changeinfo === "true") {
+      setChangeUserInfo(true);
+    }
+  }, [changeinfo]);
 
   ///get profile
   const fetchApi = async () => {
